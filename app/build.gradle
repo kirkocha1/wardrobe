@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "wardrope.kochnev.kirill.com.homewardrope"
         minSdkVersion 23
+        applicationId "com.kirill.kochnev.homewardrope"
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -17,6 +19,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    retrolambda {
+        jvmArgs '-noverify'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -24,6 +38,20 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.1'
     testCompile 'junit:junit:4.12'
+
+    compile 'org.greenrobot:greendao:3.2.0'
+
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.android.support:design:25.1.1'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    compile 'com.google.dagger:dagger:2.4'
+    annotationProcessor "com.google.dagger:dagger-compiler:2.4"
+}
+
+greendao {
+    schemaVersion 2
 }

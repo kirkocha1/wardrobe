@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Home Wardrope</string>
+    <string name="navigation_drawer_open">Opened</string>
+    <string name="navigation_drawer_close">Closed</string>
 </resources>
