@@ -5,14 +5,16 @@ import android.support.annotation.Nullable;
 
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.ui.activities.base.DrawerActivity;
+import com.kirill.kochnev.homewardrope.ui.fragments.TestFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
+import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 public class MainActivity extends DrawerActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new ThingsFragment());
+        setContentView(new TestFragment());
         initUi();
     }
 
@@ -22,6 +24,12 @@ public class MainActivity extends DrawerActivity {
 
     @Override
     public void openItem(int menuItemId) {
-        setFragmentContent(new ThingsFragment());
+        switch (menuItemId) {
+            case R.id.nav_things:
+                setFragmentContent(new ThingsFragment());
+                break;
+            default:
+                setFragmentContent(new TestFragment());
+        }
     }
 }

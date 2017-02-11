@@ -15,5 +15,4 @@
            android:icon="@drawable/thing"
            android:title="@string/nav_things"/>
    </group>
-
 </menu>
