@@ -1,6 +1,6 @@
 package com.kirill.kochnev.homewardrope.di;
 
-import com.kirill.kochnev.homewardrope.mvp.presenters.interfaces.ThingsPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 
 import javax.inject.Singleton;
 
