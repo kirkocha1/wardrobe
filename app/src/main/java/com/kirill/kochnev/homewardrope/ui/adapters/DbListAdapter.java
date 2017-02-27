@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IHolderModel;
-import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
 
 public class DbListAdapter<M extends IHolderModel> extends RecyclerView.Adapter<DbListAdapter<M>.DbListHolder> {
 
-    private List<M> things;
+    private List<M> models;
 
     public class DbListHolder extends RecyclerView.ViewHolder {
 
@@ -38,12 +37,13 @@ public class DbListAdapter<M extends IHolderModel> extends RecyclerView.Adapter<
         }
     }
 
-    public  DbListAdapter(List<M> things) {
-        this.things = things;
+    public void setData(List<M> models) {
+        this.models = models;
+        notifyDataSetChanged();
     }
 
-    public void setThings(List<M> things) {
-        this.things = things;
+    public void addData(List<M> models) {
+        this.models.addAll(models);
         notifyDataSetChanged();
     }
 
@@ -59,10 +59,10 @@ public class DbListAdapter<M extends IHolderModel> extends RecyclerView.Adapter<
 
     @Override
     public int getItemCount() {
-        return things.size();
+        return models.size();
     }
 
     public M getItem(int position) {
-        return things.get(position);
+        return models.get(position);
     }
 }

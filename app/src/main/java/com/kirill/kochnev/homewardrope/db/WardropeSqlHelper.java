@@ -30,9 +30,12 @@ public class WardropeSqlHelper extends DaoMaster.DevOpenHelper {
 
     private void testData(Database db) {
         DaoSession session = new DaoMaster(db).newSession();
-        session.getThingDao().insertOrReplace(new Thing("T-short"));
-        session.getThingDao().insertOrReplace(new Thing("skirt"));
-        session.getThingDao().insertOrReplace(new Thing("Thousers"));
+        for (int i = 0; i < 100; i++) {
+            session.getThingDao().insertOrReplace(new Thing("T-short" + i));
+            session.getThingDao().insertOrReplace(new Thing("skirt" + i));
+            session.getThingDao().insertOrReplace(new Thing("Thousers" + i));
+        }
+
     }
 
     @Override
