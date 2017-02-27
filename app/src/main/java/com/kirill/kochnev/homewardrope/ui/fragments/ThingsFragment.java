@@ -3,6 +3,10 @@ package com.kirill.kochnev.homewardrope.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.R;
@@ -19,6 +23,8 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 import java.util.List;
 import java.util.logging.Handler;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Kirill Kochnev on 24.02.17.
  */
@@ -31,12 +37,7 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     private IParent parent;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initUi();
-    }
-
-    private void initUi() {
+    public void onInitUi() {
         parent.setTitle(R.string.things_title);
         addBtn.setOnClickListener(v -> {
             startActivity(new Intent(getContext(), AddOrUpdateThingActivity.class));

@@ -73,9 +73,10 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
                 }
             }
         });
-        addBtn.setOnClickListener(v -> Toast.makeText(getContext(), "ADD CLICKED", Toast.LENGTH_SHORT).show());
+        onInitUi();
     }
 
     public abstract BaseDbListPresenter getPresenter();
 
+    public abstract void onInitUi();
 }
