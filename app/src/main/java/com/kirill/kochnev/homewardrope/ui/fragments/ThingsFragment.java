@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -10,6 +11,7 @@ import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.mvp.presenters.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
+import com.kirill.kochnev.homewardrope.ui.activities.AddOrUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IParent;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
@@ -31,7 +33,14 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initUi();
+    }
+
+    private void initUi() {
         parent.setTitle(R.string.things_title);
+        addBtn.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), AddOrUpdateThingActivity.class));
+        });
     }
 
     @Override
