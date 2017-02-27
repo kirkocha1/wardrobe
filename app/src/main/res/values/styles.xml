@@ -9,4 +9,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CardViewStyle">
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="contentPadding">10dp</item>
+        <item name="cardBackgroundColor">@color/colorPrimary</item>
+    </style>
+
+
 </resources>

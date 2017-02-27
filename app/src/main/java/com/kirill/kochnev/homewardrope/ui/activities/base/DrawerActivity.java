@@ -78,6 +78,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Drawer
     private void setContentView() {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.animator.slide_out_left, R.animator.slide_in_right);
         transaction.replace(R.id.content, fragment).commit();
         manager.executePendingTransactions();
         Log.d(TAG, "set fragment " + fragment.getClass());
