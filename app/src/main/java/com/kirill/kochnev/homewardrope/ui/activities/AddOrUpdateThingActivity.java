@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
 public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-
+    private static final int REQUEST_TAKE_PHOTO = 2;
     @BindView(R.id.new_thing_name)
     EditText name;
 
@@ -63,12 +64,8 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            presenter.processImage((Bitmap) data.getExtras().get("data"));
-        }
+    private void dispatchTakeAndSaveFullPictureIntent() {
+        presenter.createUri();
     }
 
     @Override
@@ -76,4 +73,23 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
         pic.setImageBitmap(bitmap);
         pic.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public void sendMakePhotoIntent(Uri uri) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            presenter.processCropImage((Bitmap) data.getExtras().get("data"));
+        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            presenter.processImage();
+        }
+    }
+
+
 }

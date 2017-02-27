@@ -8,6 +8,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -24,6 +25,8 @@ public class Thing implements IHolderModel{
 
     private String name;
 
+    private String filePath;
+
 
     public Thing(String name) {
         id = null;
@@ -35,11 +38,12 @@ public class Thing implements IHolderModel{
         this.creationDate = new Date();
     }
 
-    @Generated(hash = 948112464)
-    public Thing(Long id, Date creationDate, String name) {
+    @Generated(hash = 1021619647)
+    public Thing(Long id, Date creationDate, String name, String filePath) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
+        this.filePath = filePath;
     }
 
 
@@ -70,5 +74,13 @@ public class Thing implements IHolderModel{
     @Override
     public void inflateHolder(DbListAdapter.DbListHolder holder) {
         holder.item.setName(name);
+    }
+
+    public String getFilePath() {
+        return this.filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
