@@ -3,6 +3,7 @@ package com.kirill.kochnev.homewardrope.ui.fragments.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -52,7 +53,7 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
     }
 
     private void initUi() {
-        layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new GridLayoutManager(getContext(), 2);
         adapter = new DbListAdapter<>();
         list.setLayoutManager(layoutManager);
         list.setAdapter(adapter);
