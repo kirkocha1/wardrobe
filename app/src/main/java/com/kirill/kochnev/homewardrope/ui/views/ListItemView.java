@@ -1,7 +1,9 @@
 package com.kirill.kochnev.homewardrope.ui.views;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kirill.kochnev.homewardrope.R;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +48,7 @@ public class ListItemView extends FrameLayout {
         this.name.setText(name);
     }
 
-    public void setImage(@DrawableRes int resourceId) {
-        pic.setImageResource(resourceId);
+    public void setImage(String filePath) {
+        pic.setImageURI(Uri.fromFile(new File(filePath)));
     }
 }

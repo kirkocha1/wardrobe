@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.di;
 
+import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 
 import javax.inject.Singleton;
@@ -15,4 +16,5 @@ import dagger.Component;
 public interface AppComponent {
 
      void inject(ThingsPresenter presenter);
+     void inject(AddUpdateThingPresenter presenter);
 }

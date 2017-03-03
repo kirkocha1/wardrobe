@@ -1,32 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/thing_data"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <EditText
         android:id="@+id/new_thing_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:padding="5dp"
-        android:hint="Thing name"/>
+        android:hint="Thing name"
+        android:padding="5dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/shoot_btn"
-        android:text="shoot thing"/>
-
-    <ImageView
-        android:id="@+id/photo_thing"
-        android:visibility="gone"
+    <EditText
+        android:id="@+id/new_thing_tag"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <Button
-        android:id="@+id/thing_save_btn"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="SAVE"
+        android:layout_margin="5dp"
+        android:hint="hash tag #"
+        android:padding="5dp" />
 
-        />
+    <LinearLayout
+        android:id="@+id/photo_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/shoot_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="shoot thing" />
+
+        <Button
+            android:id="@+id/thing_save_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+
+            />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/photo_thing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+    </ScrollView>
+
+
 </LinearLayout>
+
+
+
+

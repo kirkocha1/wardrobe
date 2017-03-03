@@ -1,14 +1,11 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
-import java.io.File;
 import java.util.Date;
 
 /**
@@ -25,6 +22,8 @@ public class Thing implements IHolderModel{
 
     private String name;
 
+    private String tag;
+
     private String filePath;
 
 
@@ -38,14 +37,15 @@ public class Thing implements IHolderModel{
         this.creationDate = new Date();
     }
 
-    @Generated(hash = 1021619647)
-    public Thing(Long id, Date creationDate, String name, String filePath) {
+    @Generated(hash = 2035203015)
+    public Thing(Long id, Date creationDate, String name, String tag,
+            String filePath) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
+        this.tag = tag;
         this.filePath = filePath;
     }
-
 
     public Date getCreationDate() {
         return this.creationDate;
@@ -71,10 +71,7 @@ public class Thing implements IHolderModel{
         this.id = id;
     }
 
-    @Override
-    public void inflateHolder(DbListAdapter.DbListHolder holder) {
-        holder.item.setName(name);
-    }
+
 
     public String getFilePath() {
         return this.filePath;
@@ -83,4 +80,19 @@ public class Thing implements IHolderModel{
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
+    public String getTag() {
+        return this.tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    @Override
+    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+        holder.item.setName(name);
+        holder.item.setImage(filePath);
+    }
+
 }

@@ -29,6 +29,6 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     @Override
     public void loadMoreData(long id) {
         Log.d(TAG, "loadMoreData");
-        getViewState().onLoadFinished(things.queryBuilder().where(ThingDao.Properties.Id.ge(id)).limit(LIMIT).list());
+        getViewState().onLoadFinished(things.queryBuilder().where(ThingDao.Properties.Id.gt(id)).limit(LIMIT).list());
     }
 }

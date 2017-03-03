@@ -19,7 +19,6 @@ public class WardropeApplication extends Application {
         context = this;
     }
 
-    //
     private AppComponent buildComponent() {
         return DaggerAppComponent.builder().greenDaoModule(new GreenDaoModule(this)).build();
     }

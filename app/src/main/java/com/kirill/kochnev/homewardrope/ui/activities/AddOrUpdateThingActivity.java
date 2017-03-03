@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
@@ -25,7 +26,8 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
     private static final int REQUEST_TAKE_PHOTO = 2;
     @BindView(R.id.new_thing_name)
     EditText name;
-
+    @BindView(R.id.new_thing_tag)
+    EditText tag;
     @BindView(R.id.shoot_btn)
     Button captureBtn;
 
@@ -38,6 +40,11 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
     @InjectPresenter
     AddUpdateThingPresenter presenter;
 
+    @ProvidePresenter
+    AddUpdateThingPresenter providePresenter() {
+        return new AddUpdateThingPresenter(-1);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,24 +55,21 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
 
     private void initUi() {
         captureBtn.setOnClickListener(v -> {
-            dispatchTakePictureIntent();
+            dispatchTakeAndSaveFullPictureIntent();
         });
 
         save.setOnClickListener(v -> {
-            presenter.saveThing(name.getText().toString());
+            presenter.saveThing(name.getText().toString(), tag.getText().toString());
         });
-    }
-
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
     }
 
     private void dispatchTakeAndSaveFullPictureIntent() {
         presenter.createUri();
+    }
+
+    @Override
+    public void onSave() {
+        finish();
     }
 
     @Override
@@ -85,8 +89,6 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            presenter.processCropImage((Bitmap) data.getExtras().get("data"));
-        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             presenter.processImage();
         }
     }
