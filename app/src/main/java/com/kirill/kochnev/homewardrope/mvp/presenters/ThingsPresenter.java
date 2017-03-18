@@ -17,13 +17,22 @@ import javax.inject.Inject;
 public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     public static final String TAG = "ThingsPresenter";
-    public static final int LIMIT = 20;
+    public static final int LIMIT = 10;
     @Inject
     protected ThingDao things;
 
     public ThingsPresenter() {
         WardropeApplication.getComponent().inject(this);
+    }
+
+    public void refreshList() {
         getViewState().initList(things.queryBuilder().limit(LIMIT).list());
+    }
+
+    @Override
+    public void attachView(IThingsView view) {
+        super.attachView(view);
+        refreshList();
     }
 
     @Override
@@ -31,4 +40,6 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         Log.d(TAG, "loadMoreData");
         getViewState().onLoadFinished(things.queryBuilder().where(ThingDao.Properties.Id.gt(id)).limit(LIMIT).list());
     }
+
+
 }

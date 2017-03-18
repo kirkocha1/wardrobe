@@ -24,8 +24,9 @@ public class Thing implements IHolderModel{
 
     private String tag;
 
-    private String filePath;
+    private String fullImagePath;
 
+    private String iconImagePath;
 
     public Thing(String name) {
         id = null;
@@ -37,16 +38,17 @@ public class Thing implements IHolderModel{
         this.creationDate = new Date();
     }
 
-    @Generated(hash = 2035203015)
+    @Generated(hash = 2104068066)
     public Thing(Long id, Date creationDate, String name, String tag,
-            String filePath) {
+            String fullImagePath, String iconImagePath) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
         this.tag = tag;
-        this.filePath = filePath;
+        this.fullImagePath = fullImagePath;
+        this.iconImagePath = iconImagePath;
     }
-
+    
     public Date getCreationDate() {
         return this.creationDate;
     }
@@ -73,12 +75,12 @@ public class Thing implements IHolderModel{
 
 
 
-    public String getFilePath() {
-        return this.filePath;
+    public String getFullImagePath() {
+        return this.fullImagePath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFullImagePath(String fullImagePath) {
+        this.fullImagePath = fullImagePath;
     }
 
     public String getTag() {
@@ -92,7 +94,15 @@ public class Thing implements IHolderModel{
     @Override
     public void inflateHolder(DbListAdapter.DbListHolder holder) {
         holder.item.setName(name);
-        holder.item.setImage(filePath);
+        holder.item.setImage(iconImagePath);
+    }
+
+    public String getIconImagePath() {
+        return this.iconImagePath;
+    }
+
+    public void setIconImagePath(String iconImagePath) {
+        this.iconImagePath = iconImagePath;
     }
 
 }

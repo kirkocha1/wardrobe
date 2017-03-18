@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,7 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     @Override
     public void onInitUi() {
         parent.setTitle(R.string.things_title);
-        addBtn.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), AddOrUpdateThingActivity.class));
-        });
+        addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddOrUpdateThingActivity.class)));
     }
 
     @Override
@@ -62,6 +61,12 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
             isLoading = false;
             adapter.addData(data);
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "ON START");
     }
 
     @Override

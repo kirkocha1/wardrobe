@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 
 import java.io.File;
 
@@ -49,6 +50,6 @@ public class ListItemView extends FrameLayout {
     }
 
     public void setImage(String filePath) {
-        pic.setImageURI(Uri.fromFile(new File(filePath)));
+        WardropeApplication.loadImage(filePath, pic);
     }
 }

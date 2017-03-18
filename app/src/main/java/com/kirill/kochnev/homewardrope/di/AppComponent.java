@@ -12,9 +12,10 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {GreenDaoModule.class})
+@Component(modules = {GreenDaoModule.class, RepositoryModule.class, InteractorModule.class})
 public interface AppComponent {
 
      void inject(ThingsPresenter presenter);
      void inject(AddUpdateThingPresenter presenter);
+
 }

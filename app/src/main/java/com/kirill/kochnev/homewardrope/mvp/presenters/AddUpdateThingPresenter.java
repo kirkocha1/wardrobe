@@ -15,12 +15,17 @@ import com.kirill.kochnev.homewardrope.db.models.ThingDao;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import javax.inject.Inject;
+
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 @InjectViewState
@@ -29,11 +34,16 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
     public static final String TAG = "AddUpdateThingPresenter";
     private static final int REQ_HEIGHT = 640;
     private static final int REQ_WIDTH = 480;
+    private static final int ICON_HEIGHT = 160;
+    private static final int ICON_WIDTH = 120;
+
 
     @Inject
     protected ThingDao dao;
     private Thing model;
     private String imagePath;
+    private String iconPath;
+
 
     public AddUpdateThingPresenter(long id) {
         WardropeApplication.getComponent().inject(this);
@@ -45,7 +55,8 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
     public void saveThing(String name, String tag) {
         model.setName(name);
         model.setTag(tag);
-        model.setFilePath(imagePath);
+        model.setFullImagePath(imagePath);
+        model.setIconImagePath(iconPath);
         dao.insert(model);
         getViewState().onSave();
     }
@@ -56,6 +67,8 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = WardropeApplication.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File imageUri = File.createTempFile(imageFileName, ".jpg", storageDir);
+        File iconUri = File.createTempFile(imageFileName + "_min_icon", ".jpg", storageDir);
+        iconPath = iconUri.getAbsolutePath();
         imagePath = imageUri.getAbsolutePath();
         return imageUri;
     }
@@ -75,27 +88,48 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
     }
 
     public void processImage() {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, options);
-        options.inSampleSize = calculateInSampleSize(options);
-        options.inJustDecodeBounds = false;
-        Bitmap cropImage = BitmapFactory.decodeFile(imagePath, options);
-        getViewState().setImage(cropImage);
+        Single<Bitmap> getCropImage = Single.create(sub -> {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(imagePath, options);
+            options.inSampleSize = calculateInSampleSize(options);
+            options.inJustDecodeBounds = false;
+            Bitmap cropImage = BitmapFactory.decodeFile(imagePath, options);
+            saveIcon(cropImage);
+            if (cropImage != null) {
+                sub.onSuccess(cropImage);
+            } else {
+                sub.onError(new Exception("can't get image"));
+            }
+
+        });
+        getCropImage.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(img -> getViewState().setImage(img), ex -> getViewState().showError(ex.getMessage()));
     }
 
-    private int calculateInSampleSize(BitmapFactory.Options options) {
+    private void saveIcon(Bitmap cropImage) throws IOException {
+        FileOutputStream out = new FileOutputStream(iconPath);
+        cropImage.compress(Bitmap.CompressFormat.JPEG, 10, out);
+        out.flush();
+        out.close();
+    }
+
+    private int calculateInSampleSize(BitmapFactory.Options options, int height, int width) {
         int inSampleSize = 1;
-        if (options.outHeight > REQ_HEIGHT || options.outWidth > REQ_WIDTH) {
+        if (options.outHeight > height || options.outWidth > width) {
             int halfHeight = options.outHeight / 2;
             int halfWidth = options.outWidth / 2;
-
             while ((halfHeight / inSampleSize) >= REQ_HEIGHT
                     && (halfWidth / inSampleSize) >= REQ_WIDTH) {
                 inSampleSize *= 2;
             }
         }
         return inSampleSize;
+    }
+
+    private int calculateInSampleSize(BitmapFactory.Options options) {
+        return calculateInSampleSize(options, REQ_HEIGHT, REQ_WIDTH);
     }
 
 }

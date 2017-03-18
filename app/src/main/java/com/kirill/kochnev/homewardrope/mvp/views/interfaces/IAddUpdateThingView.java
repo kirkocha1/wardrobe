@@ -9,7 +9,11 @@ public interface IAddUpdateThingView extends MvpView {
 
     void setImage(Bitmap bitmap);
 
+    void setImageUri(Uri uri);
+
     void sendMakePhotoIntent(Uri uri);
 
     void onSave();
+
+    void showError(String error);
 }

@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 
 public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
+
     @BindView(R.id.new_thing_name)
     EditText name;
     @BindView(R.id.new_thing_tag)
@@ -54,17 +54,13 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
     }
 
     private void initUi() {
-        captureBtn.setOnClickListener(v -> {
-            dispatchTakeAndSaveFullPictureIntent();
-        });
-
-        save.setOnClickListener(v -> {
-            presenter.saveThing(name.getText().toString(), tag.getText().toString());
-        });
+        captureBtn.setOnClickListener(v -> presenter.createUri());
+        save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
     }
 
-    private void dispatchTakeAndSaveFullPictureIntent() {
-        presenter.createUri();
+    @Override
+    public void setImageUri(Uri uri) {
+        pic.setImageURI(uri);
     }
 
     @Override
@@ -93,5 +89,8 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
         }
     }
 
+    @Override
+    public void showError(String error) {
 
+    }
 }

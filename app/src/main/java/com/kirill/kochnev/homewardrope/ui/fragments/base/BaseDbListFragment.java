@@ -66,7 +66,7 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                 if (!isLoading && isInit) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                            && firstVisibleItemPosition >= 0) {
+                            && firstVisibleItemPosition > 0) {
                         isLoading = true;
                         getPresenter().loadMoreData(visibleItemCount + firstVisibleItemPosition);
                     }
