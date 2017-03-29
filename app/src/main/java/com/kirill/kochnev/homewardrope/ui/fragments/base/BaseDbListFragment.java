@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
     @BindView(R.id.add)
     protected FloatingActionButton addBtn;
 
-    private LinearLayoutManager layoutManager;
+    private GridLayoutManager layoutManager;
     protected boolean isLoading = false;
     protected boolean isInit = false;
 
@@ -61,15 +62,28 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                boolean isScrollDown = dy > 0;
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                if (!isLoading && isInit) {
+                if (!isLoading && isInit && isScrollDown) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                             && firstVisibleItemPosition > 0) {
                         isLoading = true;
                         getPresenter().loadMoreData(visibleItemCount + firstVisibleItemPosition);
                     }
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        addBtn.setVisibility(View.GONE);
+                        break;
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        addBtn.setVisibility(View.VISIBLE);
+                        break;
                 }
             }
         });
