@@ -7,6 +7,8 @@ import com.kirill.kochnev.homewardrope.db.models.DaoMaster;
 import com.kirill.kochnev.homewardrope.db.models.DaoSession;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.db.models.ThingDao;
+import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.WardropeDao;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -40,5 +42,11 @@ public class GreenDaoModule {
     @Singleton
     ThingDao provideThingsDao(DaoSession session) {
         return session.getThingDao();
+    }
+
+    @Provides
+    @Singleton
+    WardropeDao provideWardropesDao(DaoSession session) {
+        return session.getWardropeDao();
     }
 }

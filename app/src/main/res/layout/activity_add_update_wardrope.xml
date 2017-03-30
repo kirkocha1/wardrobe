@@ -6,20 +6,14 @@
     android:orientation="vertical">
 
     <EditText
-        style="@style/EditTextStyle"
         android:id="@+id/new_thing_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="Thing name"/>
-
-    <EditText
         style="@style/EditTextStyle"
-        android:id="@+id/new_thing_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:hint="hash tag #"/>
+        android:background="@null"
+        android:hint="Wardrope name" />
+
 
     <LinearLayout
         android:id="@+id/photo_buttons"
@@ -30,16 +24,10 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/shoot_btn"
+            android:id="@+id/wardrope_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="shoot thing" />
-
-        <Button
-            android:id="@+id/thing_save_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SAVE"/>
+            android:text="SAVE" />
     </LinearLayout>
 
 

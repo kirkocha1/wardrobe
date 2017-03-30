@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.di;
 
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.WardropePresenter;
 
 import javax.inject.Singleton;
 
@@ -15,6 +16,7 @@ import dagger.Component;
 @Component(modules = {GreenDaoModule.class, RepositoryModule.class, InteractorModule.class})
 public interface AppComponent {
 
+     void inject(WardropePresenter presenter);
      void inject(ThingsPresenter presenter);
      void inject(AddUpdateThingPresenter presenter);
 

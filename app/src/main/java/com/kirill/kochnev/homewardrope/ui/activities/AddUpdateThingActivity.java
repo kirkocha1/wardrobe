@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 
 import static com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter.THINGS_ID;
 
-public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
+public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
 
     private static final int REQUEST_TAKE_PHOTO = 2;
 

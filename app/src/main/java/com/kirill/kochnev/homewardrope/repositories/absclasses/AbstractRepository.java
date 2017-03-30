@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.repositories.absclasses;
 
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
+import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.repositories.interfaces.IRepository;
 
 import org.greenrobot.greendao.AbstractDao;
@@ -71,6 +72,18 @@ public abstract class AbstractRepository<M extends IDbModel> implements IReposit
                 sub.onSuccess(thing);
             } else {
                 sub.onError(new Exception("no thing with this id"));
+            }
+        });
+    }
+
+
+    public Single<Boolean> deletItem(M model) {
+        return Single.create(sub -> {
+            try {
+                dao.delete(model);
+                sub.onSuccess(true);
+            } catch (Exception ex) {
+                sub.onError(ex);
             }
         });
     }

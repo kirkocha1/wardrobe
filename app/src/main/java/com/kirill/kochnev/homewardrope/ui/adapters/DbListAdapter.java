@@ -22,7 +22,7 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
 
     private List<M> models;
 
-    private OnClick clickListner;
+    private OnClick<M> clickListner;
 
     public class DbListHolder extends RecyclerView.ViewHolder {
 
@@ -53,7 +53,7 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
         }
     }
 
-    public void setClickListner(OnClick clickListner) {
+    public void setClickListner(OnClick<M> clickListner) {
         this.clickListner = clickListner;
     }
 

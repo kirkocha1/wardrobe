@@ -8,9 +8,10 @@ import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IWardropeView;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 
 import javax.inject.Inject;
@@ -19,31 +20,28 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Kirill Kochnev on 25.02.17.
+ * Created by kirill on 30.03.17.
  */
-
 @InjectViewState
-public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
-
-    public static final String TAG = "ThingsPresenter";
-    public static final int LIMIT = 10;
-    public static final String THINGS_ID = "things_id";
+public class WardropePresenter extends BaseDbListPresenter<IWardropeView> {
+    public static final String TAG = "WardropePresenter";
+    public static final String WARDROPES_ID = "wardropes_id";
 
     @Inject
-    protected AbstractThingRepository things;
+    protected AbstractWardropeRepository wardropes;
 
-    public ThingsPresenter() {
+    public WardropePresenter() {
         WardropeApplication.getComponent().inject(this);
     }
 
     public void refreshList() {
-        unsubscribeOnDestroy(things.getNextList(-1).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(wardropes.getNextList(-1).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> getViewState().initList(list), e -> e.printStackTrace()));
     }
 
     @Override
-    public void attachView(IThingsView view) {
+    public void attachView(IWardropeView view) {
         super.attachView(view);
         refreshList();
     }
@@ -51,18 +49,18 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     @Override
     public void loadMoreData(long id) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(things.getNextList(id).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(wardropes.getNextList(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
     }
 
     @Override
     public void onLongItemClick(IDbModel model) {
-        unsubscribeOnDestroy(things.deletItem((Thing) model)
+        unsubscribeOnDestroy(wardropes.deletItem((Wardrope) model)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isDel -> {
-                    getViewState().notifyListChanges((Thing) model);
+                    getViewState().notifyListChanges((Wardrope) model);
                 }));
 
     }
@@ -70,7 +68,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     @Override
     public void onItemClick(IDbModel model) {
         Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
-        intent.putExtra(THINGS_ID, ((Thing) model).getId());
+        intent.putExtra(WARDROPES_ID, ((Thing) model).getId());
         getViewState().openUpdateActivity(intent);
     }
 }

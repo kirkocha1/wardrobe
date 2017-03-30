@@ -5,17 +5,15 @@ import android.os.Bundle;
 
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-import com.kirill.kochnev.homewardrope.db.models.Thing;
-
-import java.util.List;
+import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 
 /**
- * Created by Kirill Kochnev on 25.02.17.
+ * Created by kirill on 30.03.17.
  */
 
-public interface IThingsView extends IPaginationView<Thing> {
+public interface IWardropeView extends IPaginationView<Wardrope> {
 
     @StateStrategyType(SkipStrategy.class)
-    void openUpdateActivity(Intent bundle);
-
+    void openUpdateActivity(Intent intent);
 }
+
