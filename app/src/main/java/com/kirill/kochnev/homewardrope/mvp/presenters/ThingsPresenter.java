@@ -1,7 +1,6 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
@@ -12,6 +11,8 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
+
+import java.util.HashSet;
 
 import javax.inject.Inject;
 
@@ -26,20 +27,32 @@ import io.reactivex.schedulers.Schedulers;
 public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     public static final String TAG = "ThingsPresenter";
-    public static final int LIMIT = 10;
     public static final String THINGS_ID = "things_id";
+
+    private boolean isWardropeMode = false;
 
     @Inject
     protected AbstractThingRepository things;
 
-    public ThingsPresenter() {
+    public ThingsPresenter(int mode) {
         WardropeApplication.getComponent().inject(this);
+        initMode(mode);
+    }
+
+    private void initMode(int mode) {
+        switch (mode) {
+            case 1:
+                isWardropeMode = true;
+                break;
+            case -1:
+                break;
+        }
     }
 
     public void refreshList() {
         unsubscribeOnDestroy(things.getNextList(-1).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().initList(list), e -> e.printStackTrace()));
+                .subscribe(list -> getViewState().initList(list, isWardropeMode), e -> e.printStackTrace()));
     }
 
     @Override
@@ -58,19 +71,26 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     @Override
     public void onLongItemClick(IDbModel model) {
-        unsubscribeOnDestroy(things.deletItem((Thing) model)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isDel -> {
-                    getViewState().notifyListChanges((Thing) model);
-                }));
-
+        if (!isWardropeMode) {
+            unsubscribeOnDestroy(things.deletItem((Thing) model)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(isDel -> {
+                        getViewState().notifyListChanges((Thing) model);
+                    }));
+        }
     }
 
     @Override
     public void onItemClick(IDbModel model) {
-        Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
-        intent.putExtra(THINGS_ID, ((Thing) model).getId());
-        getViewState().openUpdateActivity(intent);
+        Thing thing = (Thing) model;
+        if (!isWardropeMode) {
+            Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
+            intent.putExtra(THINGS_ID, ((Thing) model).getId());
+            getViewState().openUpdateActivity(intent);
+        } else {
+            getViewState().addThingId(thing.getId());
+        }
+
     }
 }

@@ -7,4 +7,6 @@ import com.arellomobile.mvp.MvpView;
  */
 
 public interface IAddUpdateWardropeView extends MvpView {
+    void setCount(int count);
+    void addThingId(long id);
 }

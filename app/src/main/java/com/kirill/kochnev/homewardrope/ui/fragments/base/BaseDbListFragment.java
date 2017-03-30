@@ -52,6 +52,12 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
 
     protected DbListAdapter<M> adapter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        onCreationStart();
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,13 +108,15 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                switch (newState) {
-                    case RecyclerView.SCROLL_STATE_DRAGGING:
-                        addBtn.setVisibility(View.GONE);
-                        break;
-                    case RecyclerView.SCROLL_STATE_IDLE:
-                        addBtn.setVisibility(View.VISIBLE);
-                        break;
+                if (addBtn.isActivated()) {
+                    switch (newState) {
+                        case RecyclerView.SCROLL_STATE_DRAGGING:
+                            addBtn.setVisibility(View.GONE);
+                            break;
+                        case RecyclerView.SCROLL_STATE_IDLE:
+                            addBtn.setVisibility(View.VISIBLE);
+                            break;
+                    }
                 }
             }
         });
@@ -118,7 +126,9 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        parent = (IParent) context;
+        if (context instanceof  IParent) {
+            parent = (IParent) context;
+        }
     }
 
     @Override
@@ -151,4 +161,8 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
     public abstract BaseDbListPresenter getPresenter();
 
     public abstract void onInitUi();
+
+    public void onCreationStart() {
+
+    }
 }

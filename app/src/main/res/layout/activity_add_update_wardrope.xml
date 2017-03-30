@@ -20,16 +20,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:gravity="center"
         android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="SELECTED: "/>
+        <TextView
+            android:id="@+id/things_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0"/>
 
         <Button
-            android:id="@+id/wardrope_save_btn"
+            android:id="@+id/wardrope_show_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SAVE" />
+            android:layout_gravity="end"
+            android:text="ВЫБРАТЬ" />
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/frame_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <ImageView
         android:id="@+id/photo_thing"

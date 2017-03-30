@@ -16,6 +16,11 @@ import java.util.List;
 public interface IThingsView extends IPaginationView<Thing> {
 
     @StateStrategyType(SkipStrategy.class)
+    void initList(List<Thing> models, boolean isWardropeMode);
+
+    @StateStrategyType(SkipStrategy.class)
     void openUpdateActivity(Intent bundle);
+
+    void addThingId(long id);
 
 }

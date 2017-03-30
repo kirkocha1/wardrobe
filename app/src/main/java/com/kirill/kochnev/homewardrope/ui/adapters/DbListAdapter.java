@@ -24,6 +24,8 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
 
     private OnClick<M> clickListner;
 
+    private boolean isWardropeMode;
+
     public class DbListHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.item)
@@ -34,6 +36,9 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(v -> {
                 if (clickListner != null) {
+                    if (isWardropeMode) {
+                        item.toogleCheck();
+                    }
                     clickListner.onClick(DbListAdapter.this.getItem(getLayoutPosition()));
                 }
             });
@@ -45,12 +50,18 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
                 return true;
             });
 
+            item.setBoxVisibility(isWardropeMode);
+
         }
 
 
         public void setModel(M model) {
             model.inflateHolder(this);
         }
+    }
+
+    public void setWardropeMode(boolean wardropeMode) {
+        isWardropeMode = wardropeMode;
     }
 
     public void setClickListner(OnClick<M> clickListner) {

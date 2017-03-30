@@ -2,12 +2,15 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,8 +21,14 @@ import butterknife.ButterKnife;
 
 public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView{
 
-    @BindView(R.id.wardrope_save_btn)
-    Button save;
+    @BindView(R.id.frame_id)
+    FrameLayout frame;
+
+    @BindView(R.id.wardrope_show_frame)
+    Button select;
+
+    @BindView(R.id.things_count)
+    TextView countView;
 
     @InjectPresenter
     AddUpdateWardropePresenter presenter;
@@ -34,7 +43,21 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     }
 
     private void initUi() {
-
+        select.setOnClickListener(v -> {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.frame_id, ThingsFragment.createInstance(1))
+                    .commit();
+        });
     }
 
+    @Override
+    public void setCount(int count) {
+        countView.setText("" + count);
+    }
+
+
+    @Override
+    public void addThingId(long id) {
+        presenter.addThingId(id);
+    }
 }
