@@ -13,7 +13,7 @@ import java.util.Date;
  */
 
 @Entity
-public class Thing implements IHolderModel{
+public class Thing implements IDbModel {
 
     @Id
     private Long id;

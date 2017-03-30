@@ -14,11 +14,16 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter.THINGS_ID;
 
 public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
 
@@ -42,11 +47,14 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
 
     @ProvidePresenter
     AddUpdateThingPresenter providePresenter() {
-        return new AddUpdateThingPresenter(-1);
+        return new AddUpdateThingPresenter(thingsId);
     }
+
+    private long thingsId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        thingsId = getIntent().getLongExtra(THINGS_ID, -1);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_update_thing);
         ButterKnife.bind(this);
@@ -92,5 +100,12 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
     @Override
     public void showError(String error) {
 
+    }
+
+    @Override
+    public void updateView(Thing model) {
+        pic.setImageURI(Uri.fromFile(new File(model.getFullImagePath())));
+        tag.setText(model.getTag());
+        name.setText(model.getName());
     }
 }

@@ -6,6 +6,7 @@ import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
  * Created by Kirill Kochnev on 26.02.17.
  */
 
-public interface IHolderModel {
+public interface IDbModel {
     void inflateHolder(DbListAdapter.DbListHolder holder);
+
 }

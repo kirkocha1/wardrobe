@@ -1,24 +1,27 @@
 package com.kirill.kochnev.homewardrope.ui.fragments.base;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.arellomobile.mvp.MvpFragment;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.db.models.IHolderModel;
+import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.mvp.presenters.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IPaginationView;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +30,7 @@ import butterknife.ButterKnife;
  * Created by Kirill Kochnev on 24.02.17.
  */
 
-public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFragment implements IPaginationView<M> {
+public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment implements IPaginationView<M>, OnClick<M> {
 
     public static final String TAG = "BaseDbListFragment";
 
@@ -36,6 +39,9 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
 
     @BindView(R.id.add)
     protected FloatingActionButton addBtn;
+
+    @BindView(R.id.blank_image)
+    protected ImageView blankImg;
 
     private GridLayoutManager layoutManager;
     protected boolean isLoading = false;
@@ -53,9 +59,26 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
 
     }
 
+    @Override
+    public void onLongClick(M model) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Вы уверенны, что хотите удалить?")
+                .setPositiveButton("Да", (dialog, which) -> {
+                    getPresenter().onLongItemClick(model);
+                    dialog.dismiss();
+                });
+        builder.create().show();
+    }
+
+    @Override
+    public void onClick(M model) {
+        getPresenter().onItemClick(model);
+    }
+
     private void initUi() {
         layoutManager = new GridLayoutManager(getContext(), 2);
         adapter = new DbListAdapter<>();
+        adapter.setClickListner(this);
         list.setLayoutManager(layoutManager);
         list.setAdapter(adapter);
         list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -88,6 +111,13 @@ public abstract class BaseDbListFragment<M extends IHolderModel> extends MvpFrag
             }
         });
         onInitUi();
+    }
+
+    @Override
+    public void notifyListChanges(M model) {
+        if (adapter != null) {
+            adapter.onRemoveItem(model);
+        }
     }
 
     public abstract BaseDbListPresenter getPresenter();

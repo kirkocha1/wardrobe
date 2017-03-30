@@ -49,7 +49,16 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         WardropeApplication.getComponent().inject(this);
         if (id == -1) {
             model = new Thing();
+        } else {
+            initValues(id);
+            getViewState().updateView(model);
         }
+    }
+
+    private void initValues(long id) {
+        model = dao.load(id);
+        iconPath = model.getIconImagePath();
+        imagePath = model.getFullImagePath();
     }
 
     public void saveThing(String name, String tag) {
@@ -57,7 +66,7 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         model.setTag(tag);
         model.setFullImagePath(imagePath);
         model.setIconImagePath(iconPath);
-        dao.insert(model);
+        dao.insertOrReplace(model);
         getViewState().onSave();
     }
 
