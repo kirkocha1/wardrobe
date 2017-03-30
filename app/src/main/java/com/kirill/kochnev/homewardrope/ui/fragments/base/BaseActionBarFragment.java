@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.fragments.base;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 
 import com.arellomobile.mvp.MvpFragment;
 import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IActionBarController;
@@ -22,9 +23,9 @@ public class BaseActionBarFragment extends MvpFragment {
     }
 
 
-    public void setTitle() {
+    public void setTitle(@StringRes int resId) {
         if (barController != null) {
-//            barController.setTitle();
+            barController.setTitle(resId);
         }
     }
 }
