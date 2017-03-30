@@ -3,7 +3,6 @@ package com.kirill.kochnev.homewardrope;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.kirill.kochnev.homewardrope.di.AppComponent;
@@ -31,7 +30,6 @@ public class WardropeApplication extends Application {
     }
 
     public static void loadImage(String url, ImageView imageView) {
-        Log.e(TAG, "path to icon: " + url);
         Uri uriToFile = url != null ? Uri.fromFile(new File(url)) : null;
         Picasso.with(getContext()).load(uriToFile).placeholder(R.drawable.image_placeholder).into(imageView);
     }

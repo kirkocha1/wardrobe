@@ -56,6 +56,7 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         things.getItem(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(model -> {
+                    this.model = model;
                     iconPath = model.getIconImagePath();
                     imagePath = model.getFullImagePath();
                     getViewState().updateView(model.getName(), model.getTag(), makeImage(imagePath));
@@ -79,7 +80,7 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = WardropeApplication.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File imageUri = File.createTempFile(imageFileName, ".jpg", storageDir);
-        File iconUri = File.createTempFile(imageFileName + "_min_icon", ".jpg", storageDir);
+        File iconUri = File.createTempFile(imageFileName + "min_icon", ".jpg", storageDir);
         iconPath = iconUri.getAbsolutePath();
         imagePath = imageUri.getAbsolutePath();
         return imageUri;
