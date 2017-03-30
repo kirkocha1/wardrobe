@@ -1,7 +1,5 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -15,7 +13,7 @@ import java.util.Date;
  */
 
 @Entity
-public class Thing implements IHolderModel{
+public class Thing implements IDbModel {
 
     @Id
     private Long id;
@@ -24,6 +22,11 @@ public class Thing implements IHolderModel{
 
     private String name;
 
+    private String tag;
+
+    private String fullImagePath;
+
+    private String iconImagePath;
 
     public Thing(String name) {
         id = null;
@@ -35,14 +38,17 @@ public class Thing implements IHolderModel{
         this.creationDate = new Date();
     }
 
-    @Generated(hash = 948112464)
-    public Thing(Long id, Date creationDate, String name) {
+    @Generated(hash = 2104068066)
+    public Thing(Long id, Date creationDate, String name, String tag,
+            String fullImagePath, String iconImagePath) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
+        this.tag = tag;
+        this.fullImagePath = fullImagePath;
+        this.iconImagePath = iconImagePath;
     }
-
-
+    
     public Date getCreationDate() {
         return this.creationDate;
     }
@@ -67,8 +73,36 @@ public class Thing implements IHolderModel{
         this.id = id;
     }
 
+
+
+    public String getFullImagePath() {
+        return this.fullImagePath;
+    }
+
+    public void setFullImagePath(String fullImagePath) {
+        this.fullImagePath = fullImagePath;
+    }
+
+    public String getTag() {
+        return this.tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     @Override
     public void inflateHolder(DbListAdapter.DbListHolder holder) {
         holder.item.setName(name);
+        holder.item.setImage(iconImagePath);
     }
+
+    public String getIconImagePath() {
+        return this.iconImagePath;
+    }
+
+    public void setIconImagePath(String iconImagePath) {
+        this.iconImagePath = iconImagePath;
+    }
+
 }

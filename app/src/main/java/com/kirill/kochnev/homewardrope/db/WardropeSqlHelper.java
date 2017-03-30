@@ -25,7 +25,7 @@ public class WardropeSqlHelper extends DaoMaster.DevOpenHelper {
     @Override
     public void onCreate(Database db) {
         super.onCreate(db);
-        testData(db);
+//        testData(db);
     }
 
     private void testData(Database db) {

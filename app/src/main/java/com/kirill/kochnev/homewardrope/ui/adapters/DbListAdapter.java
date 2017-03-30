@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.db.models.IHolderModel;
+import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
 
 import java.util.List;
@@ -18,9 +18,11 @@ import butterknife.ButterKnife;
  * Created by Kirill Kochnev on 25.02.17.
  */
 
-public class DbListAdapter<M extends IHolderModel> extends RecyclerView.Adapter<DbListAdapter<M>.DbListHolder> {
+public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbListAdapter<M>.DbListHolder> {
 
     private List<M> models;
+
+    private OnClick clickListner;
 
     public class DbListHolder extends RecyclerView.ViewHolder {
 
@@ -30,11 +32,29 @@ public class DbListAdapter<M extends IHolderModel> extends RecyclerView.Adapter<
         DbListHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(v -> {
+                if (clickListner != null) {
+                    clickListner.onClick(DbListAdapter.this.getItem(getLayoutPosition()));
+                }
+            });
+
+            itemView.setOnLongClickListener(v -> {
+                if (clickListner != null) {
+                    clickListner.onLongClick(DbListAdapter.this.getItem(getLayoutPosition()));
+                }
+                return true;
+            });
+
         }
+
 
         public void setModel(M model) {
             model.inflateHolder(this);
         }
+    }
+
+    public void setClickListner(OnClick clickListner) {
+        this.clickListner = clickListner;
     }
 
     public void setData(List<M> models) {
@@ -55,6 +75,11 @@ public class DbListAdapter<M extends IHolderModel> extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(DbListHolder holder, int position) {
         holder.setModel(getItem(position));
+    }
+
+    public void onRemoveItem(M model) {
+        models.remove(model);
+        notifyDataSetChanged();
     }
 
     @Override
