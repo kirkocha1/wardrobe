@@ -56,7 +56,6 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
         ButterKnife.bind(this, view);
         initUi();
         return view;
-
     }
 
     @Override

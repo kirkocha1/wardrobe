@@ -11,8 +11,8 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
-import com.kirill.kochnev.homewardrope.db.models.ThingDao;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,12 +34,10 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
     public static final String TAG = "AddUpdateThingPresenter";
     private static final int REQ_HEIGHT = 640;
     private static final int REQ_WIDTH = 480;
-    private static final int ICON_HEIGHT = 160;
-    private static final int ICON_WIDTH = 120;
-
 
     @Inject
-    protected ThingDao dao;
+    protected AbstractThingRepository things;
+
     private Thing model;
     private String imagePath;
     private String iconPath;
@@ -51,14 +49,17 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
             model = new Thing();
         } else {
             initValues(id);
-            getViewState().updateView(model);
         }
     }
 
     private void initValues(long id) {
-        model = dao.load(id);
-        iconPath = model.getIconImagePath();
-        imagePath = model.getFullImagePath();
+        things.getItem(id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(model -> {
+                    iconPath = model.getIconImagePath();
+                    imagePath = model.getFullImagePath();
+                    getViewState().updateView(model.getName(), model.getTag(), makeImage(imagePath));
+                }, e -> e.printStackTrace());
     }
 
     public void saveThing(String name, String tag) {
@@ -66,8 +67,10 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         model.setTag(tag);
         model.setFullImagePath(imagePath);
         model.setIconImagePath(iconPath);
-        dao.insertOrReplace(model);
-        getViewState().onSave();
+        things.putItem(model)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isPut -> getViewState().onSave());
     }
 
     private File createImageFile() throws IOException {
@@ -96,14 +99,18 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         }
     }
 
+    private Bitmap makeImage(String imagePath) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, options);
+        options.inSampleSize = calculateInSampleSize(options);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(imagePath, options);
+    }
+
     public void processImage() {
         Single<Bitmap> getCropImage = Single.create(sub -> {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(imagePath, options);
-            options.inSampleSize = calculateInSampleSize(options);
-            options.inJustDecodeBounds = false;
-            Bitmap cropImage = BitmapFactory.decodeFile(imagePath, options);
+            Bitmap cropImage = makeImage(imagePath);
             saveIcon(cropImage);
             if (cropImage != null) {
                 sub.onSuccess(cropImage);

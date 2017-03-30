@@ -18,5 +18,5 @@ public interface IAddUpdateThingView extends MvpView {
 
     void showError(String error);
 
-    void updateView(Thing model);
+    void updateView(String name, String tag, Bitmap image);
 }
