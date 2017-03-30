@@ -84,7 +84,7 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return models == null ? 0 : models.size();
     }
 
     public M getItem(int position) {

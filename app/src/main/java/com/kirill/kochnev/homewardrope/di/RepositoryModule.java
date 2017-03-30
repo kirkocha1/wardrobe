@@ -1,8 +1,11 @@
 package com.kirill.kochnev.homewardrope.di;
 
 import com.kirill.kochnev.homewardrope.db.models.ThingDao;
-import com.kirill.kochnev.homewardrope.repositories.ThingsRepository;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.interfaces.IThingsRepository;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,9 +17,10 @@ import dagger.Provides;
 @Module
 public class RepositoryModule {
 
+    @Singleton
     @Provides
-    IThingsRepository provideThingsRepository(ThingDao dao) {
-        return new ThingsRepository(dao);
+    AbstractThingRepository provideTRepository(ThingDao dao) {
+        return new ThingRepository(dao);
     }
 
 }

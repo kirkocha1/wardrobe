@@ -103,9 +103,9 @@ public class AddOrUpdateThingActivity extends MvpAppCompatActivity implements IA
     }
 
     @Override
-    public void updateView(Thing model) {
-        pic.setImageURI(Uri.fromFile(new File(model.getFullImagePath())));
-        tag.setText(model.getTag());
-        name.setText(model.getName());
+    public void updateView(String name, String tag, Bitmap image) {
+        pic.setImageBitmap(image);
+        this.tag.setText(tag);
+        this.name.setText(name);
     }
 }
