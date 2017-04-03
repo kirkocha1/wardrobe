@@ -28,6 +28,10 @@ public class WardropeFragment extends BaseDbListFragment<Wardrope> implements IW
     @Override
     public void initList(List<Wardrope> models) {
         blankImg.setVisibility(models == null || models.size() == 0 ? View.VISIBLE : View.GONE);
+        for(Wardrope wardrope : models) {
+            String name = wardrope.getName();
+            wardrope.getThingsWardropes();
+        }
         adapter.setData(models);
         isInit = true;
         isLoading = false;

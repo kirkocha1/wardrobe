@@ -25,7 +25,7 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 
 public class ThingsFragment extends BaseDbListFragment<Thing> implements IThingsView {
-
+    public static final int WARDROPE_MODE = 1;
     public static final String FRAGMENT_MODE = "mode";
     private int mode;
     private IAddUpdateWardropeView wardropeView;
@@ -81,7 +81,9 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        wardropeView = (IAddUpdateWardropeView) context;
+        if (context instanceof IAddUpdateWardropeView) {
+            wardropeView = (IAddUpdateWardropeView) context;
+        }
     }
 
     @Override

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/new_thing_name"
+        android:id="@+id/new_wardrope_name"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,6 +39,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="ВЫБРАТЬ" />
+
+        <Button
+            android:id="@+id/save_wardrope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="СОХРАНИТЬ" />
+
+
     </LinearLayout>
 
     <FrameLayout

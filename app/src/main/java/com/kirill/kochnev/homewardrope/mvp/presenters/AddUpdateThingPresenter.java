@@ -57,6 +57,7 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(model -> {
                     this.model = model;
+                    model.getThingsWardropes();
                     iconPath = model.getIconImagePath();
                     imagePath = model.getFullImagePath();
                     getViewState().updateView(model.getName(), model.getTag(), makeImage(imagePath));

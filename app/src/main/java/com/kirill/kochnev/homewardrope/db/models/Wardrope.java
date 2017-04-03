@@ -21,7 +21,7 @@ import com.kirill.kochnev.homewardrope.db.models.manytomany.ThingsWardropesDao;
 public class Wardrope implements IDbModel {
 
     @Id
-    private long id;
+    private Long id;
     private Date creationDate;
     private String name;
 
@@ -33,6 +33,7 @@ public class Wardrope implements IDbModel {
     /** Used for active entity operations. */
     @Generated(hash = 981576401)
     private transient WardropeDao myDao;
+    /** Used to resolve relations */
 
     public Wardrope(String name, long id) {
         this.name = name;
@@ -44,20 +45,16 @@ public class Wardrope implements IDbModel {
         this.creationDate = new Date();
     }
 
-    @Generated(hash = 1120298132)
-    public Wardrope(long id, Date creationDate, String name) {
+    @Generated(hash = 107173050)
+    public Wardrope(Long id, Date creationDate, String name) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
     }
 
-    public long getId() {
-        return this.id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+
+   
 
     public Date getCreationDate() {
         return this.creationDate;
@@ -73,6 +70,15 @@ public class Wardrope implements IDbModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+        
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**
@@ -140,9 +146,8 @@ public class Wardrope implements IDbModel {
         myDao.update(this);
     }
 
-    @Override
-    public void inflateHolder(DbListAdapter.DbListHolder holder) {
-
+    public Long getId() {
+        return this.id;
     }
 
     /** called by internal mechanisms, do not call yourself. */

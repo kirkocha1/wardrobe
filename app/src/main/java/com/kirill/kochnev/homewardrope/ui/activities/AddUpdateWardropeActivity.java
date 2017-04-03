@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -27,6 +28,12 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     @BindView(R.id.wardrope_show_frame)
     Button select;
 
+    @BindView(R.id.save_wardrope)
+    Button save;
+
+    @BindView(R.id.new_wardrope_name)
+    EditText name;
+
     @BindView(R.id.things_count)
     TextView countView;
 
@@ -45,9 +52,11 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     private void initUi() {
         select.setOnClickListener(v -> {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.frame_id, ThingsFragment.createInstance(1))
+                    .replace(R.id.frame_id, ThingsFragment.createInstance(ThingsFragment.WARDROPE_MODE))
                     .commit();
         });
+
+        save.setOnClickListener(v -> presenter.save(name.getText().toString()));
     }
 
     @Override
