@@ -1,43 +1,28 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Property;
+import android.provider.BaseColumns;
+
+import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 /**
  * Created by kirill on 30.03.17.
  */
 
-@Entity
-public class ThingsWardropes {
+@StorIOSQLiteType(table = "things_wardropes")
+public class ThingsWardropes implements IDbModel {
 
-    @Id
-    private Long id;
+    @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
+    Long _id;
 
-    @Property(nameInDb = "wardropeId")
-    private Long wardropeId;
+    @StorIOSQLiteColumn(name = "wardropeId")
+    long wardropeId;
 
-    @Property(nameInDb = "thingId")
-    private Long thingId;
+    @StorIOSQLiteColumn(name = "thingId")
+    long thingId;
 
-    @Generated(hash = 1173295568)
-    public ThingsWardropes(Long id, Long wardropeId, Long thingId) {
-        this.id = id;
-        this.wardropeId = wardropeId;
-        this.thingId = thingId;
-    }
-
-    @Generated(hash = 66473543)
     public ThingsWardropes() {
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getWardropeId() {
@@ -54,5 +39,10 @@ public class ThingsWardropes {
 
     public void setThingId(Long thingId) {
         this.thingId = thingId;
+    }
+
+    @Override
+    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+
     }
 }

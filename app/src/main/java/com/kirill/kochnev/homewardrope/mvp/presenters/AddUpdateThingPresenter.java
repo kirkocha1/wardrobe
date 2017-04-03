@@ -10,7 +10,6 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.StringJoiner;
 
 import javax.inject.Inject;
 
@@ -59,9 +57,6 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(model -> {
                     this.model = model;
-                    for (Wardrope w : model.getWardropes()) {
-                        String name = w.getName();
-                    }
                     iconPath = model.getIconImagePath();
                     imagePath = model.getFullImagePath();
                     getViewState().updateView(model.getName(), model.getTag(), makeImage(imagePath));

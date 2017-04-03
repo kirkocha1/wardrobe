@@ -1,33 +1,49 @@
 package com.kirill.kochnev.homewardrope.db;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
 import android.util.Log;
 
-import com.kirill.kochnev.homewardrope.db.models.DaoMaster;
-
-import org.greenrobot.greendao.database.Database;
+import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.CREATE_THINGS_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable.CREATE_THINGS_WARDROPES_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.CREATE_WARDROPES_TABLE;
 
 /**
  * Created by Kirill Kochnev on 26.02.17.
  */
 
-public class WardropeSqlHelper extends DaoMaster.DevOpenHelper {
+public class WardropeSqlHelper extends SQLiteOpenHelper {
     public static final String TAG = "WardropeSqlHelper";
 
-    public WardropeSqlHelper(Context context, String name) {
-        super(context, name);
-        Log.d(TAG, "constructor");
+    public static final int DB_VERSION = 1;
+    public static final String DB_NAME = "wardrope.db";
+
+    public static final String CREATION_DATE = "creation_date";
+
+    public WardropeSqlHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
-    public void onCreate(Database db) {
-        super.onCreate(db);
-
+    public void onCreate(SQLiteDatabase db) {
+        updateDb(db, 0, DB_VERSION);
     }
 
-
     @Override
-    public void onUpgrade(Database db, int oldVersion, int newVersion) {
-        super.onUpgrade(db, oldVersion, newVersion);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        updateDb(db, oldVersion, newVersion);
+    }
+
+    private void updateDb(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d(TAG, "DB CREATION");
+        Log.d(TAG, CREATE_THINGS_TABLE);
+        Log.d(TAG, CREATE_WARDROPES_TABLE);
+        Log.d(TAG, CREATE_THINGS_WARDROPES_TABLE);
+
+        db.execSQL(CREATE_THINGS_TABLE);
+        db.execSQL(CREATE_WARDROPES_TABLE);
+        db.execSQL(CREATE_THINGS_WARDROPES_TABLE);
     }
 }

@@ -1,12 +1,14 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
+import android.provider.BaseColumns;
+
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 
 /**
- * Created by Kirill Kochnev on 26.02.17.
+ * Created by kirill on 03.04.17.
  */
 
-public interface IDbModel {
-    void inflateHolder(DbListAdapter.DbListHolder holder);
+public interface IDbModel extends BaseColumns {
 
+    void inflateHolder(DbListAdapter.DbListHolder holder);
 }

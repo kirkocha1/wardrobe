@@ -9,6 +9,8 @@ import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IPaginationView;
 
 public abstract class BaseDbListPresenter<V extends IPaginationView> extends BaseMvpPresenter<V> {
     public abstract void loadMoreData(long modelId);
+
     public abstract void onLongItemClick(IDbModel model);
+
     public abstract void onItemClick(IDbModel model);
 }

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -43,8 +42,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
 
-    compile 'org.greenrobot:greendao:3.2.0'
-
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.android.support:design:25.2.0'
     compile 'com.jakewharton:butterknife:8.5.1'
@@ -63,9 +60,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
 
+    compile 'com.pushtorefresh.storio:sqlite-annotations:1.12.3'
+    annotationProcessor 'com.pushtorefresh.storio:sqlite-annotations-processor:1.12.3'
     compile 'com.pushtorefresh.storio:sqlite:1.12.3'
-}
-
-greendao {
-    schemaVersion 12
 }
