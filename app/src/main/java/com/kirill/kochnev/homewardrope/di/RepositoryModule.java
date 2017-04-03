@@ -1,6 +1,8 @@
 package com.kirill.kochnev.homewardrope.di;
 
+import com.kirill.kochnev.homewardrope.db.models.DaoSession;
 import com.kirill.kochnev.homewardrope.db.models.ThingDao;
+import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.db.models.WardropeDao;
 import com.kirill.kochnev.homewardrope.repositories.WardropeRepository;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
@@ -28,7 +30,7 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    AbstractWardropeRepository provideWardropeRepository(WardropeDao dao) {
-        return new WardropeRepository(dao);
+    AbstractWardropeRepository provideWardropeRepository(WardropeDao dao, DaoSession session) {
+        return new WardropeRepository(dao, session);
     }
 }

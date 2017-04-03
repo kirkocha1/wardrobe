@@ -62,8 +62,10 @@ dependencies {
     compile 'com.arello-mobile:moxy-app-compat:1.4.5'
     compile 'com.android.support:appcompat-v7:25.2.0'
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
+
+    compile 'com.pushtorefresh.storio:sqlite:1.12.3'
 }
 
 greendao {
-    schemaVersion 10
+    schemaVersion 12
 }

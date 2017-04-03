@@ -1,8 +1,10 @@
 package com.kirill.kochnev.homewardrope.repositories;
 
+import com.kirill.kochnev.homewardrope.db.models.DaoSession;
+import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.db.models.ThingDao;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.db.models.WardropeDao;
-import com.kirill.kochnev.homewardrope.db.models.manytomany.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 
 import org.greenrobot.greendao.AbstractDao;
@@ -19,8 +21,11 @@ import io.reactivex.Single;
 
 public class WardropeRepository extends AbstractWardropeRepository {
 
-    public WardropeRepository(AbstractDao<Wardrope, Long> dao) {
+    private DaoSession session;
+
+    public WardropeRepository(AbstractDao<Wardrope, Long> dao, DaoSession session) {
         super(dao);
+        this.session = session;
     }
 
 
@@ -31,18 +36,12 @@ public class WardropeRepository extends AbstractWardropeRepository {
                 Wardrope wardrope = new Wardrope();
                 wardrope.setName(name);
                 long wardropeId = dao.insertOrReplace(wardrope);
-                for (Long id : thingIds) {
-                    ThingsWardropes entity = new ThingsWardropes();
-                    entity.setThingId(id);
-                    entity.setWardropeId(wardropeId);
-                    wardrope.getThingsWardropes().add(entity);
+                List<Thing> things = session.getThingDao().queryBuilder().where(ThingDao.Properties.Id.in(thingIds)).list();
+                for (Thing thing : things) {
+                    wardrope.getThings().add(thing);
                 }
-                long id = dao.insertOrReplace(wardrope);
-
-                List<Wardrope> ls = dao.queryBuilder().where(WardropeDao.Properties.Id.eq(wardrope.getId())).list();
-                for (Wardrope w : ls) {
-                    List<ThingsWardropes> f = w.getThingsWardropes();
-                }
+                wardrope.update();
+                Wardrope w = dao.load(wardropeId);
                 sub.onSuccess(new Object());
             } catch (Exception ex) {
                 sub.onError(ex);

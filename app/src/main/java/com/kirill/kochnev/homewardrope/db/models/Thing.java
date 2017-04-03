@@ -1,17 +1,16 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import com.kirill.kochnev.homewardrope.db.models.manytomany.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.Date;
 import java.util.List;
-import org.greenrobot.greendao.DaoException;
-import com.kirill.kochnev.homewardrope.db.models.manytomany.ThingsWardropesDao;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
@@ -23,8 +22,12 @@ public class Thing implements IDbModel {
     @Id
     private Long id;
 
-    @ToMany(referencedJoinProperty = "thingId")
-    private List<ThingsWardropes> thingsWardropes;
+    @ToMany
+    @JoinEntity(entity = ThingsWardropes.class,
+            sourceProperty = "thingId",
+            targetProperty = "wardropeId")
+    private List<Wardrope> wardropes;
+
 
     private Date creationDate;
 
@@ -44,19 +47,9 @@ public class Thing implements IDbModel {
     @Generated(hash = 359674910)
     private transient ThingDao myDao;
 
-    public Thing(String name) {
-        id = null;
-        this.name = name;
-        this.creationDate = new Date();
-    }
-
-    public Thing() {
-        this.creationDate = new Date();
-    }
-
     @Generated(hash = 2104068066)
-    public Thing(Long id, Date creationDate, String name, String tag,
-            String fullImagePath, String iconImagePath) {
+    public Thing(Long id, Date creationDate, String name, String tag, String fullImagePath,
+            String iconImagePath) {
         this.id = id;
         this.creationDate = creationDate;
         this.name = name;
@@ -64,7 +57,30 @@ public class Thing implements IDbModel {
         this.fullImagePath = fullImagePath;
         this.iconImagePath = iconImagePath;
     }
-    
+
+    @Generated(hash = 1981866127)
+    public Thing() {
+    }
+
+    public Thing(long id) {
+        this.id = id;
+        this.creationDate = new Date();
+    }
+
+
+    @Override
+    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Date getCreationDate() {
         return this.creationDate;
     }
@@ -81,22 +97,6 @@ public class Thing implements IDbModel {
         this.name = name;
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFullImagePath() {
-        return this.fullImagePath;
-    }
-
-    public void setFullImagePath(String fullImagePath) {
-        this.fullImagePath = fullImagePath;
-    }
-
     public String getTag() {
         return this.tag;
     }
@@ -105,10 +105,12 @@ public class Thing implements IDbModel {
         this.tag = tag;
     }
 
-    @Override
-    public void inflateHolder(DbListAdapter.DbListHolder holder) {
-        holder.item.setName(name);
-        holder.item.setImage(iconImagePath);
+    public String getFullImagePath() {
+        return this.fullImagePath;
+    }
+
+    public void setFullImagePath(String fullImagePath) {
+        this.fullImagePath = fullImagePath;
     }
 
     public String getIconImagePath() {
@@ -123,29 +125,28 @@ public class Thing implements IDbModel {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 2020594078)
-    public List<ThingsWardropes> getThingsWardropes() {
-        if (thingsWardropes == null) {
+    @Generated(hash = 1135832049)
+    public List<Wardrope> getWardropes() {
+        if (wardropes == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            ThingsWardropesDao targetDao = daoSession.getThingsWardropesDao();
-            List<ThingsWardropes> thingsWardropesNew = targetDao
-                    ._queryThing_ThingsWardropes(id);
+            WardropeDao targetDao = daoSession.getWardropeDao();
+            List<Wardrope> wardropesNew = targetDao._queryThing_Wardropes(id);
             synchronized (this) {
-                if (thingsWardropes == null) {
-                    thingsWardropes = thingsWardropesNew;
+                if (wardropes == null) {
+                    wardropes = wardropesNew;
                 }
             }
         }
-        return thingsWardropes;
+        return wardropes;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated(hash = 1052105978)
-    public synchronized void resetThingsWardropes() {
-        thingsWardropes = null;
+    @Generated(hash = 1618912207)
+    public synchronized void resetWardropes() {
+        wardropes = null;
     }
 
     /**
@@ -190,5 +191,4 @@ public class Thing implements IDbModel {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getThingDao() : null;
     }
-
 }

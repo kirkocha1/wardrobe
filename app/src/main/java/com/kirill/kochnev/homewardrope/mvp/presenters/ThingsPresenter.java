@@ -12,8 +12,6 @@ import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 
-import java.util.HashSet;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
