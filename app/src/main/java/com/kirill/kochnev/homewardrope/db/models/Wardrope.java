@@ -9,6 +9,10 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 import java.util.Date;
 import java.util.List;
 
+import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
+import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_COUNT;
+import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_NAME;
+
 /**
  * Created by Kirill Kochnev on 12.02.17.
  */
@@ -18,11 +22,14 @@ public class Wardrope implements IDbModel {
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
     Long _id;
 
-    @StorIOSQLiteColumn(name = "creation_date")
+    @StorIOSQLiteColumn(name = CREATION_DATE)
     String creationDate;
 
-    @StorIOSQLiteColumn(name = "name")
+    @StorIOSQLiteColumn(name = WARDROPE_NAME)
     String name;
+
+    @StorIOSQLiteColumn(name = WARDROPE_COUNT)
+    int count;
 
     private List<Thing> things;
 
@@ -41,11 +48,11 @@ public class Wardrope implements IDbModel {
         this.name = name;
     }
 
-    public Long get_id() {
+    public Long getId() {
         return _id;
     }
 
-    public void set_id(Long _id) {
+    public void setId(Long _id) {
         this._id = _id;
     }
 
@@ -60,5 +67,21 @@ public class Wardrope implements IDbModel {
 
     public void setThings(List<Thing> things) {
         this.things = things;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

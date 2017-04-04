@@ -8,7 +8,9 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
@@ -20,7 +22,9 @@ import butterknife.ButterKnife;
  * Created by kirill on 30.03.17.
  */
 
-public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView{
+public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView {
+
+    public static final String WARDROPE_ID = "wardrope_id";
 
     @BindView(R.id.frame_id)
     FrameLayout frame;
@@ -40,9 +44,16 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     @InjectPresenter
     AddUpdateWardropePresenter presenter;
 
+    private long wardropeId;
+
+    @ProvidePresenter
+    AddUpdateWardropePresenter providePresenter() {
+        return new AddUpdateWardropePresenter(wardropeId);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        thingsId = getIntent().getLongExtra(THINGS_ID, -1);
+        wardropeId = getIntent().getLongExtra(WARDROPE_ID, -1);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_update_wardrope);
         ButterKnife.bind(this);
@@ -56,7 +67,7 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
                     .commit();
         });
 
-        save.setOnClickListener(v -> presenter.save(name.getText().toString()));
+        save.setOnClickListener(v -> presenter.save(name.getText().toString(), Integer.valueOf(countView.getText().toString())));
     }
 
     @Override
@@ -68,5 +79,11 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     @Override
     public void addThingId(long id) {
         presenter.addThingId(id);
+    }
+
+    @Override
+    public void initView(Wardrope wardrope) {
+        countView.setText(wardrope.getCount() + "");
+        name.setText(wardrope.getName());
     }
 }

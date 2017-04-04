@@ -3,7 +3,6 @@ package com.kirill.kochnev.homewardrope.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.CREATE_THINGS_TABLE;

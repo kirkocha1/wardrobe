@@ -18,7 +18,7 @@ import io.reactivex.Single;
 //Abstract repository for common CRUD operation
 public abstract class AbstractRepository<M> implements IRepository<M> {
 
-    private StorIOSQLite storIOSQLite;
+    public StorIOSQLite storIOSQLite;
 
     public AbstractRepository(StorIOSQLite storIOSQLite) {
         this.storIOSQLite = storIOSQLite;

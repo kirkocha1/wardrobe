@@ -14,11 +14,8 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

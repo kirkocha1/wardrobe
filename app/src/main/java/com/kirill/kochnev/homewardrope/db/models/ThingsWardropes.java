@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
 
+import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
@@ -16,13 +17,18 @@ public class ThingsWardropes implements IDbModel {
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
     Long _id;
 
-    @StorIOSQLiteColumn(name = "wardropeId")
+    @StorIOSQLiteColumn(name = ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID)
     long wardropeId;
 
-    @StorIOSQLiteColumn(name = "thingId")
+    @StorIOSQLiteColumn(name = ThingsWardropesTable.THINGS_WARDROPES_THING_ID)
     long thingId;
 
     public ThingsWardropes() {
+    }
+
+    public ThingsWardropes(long wardropeId, long thingId) {
+        this.wardropeId = wardropeId;
+        this.thingId = thingId;
     }
 
     public Long getWardropeId() {

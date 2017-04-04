@@ -1,10 +1,15 @@
 package com.kirill.kochnev.homewardrope.repositories;
 
+import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import io.reactivex.Single;
 
@@ -16,27 +21,28 @@ public class WardropeRepository extends AbstractWardropeRepository {
 
     public WardropeRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
-
     }
 
-
     @Override
-    public Single<Object> putWardropeWithThings(String name, HashSet<Long> thingIds) {
+    public Single<Object> putWardropeWithThings(Wardrope wardrope, HashSet<Long> thingIds) {
         return Single.create(sub -> {
-//            try {
-//                Wardrope wardrope = new Wardrope();
-//                wardrope.setName(name);
-//                long wardropeId = dao.insertOrReplace(wardrope);
-//                List<Thing> things = session.getThingDao().queryBuilder().where(ThingDao.Properties.Id.in(thingIds)).list();
-//                for (Thing thing : things) {
-//                    wardrope.getThings().add(thing);
-//                }
-//                wardrope.update();
-//                Wardrope w = dao.load(wardropeId);
-//                sub.onSuccess(new Object());
-//            } catch (Exception ex) {
-//                sub.onError(ex);
-//            }
+            try {
+                PutResult result = storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+                List<ThingsWardropes> thingsWardropes = new ArrayList<>();
+                Long wardropeId = result.insertedId();
+                if (wardropeId != null) {
+                    for (Long id : thingIds) {
+                        thingsWardropes.add(new ThingsWardropes(wardropeId, id));
+                    }
+                    storIOSQLite.put().objects(thingsWardropes).prepare().executeAsBlocking();
+                } else {
+                    throw new Exception("wardrope wasn't put");
+                }
+
+                sub.onSuccess(new Object());
+            } catch (Exception ex) {
+                sub.onError(ex);
+            }
         });
     }
 
@@ -47,6 +53,6 @@ public class WardropeRepository extends AbstractWardropeRepository {
 
     @Override
     public String getTableName() {
-        return "wardropes";
+        return WardropeTable.WARDROPE_TABLE;
     }
 }

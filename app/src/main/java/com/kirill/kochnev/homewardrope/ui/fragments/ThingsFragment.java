@@ -18,8 +18,6 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 import java.util.List;
 
-import io.reactivex.disposables.CompositeDisposable;
-
 /**
  * Created by Kirill Kochnev on 24.02.17.
  */

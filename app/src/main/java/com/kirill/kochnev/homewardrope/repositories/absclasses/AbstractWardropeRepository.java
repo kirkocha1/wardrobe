@@ -17,6 +17,6 @@ public abstract class AbstractWardropeRepository extends AbstractRepository<Ward
         super(storIOSQLite);
     }
 
-    public abstract Single<Object> putWardropeWithThings(String name, HashSet<Long> thingIds);
+    public abstract Single<Object> putWardropeWithThings(Wardrope wardrope, HashSet<Long> thingIds);
 
 }

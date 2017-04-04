@@ -1,18 +1,15 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters;
 
-import android.widget.Toast;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
-import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,13 +23,31 @@ import io.reactivex.schedulers.Schedulers;
 @InjectViewState
 public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardropeView> {
 
+    public static final String TAG = "AddUpdateWardrope";
+
     @Inject
     protected AbstractWardropeRepository wardropes;
 
     private HashSet<Long> checkedSet = new HashSet<>();
 
-    public AddUpdateWardropePresenter() {
+    private Wardrope wardrope;
+
+    public AddUpdateWardropePresenter(long id) {
         WardropeApplication.getComponent().inject(this);
+        if (id == -1) {
+            wardrope = new Wardrope();
+        } else {
+            initWardrope(id);
+        }
+    }
+
+    private void initWardrope(long id) {
+        unsubscribeOnDestroy(wardropes.getItem(id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(ward -> {
+                    wardrope = ward;
+                    getViewState().initView(wardrope);
+                }));
     }
 
     public void addThingId(long id) {
@@ -44,13 +59,16 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
         getViewState().setCount(checkedSet.size());
     }
 
-    public void save(String name) {
-        wardropes.putWardropeWithThings(name, checkedSet)
+    public void save(String name, Integer count) {
+        wardrope.setName(name);
+        wardrope.setCount(count == null ? 0 : count);
+        unsubscribeOnDestroy(wardropes.putWardropeWithThings(wardrope, checkedSet)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
-                    Toast.makeText(WardropeApplication.getContext(), "ADDD", Toast.LENGTH_SHORT).show();
-                }, e -> e.printStackTrace());
+                    Log.d(TAG, "put wardrope");
+                }, e -> e.printStackTrace()));
+
     }
 
 }

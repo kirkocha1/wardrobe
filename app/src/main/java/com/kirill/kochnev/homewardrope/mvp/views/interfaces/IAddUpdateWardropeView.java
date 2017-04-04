@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.mvp.views.interfaces;
 
 import com.arellomobile.mvp.MvpView;
+import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 
 /**
  * Created by kirill on 30.03.17.
@@ -9,4 +10,6 @@ import com.arellomobile.mvp.MvpView;
 public interface IAddUpdateWardropeView extends MvpView {
     void setCount(int count);
     void addThingId(long id);
+    void initView(Wardrope wardrope);
+
 }

@@ -1,7 +1,6 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -54,6 +53,6 @@ public class WardropeFragment extends BaseDbListFragment<Wardrope> implements IW
 
     @Override
     public void openUpdateActivity(Intent intent) {
-
+        startActivity(intent);
     }
 }

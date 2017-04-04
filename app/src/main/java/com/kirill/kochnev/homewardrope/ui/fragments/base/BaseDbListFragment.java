@@ -126,7 +126,7 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof  IParent) {
+        if (context instanceof IParent) {
             parent = (IParent) context;
         }
     }
