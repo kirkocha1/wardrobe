@@ -6,7 +6,7 @@ import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
  * Created by Kirill Kochnev on 12.02.17.
  */
 
-public class Look implements IDbModel {
+public abstract class Look implements IDbModel {
 
     private String name;
 

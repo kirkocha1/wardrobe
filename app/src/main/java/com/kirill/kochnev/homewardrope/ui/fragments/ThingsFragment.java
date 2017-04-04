@@ -18,6 +18,8 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 import java.util.List;
 
+import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
+
 /**
  * Created by Kirill Kochnev on 24.02.17.
  */
@@ -26,12 +28,16 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     public static final int WARDROPE_MODE = 1;
     public static final String FRAGMENT_MODE = "mode";
     private int mode;
+    private long wardropeId;
+
     private IAddUpdateWardropeView wardropeView;
 
-    public static ThingsFragment createInstance(int mode) {
+    public static ThingsFragment createInstance(int mode, long wardropeId) {
         ThingsFragment fragment = new ThingsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(FRAGMENT_MODE, mode);
+        bundle.putLong(WARDROPE_ID, wardropeId);
+
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -41,7 +47,7 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
 
     @ProvidePresenter
     ThingsPresenter providePresenter() {
-        return new ThingsPresenter(mode);
+        return new ThingsPresenter(mode, wardropeId);
     }
 
     @Override
@@ -58,9 +64,9 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     }
 
     @Override
-    public void initList(List<Thing> models, boolean isWardropeMode) {
+    public void initList(List<Thing> models, boolean isWardropeMode, long wardropeId) {
         blankImg.setVisibility(models.size() == 0 ? View.VISIBLE : View.GONE);
-        adapter.setWardropeMode(isWardropeMode);
+        adapter.setWardropeMode(isWardropeMode, wardropeId);
         adapter.setData(models);
         isInit = true;
         isLoading = false;
@@ -98,5 +104,6 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     @Override
     public void onCreationStart() {
         mode = getArguments().getInt(FRAGMENT_MODE, -1);
+        wardropeId = getArguments().getLong(WARDROPE_ID, -1);
     }
 }

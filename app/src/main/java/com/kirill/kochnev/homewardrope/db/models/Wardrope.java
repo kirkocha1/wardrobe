@@ -7,6 +7,7 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
@@ -31,13 +32,14 @@ public class Wardrope implements IDbModel {
     @StorIOSQLiteColumn(name = WARDROPE_COUNT)
     int count;
 
-    private List<Thing> things;
+    private HashSet<Long> thingIds;
 
     public Wardrope() {
     }
 
     @Override
     public void inflateHolder(DbListAdapter.DbListHolder holder) {
+        holder.item.setName(name);
     }
 
     public String getName() {
@@ -61,12 +63,12 @@ public class Wardrope implements IDbModel {
         this.creationDate = creationDate.toString();
     }
 
-    public List<Thing> getThings() {
-        return things;
+    public HashSet<Long> getThingIds() {
+        return thingIds;
     }
 
-    public void setThings(List<Thing> things) {
-        this.things = things;
+    public void setThingIds(HashSet<Long> thingIds) {
+        this.thingIds = thingIds;
     }
 
     public String getCreationDate() {

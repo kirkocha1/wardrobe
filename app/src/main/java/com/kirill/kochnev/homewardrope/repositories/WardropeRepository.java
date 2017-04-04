@@ -2,10 +2,12 @@ package com.kirill.kochnev.homewardrope.repositories;
 
 import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,6 +45,21 @@ public class WardropeRepository extends AbstractWardropeRepository {
             } catch (Exception ex) {
                 sub.onError(ex);
             }
+        });
+    }
+
+    @Override
+    public Single<Wardrope> getItem(long id) {
+        return super.getItem(id).map(wardrope -> {
+            List<ThingsWardropes> thingsWardropes = storIOSQLite.get().listOfObjects(ThingsWardropes.class)
+                    .withQuery(Query.builder().table(ThingsWardropesTable.THINGS_WARDROPES_TABLE).build())
+                    .prepare()
+                    .executeAsBlocking();
+            wardrope.setThingIds(new HashSet<>());
+            for (ThingsWardropes thingsWardrope : thingsWardropes) {
+                wardrope.getThingIds().add(thingsWardrope.getThingId());
+            }
+            return wardrope;
         });
     }
 

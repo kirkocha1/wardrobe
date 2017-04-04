@@ -1,12 +1,15 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
+import java.io.File;
 import java.util.Date;
 
 import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.THINGS_TABLE;
@@ -62,7 +65,8 @@ public class Thing implements IDbModel {
 
     @Override
     public void inflateHolder(DbListAdapter.DbListHolder holder) {
-
+        holder.item.setName(name);
+        holder.item.setImage(iconImagePath);
     }
 
     public String getName() {

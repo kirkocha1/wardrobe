@@ -28,19 +28,21 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     public static final String THINGS_ID = "things_id";
 
     private boolean isWardropeMode = false;
+    private long wardropeId;
 
     @Inject
     protected AbstractThingRepository things;
 
-    public ThingsPresenter(int mode) {
+    public ThingsPresenter(int mode, long wardropeId) {
         WardropeApplication.getComponent().inject(this);
-        initMode(mode);
+        initMode(mode, wardropeId);
     }
 
-    private void initMode(int mode) {
+    private void initMode(int mode, long wardropeId) {
         switch (mode) {
             case 1:
                 isWardropeMode = true;
+                this.wardropeId = wardropeId;
                 break;
             case -1:
                 break;
@@ -50,7 +52,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     public void refreshList() {
         unsubscribeOnDestroy(things.getNextList(-1).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().initList(list, isWardropeMode), e -> e.printStackTrace()));
+                .subscribe(list -> getViewState().initList(list, isWardropeMode, wardropeId), e -> e.printStackTrace()));
     }
 
     @Override
@@ -84,7 +86,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         Thing thing = (Thing) model;
         if (!isWardropeMode) {
             Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
-            intent.putExtra(THINGS_ID, ((Thing) model).getId());
+            intent.putExtra(THINGS_ID,  model.getId());
             getViewState().openUpdateActivity(intent);
         } else {
             getViewState().addThingId(thing.getId());

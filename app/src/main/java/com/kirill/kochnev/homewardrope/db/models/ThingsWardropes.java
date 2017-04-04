@@ -47,6 +47,14 @@ public class ThingsWardropes implements IDbModel {
         this.thingId = thingId;
     }
 
+    public Long getId() {
+        return _id;
+    }
+
+    public void setId(Long _id) {
+        this._id = _id;
+    }
+
     @Override
     public void inflateHolder(DbListAdapter.DbListHolder holder) {
 

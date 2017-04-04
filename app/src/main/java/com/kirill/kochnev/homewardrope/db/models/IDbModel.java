@@ -9,6 +9,7 @@ import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
  */
 
 public interface IDbModel extends BaseColumns {
+    Long getId();
 
     void inflateHolder(DbListAdapter.DbListHolder holder);
 }

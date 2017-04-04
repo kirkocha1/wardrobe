@@ -46,6 +46,7 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ward -> {
                     wardrope = ward;
+                    checkedSet = wardrope.getThingIds();
                     getViewState().initView(wardrope);
                 }));
     }

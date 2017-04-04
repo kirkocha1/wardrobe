@@ -25,6 +25,8 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
     private OnClick<M> clickListner;
 
     private boolean isWardropeMode;
+    private long wardropeId;
+
 
     public class DbListHolder extends RecyclerView.ViewHolder {
 
@@ -60,8 +62,9 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
         }
     }
 
-    public void setWardropeMode(boolean wardropeMode) {
+    public void setWardropeMode(boolean wardropeMode, long wardropeId) {
         isWardropeMode = wardropeMode;
+        this.wardropeId = wardropeId;
     }
 
     public void setClickListner(OnClick<M> clickListner) {

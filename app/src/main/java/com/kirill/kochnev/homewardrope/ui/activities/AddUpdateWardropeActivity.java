@@ -63,7 +63,7 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     private void initUi() {
         select.setOnClickListener(v -> {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.frame_id, ThingsFragment.createInstance(ThingsFragment.WARDROPE_MODE))
+                    .replace(R.id.frame_id, ThingsFragment.createInstance(ThingsFragment.WARDROPE_MODE, wardropeId))
                     .commit();
         });
 
