@@ -46,6 +46,7 @@ public class Thing implements IDbModel {
 
 
     public Thing() {
+        this.creationDate = new Date().toString();
     }
 
     public Thing(long id) {

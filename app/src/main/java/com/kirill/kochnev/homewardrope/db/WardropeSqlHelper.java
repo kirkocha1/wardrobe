@@ -14,10 +14,10 @@ import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.CREATE_WAR
  */
 
 public class WardropeSqlHelper extends SQLiteOpenHelper {
-    public static final String TAG = "WardropeSqlHelper";
+    private static final String TAG = "WardropeSqlHelper";
 
-    public static final int DB_VERSION = 1;
-    public static final String DB_NAME = "wardrope.db";
+    private static final int DB_VERSION = 1;
+    private static final String DB_NAME = "wardrope.db";
 
     public static final String CREATION_DATE = "creation_date";
 
@@ -36,6 +36,18 @@ public class WardropeSqlHelper extends SQLiteOpenHelper {
     }
 
     private void updateDb(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < newVersion) {
+            switch (oldVersion) {
+                case 0:
+                    createTables(db);
+                    oldVersion++;
+                    break;
+            }
+            updateDb(db, oldVersion, newVersion);
+        }
+    }
+
+    private void createTables(SQLiteDatabase db) {
         Log.d(TAG, "DB CREATION");
         Log.d(TAG, CREATE_THINGS_TABLE);
         Log.d(TAG, CREATE_WARDROPES_TABLE);

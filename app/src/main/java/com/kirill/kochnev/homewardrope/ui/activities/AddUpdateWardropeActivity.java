@@ -67,6 +67,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void onInitUi(View baseLayout) {
+        setTitleText(wardropeId == -1 ? "новый гардероб" : "");
         setBackButtonEnabled(true);
         setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
         ButterKnife.bind(this, baseLayout);
@@ -117,6 +118,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void initView(Wardrope wardrope) {
+        setTitleText(wardrope.getName() == null ? "новый гардероб" : wardrope.getName());
         countView.setText(wardrope.getThingIds().size() + "");
         name.setText(wardrope.getName());
     }

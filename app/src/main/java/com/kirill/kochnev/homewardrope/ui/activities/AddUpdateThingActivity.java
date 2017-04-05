@@ -58,6 +58,7 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     @Override
     public void onInitUi(View baseLayout) {
         setBackButtonEnabled(true);
+        setTitleText(thingsId == -1 ? "новая вещь" : "");
         setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
         ButterKnife.bind(this, baseLayout);
         captureBtn.setOnClickListener(v -> presenter.createUri());
@@ -112,6 +113,7 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     @Override
     public void updateView(String name, String tag, Bitmap image) {
+        setTitleText(name == null ? "без имени" : name);
         pic.setImageBitmap(image);
         this.tag.setText(tag);
         this.name.setText(name);
