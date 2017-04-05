@@ -1,23 +1,23 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
-import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IWardropeView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
-import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
 /**
  * Created by kirill on 30.03.17.
@@ -25,7 +25,6 @@ import io.reactivex.schedulers.Schedulers;
 @InjectViewState
 public class WardropePresenter extends BaseDbListPresenter<IWardropeView> {
     public static final String TAG = "WardropePresenter";
-    public static final String WARDROPES_ID = "wardropes_id";
 
     @Inject
     protected AbstractWardropeRepository wardropes;
@@ -67,8 +66,8 @@ public class WardropePresenter extends BaseDbListPresenter<IWardropeView> {
 
     @Override
     public void onItemClick(IDbModel model) {
-        Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
-        intent.putExtra(WARDROPES_ID, ((Thing) model).getId());
+        Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateWardropeActivity.class);
+        intent.putExtra(WARDROPE_ID, model.getId());
         getViewState().openUpdateActivity(intent);
     }
 }

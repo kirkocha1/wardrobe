@@ -14,7 +14,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {GreenDaoModule.class, RepositoryModule.class, InteractorModule.class})
+@Component(modules = {RepositoryModule.class, DbModule.class})
 public interface AppComponent {
 
     void inject(AddUpdateWardropePresenter presenter);

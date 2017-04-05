@@ -7,12 +7,11 @@ import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
-
-import java.util.HashSet;
 
 import javax.inject.Inject;
 
@@ -30,29 +29,32 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     public static final String THINGS_ID = "things_id";
 
     private boolean isWardropeMode = false;
+    private long wardropeId;
 
     @Inject
     protected AbstractThingRepository things;
 
-    public ThingsPresenter(int mode) {
+    public ThingsPresenter(ViewMode mode, long wardropeId) {
         WardropeApplication.getComponent().inject(this);
-        initMode(mode);
+        initMode(mode, wardropeId);
     }
 
-    private void initMode(int mode) {
+    private void initMode(ViewMode mode, long wardropeId) {
         switch (mode) {
-            case 1:
+            case WARDROPE_MODE:
                 isWardropeMode = true;
-                break;
-            case -1:
+                this.wardropeId = wardropeId;
                 break;
         }
     }
 
     public void refreshList() {
-        unsubscribeOnDestroy(things.getNextList(-1).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().initList(list, isWardropeMode), e -> e.printStackTrace()));
+        unsubscribeOnDestroy(things.getNextList(-1).subscribe(list -> getViewState().initList(list, isWardropeMode), e -> e.printStackTrace()));
+        if (isWardropeMode) {
+            things.getWardropeThingIds(wardropeId).subscribe(set -> {
+                getViewState().addThingIdsToAdapter(set);
+            });
+        }
     }
 
     @Override
@@ -86,7 +88,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         Thing thing = (Thing) model;
         if (!isWardropeMode) {
             Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
-            intent.putExtra(THINGS_ID, ((Thing) model).getId());
+            intent.putExtra(THINGS_ID, model.getId());
             getViewState().openUpdateActivity(intent);
         } else {
             getViewState().addThingId(thing.getId());
