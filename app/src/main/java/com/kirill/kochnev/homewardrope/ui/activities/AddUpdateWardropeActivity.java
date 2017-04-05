@@ -3,6 +3,7 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 30.03.17.
  */
 
-public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView {
+public class AddUpdateWardropeActivity extends BaseActionBarActivity implements IAddUpdateWardropeView {
 
     public static final String WARDROPE_ID = "wardrope_id";
 
@@ -62,16 +63,28 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     protected void onCreate(Bundle savedInstanceState) {
         wardropeId = getIntent().getLongExtra(WARDROPE_ID, -1);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_update_wardrope);
-        ButterKnife.bind(this);
-        initUi();
     }
 
-    private void initUi() {
+    @Override
+    public void onInitUi(View baseLayout) {
+        setBackButtonEnabled(true);
+        setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
+        ButterKnife.bind(this, baseLayout);
         select.setOnClickListener(v -> showFragment());
         hide.setOnClickListener(v -> setItemsVisibility(true));
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
     }
+
+    @Override
+    public boolean isMenuActive() {
+        return false;
+    }
+
+    @Override
+    public boolean isSearchActive() {
+        return false;
+    }
+
 
     private void showFragment() {
         if (fragment == null) {

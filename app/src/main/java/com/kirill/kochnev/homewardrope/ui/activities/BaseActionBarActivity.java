@@ -4,19 +4,18 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.databinding.ActivityBaseActionBarBinding;
 import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IActionBarController;
 
-import rx.functions.Action1;
 
-public abstract class BaseActionBarActivity extends AppCompatActivity implements IActionBarController {
+public abstract class BaseActionBarActivity extends MvpAppCompatActivity implements IActionBarController {
 
     private ActivityBaseActionBarBinding binding;
-    private Action1<View> menuClick;
+    private Consumer<View> menuClick;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,13 +32,12 @@ public abstract class BaseActionBarActivity extends AppCompatActivity implements
         binding.search.setVisibility(isSearchActive() ? View.VISIBLE : View.GONE);
         binding.menuBtn.setOnClickListener(v -> {
             if (menuClick != null) {
-                menuClick.call(v);
+                menuClick.accept(v);
             }
         });
         onInitUi(view);
         setSupportActionBar(binding.toolbar);
     }
-
 
     @Override
     public void setContentView(View view) {
@@ -51,6 +49,7 @@ public abstract class BaseActionBarActivity extends AppCompatActivity implements
             super.setContentView(view);
         } else {
             binding.content.addView(view);
+            super.setContentView(binding.getRoot());
         }
     }
 
@@ -62,6 +61,10 @@ public abstract class BaseActionBarActivity extends AppCompatActivity implements
 
     public abstract boolean isSearchActive();
 
+    public void setBackButtonEnabled(boolean isEnable) {
+        binding.backAction.setVisibility(isEnable ? View.VISIBLE : View.GONE);
+    }
+
     public void setTitle(@StringRes int resId) {
         binding.title.setText(getString(resId));
     }
@@ -71,7 +74,12 @@ public abstract class BaseActionBarActivity extends AppCompatActivity implements
     }
 
 
-    public void setMenuClickListener(Action1<View> listener) {
+    public void setMenuClickListener(Consumer<View> listener) {
         menuClick = listener;
     }
+
+    public interface Consumer<T> {
+        void accept(T t);
+    }
+
 }

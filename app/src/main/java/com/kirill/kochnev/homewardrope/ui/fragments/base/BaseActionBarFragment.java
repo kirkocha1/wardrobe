@@ -13,7 +13,9 @@ public class BaseActionBarFragment extends MvpFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        barController = (IActionBarController) context;
+        if (context instanceof IActionBarController) {
+            barController = (IActionBarController) context;
+        }
     }
 
     @Override

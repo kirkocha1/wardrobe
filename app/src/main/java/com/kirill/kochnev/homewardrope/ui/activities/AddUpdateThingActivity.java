@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 
 import static com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter.THINGS_ID;
 
-public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
+public class AddUpdateThingActivity extends BaseActionBarActivity implements IAddUpdateThingView {
 
     private static final int REQUEST_TAKE_PHOTO = 2;
 
@@ -53,14 +53,25 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
     protected void onCreate(Bundle savedInstanceState) {
         thingsId = getIntent().getLongExtra(THINGS_ID, -1);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_or_update_thing);
-        ButterKnife.bind(this);
-        initUi();
     }
 
-    private void initUi() {
+    @Override
+    public void onInitUi(View baseLayout) {
+        setBackButtonEnabled(true);
+        setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
+        ButterKnife.bind(this, baseLayout);
         captureBtn.setOnClickListener(v -> presenter.createUri());
         save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
+    }
+
+    @Override
+    public boolean isMenuActive() {
+        return false;
+    }
+
+    @Override
+    public boolean isSearchActive() {
+        return false;
     }
 
     @Override
