@@ -3,10 +3,12 @@ package com.kirill.kochnev.homewardrope.mvp.views.interfaces;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -16,11 +18,14 @@ import java.util.List;
 public interface IThingsView extends IPaginationView<Thing> {
 
     @StateStrategyType(SkipStrategy.class)
-    void initList(List<Thing> models, boolean isWardropeMode, long wardropeId);
+    void initList(List<Thing> models, boolean isWardropeMode);
 
     @StateStrategyType(SkipStrategy.class)
     void openUpdateActivity(Intent bundle);
 
     void addThingId(long id);
+
+    @StateStrategyType(SingleStateStrategy.class)
+    void addThingIdsToAdapter(HashSet<Long> set);
 
 }

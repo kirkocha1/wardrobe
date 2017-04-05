@@ -9,6 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateWardropeView;
@@ -16,6 +17,7 @@ import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
+import java.util.HashSet;
 import java.util.List;
 
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
@@ -27,7 +29,7 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
 public class ThingsFragment extends BaseDbListFragment<Thing> implements IThingsView {
     public static final int WARDROPE_MODE = 1;
     public static final String FRAGMENT_MODE = "mode";
-    private int mode;
+    private ViewMode mode;
     private long wardropeId;
 
     private IAddUpdateWardropeView wardropeView;
@@ -54,8 +56,8 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     public void onInitUi() {
         setTitle(R.string.things_title);
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
-        addBtn.setActivated(mode != 1);
-        addBtn.setVisibility(mode == 1 ? View.GONE : View.VISIBLE);
+        addBtn.setActivated(mode != ViewMode.WARDROPE_MODE);
+        addBtn.setVisibility(mode == ViewMode.WARDROPE_MODE ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -64,9 +66,9 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     }
 
     @Override
-    public void initList(List<Thing> models, boolean isWardropeMode, long wardropeId) {
+    public void initList(List<Thing> models, boolean isWardropeMode) {
         blankImg.setVisibility(models.size() == 0 ? View.VISIBLE : View.GONE);
-        adapter.setWardropeMode(isWardropeMode, wardropeId);
+        adapter.setWardropeMode(isWardropeMode);
         adapter.setData(models);
         isInit = true;
         isLoading = false;
@@ -103,7 +105,12 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
 
     @Override
     public void onCreationStart() {
-        mode = getArguments().getInt(FRAGMENT_MODE, -1);
+        mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, -1));
         wardropeId = getArguments().getLong(WARDROPE_ID, -1);
+    }
+
+    @Override
+    public void addThingIdsToAdapter(HashSet<Long> set) {
+        adapter.setUsedIds(set);
     }
 }

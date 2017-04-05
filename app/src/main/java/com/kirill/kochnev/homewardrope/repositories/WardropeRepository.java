@@ -6,7 +6,9 @@ import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
+import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
@@ -29,19 +31,24 @@ public class WardropeRepository extends AbstractWardropeRepository {
     public Single<Object> putWardropeWithThings(Wardrope wardrope, HashSet<Long> thingIds) {
         return Single.create(sub -> {
             try {
-                PutResult result = storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
-                List<ThingsWardropes> thingsWardropes = new ArrayList<>();
-                Long wardropeId = result.insertedId();
-                if (wardropeId != null) {
-                    for (Long id : thingIds) {
-                        thingsWardropes.add(new ThingsWardropes(wardropeId, id));
-                    }
-                    storIOSQLite.put().objects(thingsWardropes).prepare().executeAsBlocking();
-                } else {
-                    throw new Exception("wardrope wasn't put");
+                if (wardrope.getId() != null) {
+                    storIOSQLite.delete().byQuery(DeleteQuery.builder()
+                            .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
+                            .where(ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + "=?")
+                            .whereArgs(wardrope.getId())
+                            .build())
+                            .prepare()
+                            .executeAsBlocking();
                 }
-
+                PutResult result = storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+                Long wardropeId = result.wasInserted() ? result.insertedId() : wardrope.getId();
+                List<ThingsWardropes> thingsWardropes = new ArrayList<>();
+                for (Long id : thingIds) {
+                    thingsWardropes.add(new ThingsWardropes(wardropeId, id));
+                }
+                storIOSQLite.put().objects(thingsWardropes).prepare().executeAsBlocking();
                 sub.onSuccess(new Object());
+
             } catch (Exception ex) {
                 sub.onError(ex);
             }
@@ -60,6 +67,23 @@ public class WardropeRepository extends AbstractWardropeRepository {
                 wardrope.getThingIds().add(thingsWardrope.getThingId());
             }
             return wardrope;
+        });
+    }
+
+    @Override
+    public Single<Boolean> deletItem(Wardrope model) {
+        return Single.create(sub -> {
+            try {
+                storIOSQLite.delete().byQuery(DeleteQuery.builder()
+                        .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
+                        .where(ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + "=?")
+                        .whereArgs(model.getId()).build()).prepare().executeAsBlocking();
+                storIOSQLite.delete().object(model);
+                sub.onSuccess(true);
+            } catch (Exception ex) {
+                sub.onError(ex);
+            }
+
         });
     }
 

@@ -60,5 +60,10 @@ public class ListItemView extends FrameLayout {
         box.setChecked(!box.isChecked());
     }
 
+    public void setCheck(boolean isChecked) {
+        box.setChecked(isChecked);
+    }
+
+
 }
 

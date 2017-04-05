@@ -60,14 +60,14 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
         getViewState().setCount(checkedSet.size());
     }
 
-    public void save(String name, Integer count) {
+    public void save(String name) {
         wardrope.setName(name);
-        wardrope.setCount(count == null ? 0 : count);
         unsubscribeOnDestroy(wardropes.putWardropeWithThings(wardrope, checkedSet)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                     Log.d(TAG, "put wardrope");
+                    getViewState().onSave();
                 }, e -> e.printStackTrace()));
 
     }

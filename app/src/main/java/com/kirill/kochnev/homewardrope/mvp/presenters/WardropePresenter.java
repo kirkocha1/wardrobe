@@ -67,7 +67,7 @@ public class WardropePresenter extends BaseDbListPresenter<IWardropeView> {
     @Override
     public void onItemClick(IDbModel model) {
         Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateWardropeActivity.class);
-        intent.putExtra(WARDROPE_ID, ((Wardrope) model).getId());
+        intent.putExtra(WARDROPE_ID, model.getId());
         getViewState().openUpdateActivity(intent);
     }
 }

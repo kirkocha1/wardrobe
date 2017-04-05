@@ -8,10 +8,8 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 
 import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
-import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_COUNT;
 import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_NAME;
 
 /**
@@ -29,12 +27,10 @@ public class Wardrope implements IDbModel {
     @StorIOSQLiteColumn(name = WARDROPE_NAME)
     String name;
 
-    @StorIOSQLiteColumn(name = WARDROPE_COUNT)
-    int count;
-
     private HashSet<Long> thingIds;
 
     public Wardrope() {
+        creationDate = new Date().toString();
     }
 
     @Override
@@ -79,11 +75,4 @@ public class Wardrope implements IDbModel {
         this.creationDate = creationDate;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
 }

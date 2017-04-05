@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by kirill on 30.03.17.
@@ -31,7 +33,7 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
                 List<M> models = null;
                 if (id != -1) {
                     models = storIOSQLite.get().listOfObjects(getEntityClass()).withQuery(Query.builder().table(getTableName())
-                            .where(BaseColumns._ID + " = ?")
+                            .where(BaseColumns._ID + " > ?")
                             .whereArgs(id + "")
                             .limit(LIMIT)
                             .build()).prepare().executeAsBlocking();
