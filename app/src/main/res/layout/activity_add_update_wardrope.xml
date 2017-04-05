@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/thing_data"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/new_wardrope_name"
+        style="@style/EditTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@null"
+        android:hint="Wardrope name" />
+
+
+    <LinearLayout
+        android:id="@+id/photo_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="SELECTED: "/>
+        <TextView
+            android:id="@+id/things_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0"/>
+
+        <Button
+            android:id="@+id/hide_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="СВЕРНУТЬ"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/wardrope_show_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="ВЫБРАТЬ" />
+
+        <Button
+            android:id="@+id/save_wardrope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="СОХРАНИТЬ" />
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/photo_thing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
+
+
+
+

@@ -1,9 +1,10 @@
 package com.kirill.kochnev.homewardrope.di;
 
-import com.kirill.kochnev.homewardrope.db.models.ThingDao;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
-import com.kirill.kochnev.homewardrope.repositories.interfaces.IThingsRepository;
+import com.kirill.kochnev.homewardrope.repositories.WardropeRepository;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Singleton;
 
@@ -19,8 +20,13 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    AbstractThingRepository provideTRepository(ThingDao dao) {
-        return new ThingRepository(dao);
+    AbstractThingRepository provideThingsRepository(StorIOSQLite storIOSQLite) {
+        return new ThingRepository(storIOSQLite);
     }
 
+    @Singleton
+    @Provides
+    AbstractWardropeRepository provideWardropeRepository(StorIOSQLite storIOSQLite) {
+        return new WardropeRepository(storIOSQLite);
+    }
 }

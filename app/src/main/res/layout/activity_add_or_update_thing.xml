@@ -6,20 +6,20 @@
     android:orientation="vertical">
 
     <EditText
+        style="@style/EditTextStyle"
         android:id="@+id/new_thing_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:hint="Thing name"
-        android:padding="5dp" />
+        android:hint="Thing name"/>
 
     <EditText
+        style="@style/EditTextStyle"
         android:id="@+id/new_thing_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:hint="hash tag #"
-        android:padding="5dp" />
+        android:hint="hash tag #"/>
 
     <LinearLayout
         android:id="@+id/photo_buttons"

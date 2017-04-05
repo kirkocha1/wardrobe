@@ -1,55 +1,41 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
+import android.provider.BaseColumns;
+
+import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import java.util.Date;
+import java.util.HashSet;
+
+import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
+import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_NAME;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
  */
+@StorIOSQLiteType(table = "wardropes")
+public class Wardrope implements IDbModel {
 
-@Entity
-public class Wardrope {
-    @Id
-    private long id;
+    @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
+    Long _id;
 
-    private Date creationDate;
+    @StorIOSQLiteColumn(name = CREATION_DATE)
+    String creationDate;
 
-    private String name;
+    @StorIOSQLiteColumn(name = WARDROPE_NAME)
+    String name;
 
-    public Wardrope(String name, long id) {
-        this.name = name;
-        this.id = id;
-        this.creationDate = new Date();
-    }
+    private HashSet<Long> thingIds;
 
     public Wardrope() {
-        this.creationDate = new Date();
+        creationDate = new Date().toString();
     }
 
-    @Generated(hash = 1120298132)
-    public Wardrope(long id, Date creationDate, String name) {
-        this.id = id;
-        this.creationDate = creationDate;
-        this.name = name;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Date getCreationDate() {
-        return this.creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    @Override
+    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+        holder.item.setName(name);
     }
 
     public String getName() {
@@ -59,4 +45,34 @@ public class Wardrope {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Long getId() {
+        return _id;
+    }
+
+    public void setId(Long _id) {
+        this._id = _id;
+    }
+
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate.toString();
+    }
+
+    public HashSet<Long> getThingIds() {
+        return thingIds;
+    }
+
+    public void setThingIds(HashSet<Long> thingIds) {
+        this.thingIds = thingIds;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
 }

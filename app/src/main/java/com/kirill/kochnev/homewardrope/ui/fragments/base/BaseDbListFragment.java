@@ -1,9 +1,9 @@
 package com.kirill.kochnev.homewardrope.ui.fragments.base;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,8 +16,9 @@ import android.widget.ImageView;
 import com.arellomobile.mvp.MvpFragment;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
-import com.kirill.kochnev.homewardrope.mvp.presenters.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IPaginationView;
+import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IActionBarController;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
 
@@ -30,9 +31,11 @@ import butterknife.ButterKnife;
  * Created by Kirill Kochnev on 24.02.17.
  */
 
-public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment implements IPaginationView<M>, OnClick<M> {
+public abstract class BaseDbListFragment<M extends IDbModel> extends BaseActionBarFragment implements IPaginationView<M>, OnClick<M> {
 
     public static final String TAG = "BaseDbListFragment";
+
+    private IActionBarController parent;
 
     @BindView(R.id.list_items)
     protected RecyclerView list;
@@ -48,6 +51,12 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
     protected boolean isInit = false;
 
     protected DbListAdapter<M> adapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        onCreationStart();
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -99,13 +108,15 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                switch (newState) {
-                    case RecyclerView.SCROLL_STATE_DRAGGING:
-                        addBtn.setVisibility(View.GONE);
-                        break;
-                    case RecyclerView.SCROLL_STATE_IDLE:
-                        addBtn.setVisibility(View.VISIBLE);
-                        break;
+                if (addBtn.isActivated()) {
+                    switch (newState) {
+                        case RecyclerView.SCROLL_STATE_DRAGGING:
+                            addBtn.setVisibility(View.GONE);
+                            break;
+                        case RecyclerView.SCROLL_STATE_IDLE:
+                            addBtn.setVisibility(View.VISIBLE);
+                            break;
+                    }
                 }
             }
         });
@@ -119,7 +130,20 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
         }
     }
 
+
+    @Override
+    public void onLoadFinished(List<M> data) {
+        list.post(() -> {
+            isLoading = false;
+            adapter.addData(data);
+        });
+    }
+
     public abstract BaseDbListPresenter getPresenter();
 
     public abstract void onInitUi();
+
+    public void onCreationStart() {
+
+    }
 }

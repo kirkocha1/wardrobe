@@ -9,6 +9,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
 
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,7 +23,16 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
 
     private List<M> models;
 
-    private OnClick clickListner;
+    private OnClick<M> clickListner;
+
+    private boolean isWardropeMode;
+
+    private HashSet<Long> usedIds;
+
+    public void setUsedIds(HashSet<Long> usedIds) {
+        this.usedIds = usedIds;
+        notifyDataSetChanged();
+    }
 
     public class DbListHolder extends RecyclerView.ViewHolder {
 
@@ -34,7 +44,12 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(v -> {
                 if (clickListner != null) {
-                    clickListner.onClick(DbListAdapter.this.getItem(getLayoutPosition()));
+                    M model = DbListAdapter.this.getItem(getLayoutPosition());
+                    if (isWardropeMode) {
+                        updateusedIds(model.getId());
+                        item.toogleCheck();
+                    }
+                    clickListner.onClick(model);
                 }
             });
 
@@ -45,15 +60,35 @@ public class DbListAdapter<M extends IDbModel> extends RecyclerView.Adapter<DbLi
                 return true;
             });
 
+            item.setBoxVisibility(isWardropeMode);
         }
 
+        //TODO temporary solution need to refactor, has two identical sets in different places
+        private void updateusedIds(long id) {
+            if (usedIds.contains(id)) {
+                usedIds.remove(id);
+            } else {
+                usedIds.add(id);
+            }
+        }
 
         public void setModel(M model) {
+            updateBoxes(model);
             model.inflateHolder(this);
+        }
+
+        private void updateBoxes(M model) {
+            if (usedIds != null && usedIds.size() != 0) {
+                item.setCheck(usedIds.contains(model.getId()));
+            }
         }
     }
 
-    public void setClickListner(OnClick clickListner) {
+    public void setWardropeMode(boolean wardropeMode) {
+        isWardropeMode = wardropeMode;
+    }
+
+    public void setClickListner(OnClick<M> clickListner) {
         this.clickListner = clickListner;
     }
 

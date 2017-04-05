@@ -1,60 +1,72 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
+import android.net.Uri;
+import android.provider.BaseColumns;
+
+import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-
+import java.io.File;
 import java.util.Date;
+
+import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.THINGS_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.THING_FULL_IMAGE_PATH;
+import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.THING_ICON_IMAGE_PATH;
+import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.THING_NAME;
+import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.THING_TAG;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
  */
 
-@Entity
+
+@StorIOSQLiteType(table = THINGS_TABLE)
 public class Thing implements IDbModel {
 
-    @Id
-    private Long id;
+    @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
+    Long _id;
 
-    private Date creationDate;
+    @StorIOSQLiteColumn(name = WardropeSqlHelper.CREATION_DATE)
+    String creationDate;
 
-    private String name;
+    @StorIOSQLiteColumn(name = THING_NAME)
+    String name;
 
-    private String tag;
+    @StorIOSQLiteColumn(name = THING_TAG)
+    String tag;
 
-    private String fullImagePath;
+    @StorIOSQLiteColumn(name = THING_FULL_IMAGE_PATH)
+    String fullImagePath;
 
-    private String iconImagePath;
+    @StorIOSQLiteColumn(name = THING_ICON_IMAGE_PATH)
+    String iconImagePath;
 
-    public Thing(String name) {
-        id = null;
-        this.name = name;
-        this.creationDate = new Date();
-    }
 
     public Thing() {
-        this.creationDate = new Date();
     }
 
-    @Generated(hash = 2104068066)
-    public Thing(Long id, Date creationDate, String name, String tag,
-            String fullImagePath, String iconImagePath) {
-        this.id = id;
-        this.creationDate = creationDate;
-        this.name = name;
-        this.tag = tag;
-        this.fullImagePath = fullImagePath;
-        this.iconImagePath = iconImagePath;
-    }
-    
-    public Date getCreationDate() {
-        return this.creationDate;
+    public Thing(long id) {
+        this._id = id;
+        this.creationDate = new Date().toString();
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+
+    public Long getId() {
+        return _id;
+    }
+
+    public void setId(Long _id) {
+        this._id = _id;
+    }
+
+
+    @Override
+    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+        holder.item.setName(name);
+        holder.item.setImage(iconImagePath);
     }
 
     public String getName() {
@@ -65,24 +77,6 @@ public class Thing implements IDbModel {
         this.name = name;
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-
-    public String getFullImagePath() {
-        return this.fullImagePath;
-    }
-
-    public void setFullImagePath(String fullImagePath) {
-        this.fullImagePath = fullImagePath;
-    }
-
     public String getTag() {
         return this.tag;
     }
@@ -91,10 +85,12 @@ public class Thing implements IDbModel {
         this.tag = tag;
     }
 
-    @Override
-    public void inflateHolder(DbListAdapter.DbListHolder holder) {
-        holder.item.setName(name);
-        holder.item.setImage(iconImagePath);
+    public String getFullImagePath() {
+        return this.fullImagePath;
+    }
+
+    public void setFullImagePath(String fullImagePath) {
+        this.fullImagePath = fullImagePath;
     }
 
     public String getIconImagePath() {

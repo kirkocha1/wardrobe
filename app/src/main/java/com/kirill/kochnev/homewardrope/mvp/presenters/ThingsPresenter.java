@@ -1,14 +1,17 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 
 import javax.inject.Inject;
 
@@ -23,20 +26,35 @@ import io.reactivex.schedulers.Schedulers;
 public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     public static final String TAG = "ThingsPresenter";
-    public static final int LIMIT = 10;
     public static final String THINGS_ID = "things_id";
+
+    private boolean isWardropeMode = false;
+    private long wardropeId;
 
     @Inject
     protected AbstractThingRepository things;
 
-    public ThingsPresenter() {
+    public ThingsPresenter(ViewMode mode, long wardropeId) {
         WardropeApplication.getComponent().inject(this);
+        initMode(mode, wardropeId);
+    }
+
+    private void initMode(ViewMode mode, long wardropeId) {
+        switch (mode) {
+            case WARDROPE_MODE:
+                isWardropeMode = true;
+                this.wardropeId = wardropeId;
+                break;
+        }
     }
 
     public void refreshList() {
-        things.getNextList(-1).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().initList(list), e -> e.printStackTrace());
+        unsubscribeOnDestroy(things.getNextList(-1).subscribe(list -> getViewState().initList(list, isWardropeMode), e -> e.printStackTrace()));
+        if (isWardropeMode) {
+            things.getWardropeThingIds(wardropeId).subscribe(set -> {
+                getViewState().addThingIdsToAdapter(set);
+            });
+        }
     }
 
     @Override
@@ -48,26 +66,33 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     @Override
     public void loadMoreData(long id) {
         Log.d(TAG, "loadMoreData");
-        things.getNextList(id).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(things.getNextList(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace());
+                .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
     }
 
     @Override
     public void onLongItemClick(IDbModel model) {
-        things.deletItem((Thing) model)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isDel -> {
-                    getViewState().notifyListChanges((Thing) model);
-                });
-
+        if (!isWardropeMode) {
+            unsubscribeOnDestroy(things.deletItem((Thing) model)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(isDel -> {
+                        getViewState().notifyListChanges((Thing) model);
+                    }));
+        }
     }
 
     @Override
     public void onItemClick(IDbModel model) {
-        Bundle bundle = new Bundle();
-        bundle.putLong(THINGS_ID, ((Thing) model).getId());
-        getViewState().openUpdateActivity(bundle);
+        Thing thing = (Thing) model;
+        if (!isWardropeMode) {
+            Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
+            intent.putExtra(THINGS_ID, model.getId());
+            getViewState().openUpdateActivity(intent);
+        } else {
+            getViewState().addThingId(thing.getId());
+        }
+
     }
 }

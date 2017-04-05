@@ -8,9 +8,9 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 
@@ -29,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 @InjectViewState
-public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
+public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingView> {
 
     public static final String TAG = "AddUpdateThingPresenter";
     private static final int REQ_HEIGHT = 640;
@@ -53,14 +53,14 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
     }
 
     private void initValues(long id) {
-        things.getItem(id).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(things.getItem(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(model -> {
                     this.model = model;
                     iconPath = model.getIconImagePath();
                     imagePath = model.getFullImagePath();
                     getViewState().updateView(model.getName(), model.getTag(), makeImage(imagePath));
-                }, e -> e.printStackTrace());
+                }, e -> e.printStackTrace()));
     }
 
     public void saveThing(String name, String tag) {
@@ -68,10 +68,10 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
         model.setTag(tag);
         model.setFullImagePath(imagePath);
         model.setIconImagePath(iconPath);
-        things.putItem(model)
+        unsubscribeOnDestroy(things.putItem(model)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isPut -> getViewState().onSave());
+                .subscribe(isPut -> getViewState().onSave()));
     }
 
     private File createImageFile() throws IOException {
@@ -120,9 +120,9 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
             }
 
         });
-        getCropImage.subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(getCropImage.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(img -> getViewState().setImage(img), ex -> getViewState().showError(ex.getMessage()));
+                .subscribe(img -> getViewState().setImage(img), ex -> getViewState().showError(ex.getMessage())));
     }
 
     private void saveIcon(Bitmap cropImage) throws IOException {
