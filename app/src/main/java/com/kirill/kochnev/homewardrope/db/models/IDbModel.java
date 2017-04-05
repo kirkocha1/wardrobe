@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
 
+import com.kirill.kochnev.homewardrope.ui.adapters.BaseHolder;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 
 /**
@@ -11,5 +12,5 @@ import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 public interface IDbModel extends BaseColumns {
     Long getId();
 
-    void inflateHolder(DbListAdapter.DbListHolder holder);
+    void inflateHolder(BaseHolder holder);
 }
