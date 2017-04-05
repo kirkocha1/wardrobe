@@ -18,7 +18,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IPaginationView;
-import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IParent;
+import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IActionBarController;
 import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
 
@@ -31,11 +31,11 @@ import butterknife.ButterKnife;
  * Created by Kirill Kochnev on 24.02.17.
  */
 
-public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment implements IPaginationView<M>, OnClick<M> {
+public abstract class BaseDbListFragment<M extends IDbModel> extends BaseActionBarFragment implements IPaginationView<M>, OnClick<M> {
 
     public static final String TAG = "BaseDbListFragment";
 
-    private IParent parent;
+    private IActionBarController parent;
 
     @BindView(R.id.list_items)
     protected RecyclerView list;
@@ -124,31 +124,12 @@ public abstract class BaseDbListFragment<M extends IDbModel> extends MvpFragment
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof IParent) {
-            parent = (IParent) context;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        parent = null;
-    }
-
-    @Override
     public void notifyListChanges(M model) {
         if (adapter != null) {
             adapter.onRemoveItem(model);
         }
     }
 
-    public void setTitle(@StringRes int stringId) {
-        if (parent != null) {
-            parent.setTitle(stringId);
-        }
-    }
 
     @Override
     public void onLoadFinished(List<M> data) {

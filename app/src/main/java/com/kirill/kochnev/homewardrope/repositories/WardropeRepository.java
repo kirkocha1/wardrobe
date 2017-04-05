@@ -78,8 +78,12 @@ public class WardropeRepository extends AbstractWardropeRepository {
                         .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
                         .where(ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + "=?")
                         .whereArgs(model.getId()).build()).prepare().executeAsBlocking();
-                storIOSQLite.delete().object(model);
-                sub.onSuccess(true);
+                DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
+                if (result.numberOfRowsDeleted() == 1) {
+                    sub.onSuccess(true);
+                } else {
+                    sub.onSuccess(false);
+                }
             } catch (Exception ex) {
                 sub.onError(ex);
             }
