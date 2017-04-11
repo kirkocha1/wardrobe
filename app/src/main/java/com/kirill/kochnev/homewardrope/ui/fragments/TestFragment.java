@@ -1,15 +1,16 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.app.Fragment;
-import android.content.ClipData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.ui.views.TestView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,8 +21,11 @@ import butterknife.ButterKnife;
 
 public class TestFragment extends Fragment {
 
-    @BindView(R.id.test_image)
-    ImageView pic;
+    @BindView(R.id.collage_view)
+    FrameLayout collage;
+
+    TestView pic;
+    TestView pic1;
 
     @Nullable
     @Override
@@ -33,14 +37,15 @@ public class TestFragment extends Fragment {
     }
 
     private void initUi() {
-        pic.setTag("TEST");
-        pic.setOnLongClickListener(v -> {
-            ClipData.Item item = new ClipData.Item(v.getTag().toString());
-            ClipData dragData = new ClipData(v.getTag().toString(), new String[]{"text/plain"}, item);
+        pic = new TestView(getContext());
+        pic1 = new TestView(getContext());
+        pic.setMaxWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics()));
+        pic1.setMaxWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
 
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(pic);
-            v.startDrag(dragData, myShadow, null, 0);
-            return true;
-        });
+//        pic.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        pic1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        collage.addView(pic);
+        collage.addView(pic1);
     }
 }
