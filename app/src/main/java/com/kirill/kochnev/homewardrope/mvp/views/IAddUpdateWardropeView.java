@@ -1,8 +1,6 @@
-package com.kirill.kochnev.homewardrope.mvp.views.interfaces;
+package com.kirill.kochnev.homewardrope.mvp.views;
 
-import android.content.Intent;
-import android.os.Bundle;
-
+import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
@@ -11,9 +9,15 @@ import com.kirill.kochnev.homewardrope.db.models.Wardrope;
  * Created by kirill on 30.03.17.
  */
 
-public interface IWardropeView extends IPaginationView<Wardrope> {
+public interface IAddUpdateWardropeView extends MvpView {
+
+    void setCount(int count);
+
+    void addThingId(long id);
+
+    void initView(Wardrope wardrope);
 
     @StateStrategyType(SkipStrategy.class)
-    void openUpdateActivity(Intent intent);
-}
+    void onSave();
 
+}

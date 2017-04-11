@@ -7,18 +7,21 @@ import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateWardropeView;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
+import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
+import com.kirill.kochnev.homewardrope.ui.adapters.ThingsAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.holders.ThingHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 import java.util.HashSet;
-import java.util.List;
 
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
@@ -26,7 +29,7 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
  * Created by Kirill Kochnev on 24.02.17.
  */
 
-public class ThingsFragment extends BaseDbListFragment<Thing> implements IThingsView {
+public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> implements IThingsView {
     public static final int WARDROPE_MODE = 1;
     public static final String FRAGMENT_MODE = "mode";
     private ViewMode mode;
@@ -53,6 +56,12 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     }
 
     @Override
+    public void onCreationStart() {
+        mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
+        wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
+    }
+
+    @Override
     public void onInitUi() {
         setTitle(R.string.things_title);
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
@@ -66,17 +75,8 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     }
 
     @Override
-    public void initList(List<Thing> models, boolean isWardropeMode) {
-        blankImg.setVisibility(models.size() == 0 ? View.VISIBLE : View.GONE);
-        adapter.setWardropeMode(isWardropeMode);
-        adapter.setData(models);
-        isInit = true;
-        isLoading = false;
-    }
-
-    @Override
-    public void initList(List<Thing> models) {
-
+    public BaseDbAdapter<Thing, ThingHolder> initAdapter() {
+        return new ThingsAdapter(mode == ViewMode.WARDROPE_MODE);
     }
 
     @Override
@@ -99,18 +99,7 @@ public class ThingsFragment extends BaseDbListFragment<Thing> implements IThings
     }
 
     @Override
-    public void openUpdateActivity(Intent intent) {
-        startActivity(intent);
-    }
-
-    @Override
-    public void onCreationStart() {
-        mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, -1));
-        wardropeId = getArguments().getLong(WARDROPE_ID, -1);
-    }
-
-    @Override
     public void addThingIdsToAdapter(HashSet<Long> set) {
-        adapter.setUsedIds(set);
+        ((ThingsAdapter) adapter).setIds(set);
     }
 }

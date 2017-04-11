@@ -7,7 +7,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.ui.activities.base.DrawerActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.TestFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
-import com.kirill.kochnev.homewardrope.ui.fragments.WardropeFragment;
+import com.kirill.kochnev.homewardrope.ui.fragments.WardropesFragment;
 
 public class MainActivity extends DrawerActivity {
 
@@ -29,7 +29,7 @@ public class MainActivity extends DrawerActivity {
                 setFragmentContent(ThingsFragment.createInstance(-1, -1));
                 break;
             case R.id.nav_wardropes:
-                setFragmentContent(new WardropeFragment());
+                setFragmentContent(new WardropesFragment());
                 break;
             default:
                 setFragmentContent(new TestFragment());

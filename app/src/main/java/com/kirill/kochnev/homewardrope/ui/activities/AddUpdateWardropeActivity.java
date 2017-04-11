@@ -3,19 +3,17 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 
 import butterknife.BindView;

@@ -3,7 +3,7 @@ package com.kirill.kochnev.homewardrope.db.models;
 import android.provider.BaseColumns;
 
 import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
-import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -56,7 +56,7 @@ public class ThingsWardropes implements IDbModel {
     }
 
     @Override
-    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+    public void inflateHolder(BaseHolder holder) {
 
     }
 }

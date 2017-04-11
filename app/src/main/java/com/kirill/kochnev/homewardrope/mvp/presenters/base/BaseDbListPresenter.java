@@ -1,7 +1,7 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.base;
 
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IPaginationView;
+import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.

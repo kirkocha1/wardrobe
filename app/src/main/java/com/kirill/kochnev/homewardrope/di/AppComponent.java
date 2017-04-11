@@ -3,7 +3,7 @@ package com.kirill.kochnev.homewardrope.di;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.WardropePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
 
 import javax.inject.Singleton;
 
@@ -19,7 +19,7 @@ public interface AppComponent {
 
     void inject(AddUpdateWardropePresenter presenter);
 
-    void inject(WardropePresenter presenter);
+    void inject(WardropesPresenter presenter);
 
     void inject(ThingsPresenter presenter);
 

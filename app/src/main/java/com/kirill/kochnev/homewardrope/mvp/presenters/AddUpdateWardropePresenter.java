@@ -3,10 +3,11 @@ package com.kirill.kochnev.homewardrope.mvp.presenters;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 
 import java.util.HashSet;
@@ -34,7 +35,7 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
 
     public AddUpdateWardropePresenter(long id) {
         WardropeApplication.getComponent().inject(this);
-        if (id == -1) {
+        if (id == AppConstants.DEFAULT_ID) {
             wardrope = new Wardrope();
         } else {
             initWardrope(id);

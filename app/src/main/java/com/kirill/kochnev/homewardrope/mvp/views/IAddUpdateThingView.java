@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.mvp.views.interfaces;
+package com.kirill.kochnev.homewardrope.mvp.views;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
