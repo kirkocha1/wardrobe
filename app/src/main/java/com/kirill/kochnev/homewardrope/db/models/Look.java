@@ -1,6 +1,6 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
@@ -19,7 +19,12 @@ public abstract class Look implements IDbModel {
     }
 
     @Override
-    public void inflateHolder(DbListAdapter.DbListHolder holder) {
+    public Long getId() {
+        return null;
+    }
+
+    @Override
+    public void inflateHolder(BaseHolder holder) {
 
     }
 }

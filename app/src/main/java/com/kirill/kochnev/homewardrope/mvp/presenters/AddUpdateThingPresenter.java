@@ -8,10 +8,11 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 
 import java.io.File;
@@ -45,7 +46,7 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
 
     public AddUpdateThingPresenter(long id) {
         WardropeApplication.getComponent().inject(this);
-        if (id == -1) {
+        if (id == AppConstants.DEFAULT_ID) {
             model = new Thing();
         } else {
             initValues(id);

@@ -1,5 +1,7 @@
 package com.kirill.kochnev.homewardrope.enums;
 
+import com.kirill.kochnev.homewardrope.AppConstants;
+
 /**
  * Created by kirill on 05.04.17.
  */
@@ -7,7 +9,7 @@ package com.kirill.kochnev.homewardrope.enums;
 public enum ViewMode {
     WARDROPE_MODE(1),
     THING_MODE(0),
-    DEFAULT(-1);
+    DEFAULT(AppConstants.DEFAULT_ID);
 
     private int modeNum;
 

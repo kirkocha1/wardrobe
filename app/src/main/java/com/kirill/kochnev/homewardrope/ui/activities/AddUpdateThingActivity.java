@@ -10,12 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

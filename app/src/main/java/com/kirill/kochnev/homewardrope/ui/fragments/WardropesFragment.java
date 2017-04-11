@@ -1,15 +1,17 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.content.Intent;
-import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
-import com.kirill.kochnev.homewardrope.mvp.presenters.WardropePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IWardropeView;
+import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
+import com.kirill.kochnev.homewardrope.ui.adapters.WardropesAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardropeHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 import java.util.List;
@@ -18,19 +20,10 @@ import java.util.List;
  * Created by kirill on 30.03.17.
  */
 
-public class WardropeFragment extends BaseDbListFragment<Wardrope> implements IWardropeView {
-
+public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHolder> implements IWardropeView {
 
     @InjectPresenter
-    WardropePresenter presenter;
-
-    @Override
-    public void initList(List<Wardrope> models) {
-        blankImg.setVisibility(models == null || models.size() == 0 ? View.VISIBLE : View.GONE);
-        adapter.setData(models);
-        isInit = true;
-        isLoading = false;
-    }
+    WardropesPresenter presenter;
 
     @Override
     public void onLoadFinished(List<Wardrope> data) {
@@ -38,6 +31,11 @@ public class WardropeFragment extends BaseDbListFragment<Wardrope> implements IW
             isLoading = false;
             adapter.addData(data);
         });
+    }
+
+    @Override
+    public BaseDbAdapter<Wardrope, WardropeHolder> initAdapter() {
+        return new WardropesAdapter();
     }
 
     @Override
@@ -51,8 +49,4 @@ public class WardropeFragment extends BaseDbListFragment<Wardrope> implements IW
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateWardropeActivity.class)));
     }
 
-    @Override
-    public void openUpdateActivity(Intent intent) {
-        startActivity(intent);
-    }
 }

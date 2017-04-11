@@ -1,8 +1,9 @@
-package com.kirill.kochnev.homewardrope.ui.adapters;
+package com.kirill.kochnev.homewardrope.ui.adapters.base;
 
 import android.support.v7.widget.RecyclerView;
 
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
+import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
     @Override
     public void onBindViewHolder(H holder, int position) {
         holder.setModel(getItem(position));
+        holder.setOnItemClick(clickListner);
     }
 
     public void onRemoveItem(M model) {

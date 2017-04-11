@@ -2,7 +2,8 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
 
-import com.kirill.kochnev.homewardrope.ui.adapters.DbListAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
+import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardropeHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -34,8 +35,8 @@ public class Wardrope implements IDbModel {
     }
 
     @Override
-    public void inflateHolder(DbListAdapter.DbListHolder holder) {
-        holder.item.setName(name);
+    public void inflateHolder(BaseHolder holder) {
+        ((WardropeHolder) holder).item.setName(name);
     }
 
     public String getName() {

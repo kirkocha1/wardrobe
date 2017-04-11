@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.interfaces.IThingsView;
+import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 
@@ -49,7 +50,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     }
 
     public void refreshList() {
-        unsubscribeOnDestroy(things.getNextList(-1).subscribe(list -> getViewState().initList(list, isWardropeMode), e -> e.printStackTrace()));
+        unsubscribeOnDestroy(things.getNextList(AppConstants.DEFAULT_ID).subscribe(list -> getViewState().initList(list), e -> e.printStackTrace()));
         if (isWardropeMode) {
             things.getWardropeThingIds(wardropeId).subscribe(set -> {
                 getViewState().addThingIdsToAdapter(set);

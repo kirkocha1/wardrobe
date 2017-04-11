@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.mvp.views.interfaces;
+package com.kirill.kochnev.homewardrope.mvp.views.base;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
