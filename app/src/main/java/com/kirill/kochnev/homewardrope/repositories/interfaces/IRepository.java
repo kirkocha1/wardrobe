@@ -10,8 +10,6 @@ import io.reactivex.Single;
 
 public interface IRepository<M> {
 
-    int LIMIT = 20;
-
     Single<List<M>> getNextList(long id);
 
     Single<Boolean> putItem(M model);

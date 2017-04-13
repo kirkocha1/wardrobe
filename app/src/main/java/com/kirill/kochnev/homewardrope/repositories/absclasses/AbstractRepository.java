@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+
+import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
 
 /**
  * Created by kirill on 30.03.17.

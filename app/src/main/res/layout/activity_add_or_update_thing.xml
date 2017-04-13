@@ -2,31 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/thing_data"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        style="@style/EditTextStyle"
-        android:id="@+id/new_thing_name"
+    <LinearLayout
+        android:id="@+id/thing_field"
+        android:layout_weight="2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="Thing name"/>
+        android:layout_height="0dp"
+        android:orientation="vertical">
 
-    <EditText
-        style="@style/EditTextStyle"
-        android:id="@+id/new_thing_tag"
+        <EditText
+            android:id="@+id/new_thing_name"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Thing name" />
+
+        <EditText
+            android:id="@+id/new_thing_tag"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="hash tag #" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="8"
+        android:id="@+id/image_content"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="hash tag #"/>
+        android:gravity="center"
+        android:layout_height="0dp">
+
+        <ImageView
+            android:id="@+id/photo_thing"
+            android:layout_margin="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"/>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/photo_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
+        android:layout_marginBottom="11dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <Button
@@ -39,14 +68,8 @@
             android:id="@+id/thing_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SAVE"/>
+            android:text="SAVE" />
     </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/photo_thing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

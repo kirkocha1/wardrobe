@@ -26,6 +26,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
+
 /**
  * Created by Kirill Kochnev on 24.02.17.
  */
@@ -48,7 +50,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     private GridLayoutManager layoutManager;
     protected boolean isLoading = false;
     protected boolean isInit = false;
-
+    protected boolean isAllLoaded = false;
     protected BaseDbAdapter<M, H> adapter;
 
     @Override
@@ -96,9 +98,8 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                if (!isLoading && isInit && isScrollDown) {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                            && firstVisibleItemPosition > 0) {
+                if (!isAllLoaded && !isLoading && isInit && isScrollDown) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                         isLoading = true;
                         getPresenter().loadMoreData(visibleItemCount + firstVisibleItemPosition);
                     }
@@ -135,6 +136,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     public void onLoadFinished(List<M> data) {
         list.post(() -> {
             isLoading = false;
+            isAllLoaded = data.size() < LIMIT;
             adapter.addData(data);
         });
     }
@@ -144,6 +146,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
         adapter.setData(models);
         isInit = true;
         isLoading = false;
+        isAllLoaded = models.size() < LIMIT;
     }
 
     public void openUpdateActivity(Intent intent) {

@@ -28,13 +28,15 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.kirill.kochnev.homewardrope.AppConstants.COMPRESSION_PERCENT;
+import static com.kirill.kochnev.homewardrope.AppConstants.REQ_HEIGHT;
+import static com.kirill.kochnev.homewardrope.AppConstants.REQ_WIDTH;
+
 
 @InjectViewState
 public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingView> {
 
     public static final String TAG = "AddUpdateThingPresenter";
-    private static final int REQ_HEIGHT = 640;
-    private static final int REQ_WIDTH = 480;
 
     @Inject
     protected AbstractThingRepository things;
@@ -128,7 +130,7 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
 
     private void saveIcon(Bitmap cropImage) throws IOException {
         FileOutputStream out = new FileOutputStream(iconPath);
-        cropImage.compress(Bitmap.CompressFormat.JPEG, 10, out);
+        cropImage.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_PERCENT, out);
         out.flush();
         out.close();
     }
