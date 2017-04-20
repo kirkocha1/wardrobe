@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -30,13 +32,13 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     @BindView(R.id.new_thing_tag)
     EditText tag;
     @BindView(R.id.shoot_btn)
-    Button captureBtn;
+    ImageView captureBtn;
 
     @BindView(R.id.photo_thing)
     ImageView pic;
 
     @BindView(R.id.thing_save_btn)
-    Button save;
+    ImageView save;
 
     @InjectPresenter
     AddUpdateThingPresenter presenter;

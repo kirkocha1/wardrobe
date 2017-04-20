@@ -4,7 +4,7 @@
        android:checkableBehavior="single">
        <item
            android:id="@+id/nav_wardropes"
-           android:icon="@drawable/wardropes"
+           android:icon="@drawable/treasure_chest"
            android:title="@string/nav_wardropes"/>
        <item
            android:id="@+id/nav_looks"

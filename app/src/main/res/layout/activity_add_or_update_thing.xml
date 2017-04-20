@@ -58,17 +58,23 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
+            style="@style/ButtonTransparentStyle"
             android:id="@+id/shoot_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="shoot thing" />
+            android:minHeight="@dimen/btn_min_size"
+            android:minWidth="@dimen/btn_min_size"
+            android:src="@drawable/camera" />
 
-        <Button
+        <ImageView
+            style="@style/ButtonTransparentStyle"
+            android:minHeight="@dimen/btn_min_size"
+            android:minWidth="@dimen/btn_min_size"
             android:id="@+id/thing_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SAVE" />
+            android:src="@drawable/content_save"/>
     </LinearLayout>
 
 
