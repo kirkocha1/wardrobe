@@ -6,6 +6,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
+import com.kirill.kochnev.homewardrope.ui.views.WardropeItemView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,12 +17,11 @@ import butterknife.ButterKnife;
 
 public class WardropeHolder extends BaseHolder<Wardrope> {
 
-    @BindView(R.id.item)
-    public ListItemView item;
+    @BindView(R.id.wardrope_list_item)
+    public WardropeItemView item;
 
     public WardropeHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        item.setBoxVisibility(false);
     }
 }

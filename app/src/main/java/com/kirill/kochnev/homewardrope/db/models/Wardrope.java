@@ -4,6 +4,7 @@ import android.provider.BaseColumns;
 
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardropeHolder;
+import com.kirill.kochnev.homewardrope.ui.views.WardropeItemView;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -11,7 +12,9 @@ import java.util.Date;
 import java.util.HashSet;
 
 import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
+import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_LOOKS_COUNT;
 import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_NAME;
+import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_THINGS_COUNT;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
@@ -28,6 +31,13 @@ public class Wardrope implements IDbModel {
     @StorIOSQLiteColumn(name = WARDROPE_NAME)
     String name;
 
+    @StorIOSQLiteColumn(name = WARDROPE_THINGS_COUNT)
+    int thingsCount;
+
+    @StorIOSQLiteColumn(name = WARDROPE_LOOKS_COUNT)
+    int looksCount;
+
+
     private HashSet<Long> thingIds;
 
     public Wardrope() {
@@ -36,7 +46,10 @@ public class Wardrope implements IDbModel {
 
     @Override
     public void inflateHolder(BaseHolder holder) {
-        ((WardropeHolder) holder).item.setName(name);
+        WardropeItemView item = ((WardropeHolder) holder).item;
+        item.setName(name);
+        item.setLooksCount(looksCount);
+        item.setThingsCount(thingsCount);
     }
 
     public String getName() {
@@ -76,4 +89,19 @@ public class Wardrope implements IDbModel {
         this.creationDate = creationDate;
     }
 
+    public int getThingsCount() {
+        return thingsCount;
+    }
+
+    public void setThingsCount(int thingsCount) {
+        this.thingsCount = thingsCount;
+    }
+
+    public int getLooksCount() {
+        return looksCount;
+    }
+
+    public void setLooksCount(int looksCount) {
+        this.looksCount = looksCount;
+    }
 }

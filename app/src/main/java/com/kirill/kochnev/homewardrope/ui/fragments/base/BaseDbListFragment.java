@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
-import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IActionBarController;
 import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
@@ -36,8 +36,6 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
 
     public static final String TAG = "BaseDbListFragment";
 
-    private IActionBarController parent;
-
     @BindView(R.id.list_items)
     protected RecyclerView list;
 
@@ -47,9 +45,8 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     @BindView(R.id.blank_image)
     protected ImageView blankImg;
 
-    private GridLayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     protected boolean isLoading = false;
-    protected boolean isInit = false;
     protected boolean isAllLoaded = false;
     protected BaseDbAdapter<M, H> adapter;
 
@@ -85,7 +82,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     }
 
     private void initUi() {
-        layoutManager = new GridLayoutManager(getContext(), 2);
+        layoutManager = getLayoutManager();
         adapter = initAdapter();
         adapter.setClickListner(this);
         list.setLayoutManager(layoutManager);
@@ -98,7 +95,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                if (!isAllLoaded && !isLoading && isInit && isScrollDown) {
+                if (!isAllLoaded && !isLoading && isScrollDown) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                         isLoading = true;
                         getPresenter().loadMoreData(visibleItemCount + firstVisibleItemPosition);
@@ -123,7 +120,9 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
         onInitUi();
     }
 
-    public abstract BaseDbAdapter<M, H> initAdapter();
+    public LinearLayoutManager getLayoutManager() {
+        return new GridLayoutManager(getContext(), 2);
+    }
 
     @Override
     public void notifyListChanges(M model) {
@@ -134,24 +133,26 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
 
     @Override
     public void onLoadFinished(List<M> data) {
+        blankImg.setVisibility(data == null || data.size() == 0 ? View.VISIBLE : View.GONE);
         list.post(() -> {
             isLoading = false;
-            isAllLoaded = data.size() < LIMIT;
+            isAllLoaded = data != null && data.size() < LIMIT;
             adapter.addData(data);
         });
     }
 
-    public void initList(List<M> models) {
-        blankImg.setVisibility(models == null || models.size() == 0 ? View.VISIBLE : View.GONE);
-        adapter.setData(models);
-        isInit = true;
-        isLoading = false;
-        isAllLoaded = models.size() < LIMIT;
+    @Override
+    public void dropData() {
+        if (adapter != null) {
+            adapter.clear();
+        }
     }
 
     public void openUpdateActivity(Intent intent) {
         startActivity(intent);
     }
+
+    public abstract BaseDbAdapter<M, H> initAdapter();
 
     public abstract BaseDbListPresenter getPresenter();
 

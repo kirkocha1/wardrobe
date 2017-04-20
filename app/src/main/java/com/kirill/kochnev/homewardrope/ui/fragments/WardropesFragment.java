@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.R;
@@ -49,4 +50,8 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateWardropeActivity.class)));
     }
 
+    @Override
+    public LinearLayoutManager getLayoutManager() {
+        return new LinearLayoutManager(getContext());
+    }
 }

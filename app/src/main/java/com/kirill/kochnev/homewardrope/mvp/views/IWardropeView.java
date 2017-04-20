@@ -10,10 +10,9 @@ import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 /**
  * Created by kirill on 30.03.17.
  */
-
+@StateStrategyType(SkipStrategy.class)
 public interface IWardropeView extends IPaginationView<Wardrope> {
 
-    @StateStrategyType(SkipStrategy.class)
     void openUpdateActivity(Intent intent);
 }
 

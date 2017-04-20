@@ -8,7 +8,7 @@ import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 /**
  * Created by kirill on 30.03.17.
  */
-
+@StateStrategyType(SkipStrategy.class)
 public interface IAddUpdateWardropeView extends MvpView {
 
     void setCount(int count);
@@ -17,7 +17,6 @@ public interface IAddUpdateWardropeView extends MvpView {
 
     void initView(Wardrope wardrope);
 
-    @StateStrategyType(SkipStrategy.class)
     void onSave();
 
 }

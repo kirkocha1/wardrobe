@@ -16,6 +16,6 @@ public class WardropesAdapter extends BaseDbAdapter<Wardrope, WardropeHolder> {
 
     @Override
     public WardropeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new WardropeHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+        return new WardropeHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.wardope_list_item, parent, false));
     }
 }

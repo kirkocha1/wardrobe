@@ -64,7 +64,9 @@ public class WardropeRepository extends AbstractWardropeRepository {
                     .executeAsBlocking();
             wardrope.setThingIds(new HashSet<>());
             for (ThingsWardropes thingsWardrope : thingsWardropes) {
-                wardrope.getThingIds().add(thingsWardrope.getThingId());
+                if (id == thingsWardrope.getWardropeId()) {
+                    wardrope.getThingIds().add(thingsWardrope.getThingId());
+                }
             }
             return wardrope;
         });

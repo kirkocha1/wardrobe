@@ -13,4 +13,25 @@ public abstract class BaseDbListPresenter<V extends IPaginationView> extends Bas
     public abstract void onLongItemClick(IDbModel model);
 
     public abstract void onItemClick(IDbModel model);
+
+    protected abstract void refreshList();
+
+    private void dropList() {
+        getViewState().dropData();
+    }
+
+    @Override
+    public void attachView(V view) {
+        super.attachView(view);
+        refreshList();
+    }
+
+    @Override
+    public void detachView(V view) {
+        dropList();
+        super.detachView(view);
+
+    }
+
+
 }

@@ -21,13 +21,12 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
         this.clickListner = clickListner;
     }
 
-    public void setData(List<M> models) {
-        this.models = models;
-        notifyDataSetChanged();
-    }
-
     public void addData(List<M> models) {
-        this.models.addAll(models);
+        if (this.models == null) {
+            this.models = models;
+        } else {
+            this.models.addAll(models);
+        }
         notifyDataSetChanged();
     }
 
@@ -40,6 +39,10 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
     public void onRemoveItem(M model) {
         models.remove(model);
         notifyDataSetChanged();
+    }
+
+    public void clear() {
+        models = null;
     }
 
     @Override

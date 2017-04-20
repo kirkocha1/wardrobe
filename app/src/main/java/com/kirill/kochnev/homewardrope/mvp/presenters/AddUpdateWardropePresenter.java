@@ -29,7 +29,7 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     @Inject
     protected AbstractWardropeRepository wardropes;
 
-    private HashSet<Long> checkedSet = new HashSet<>();
+    private HashSet<Long> thingsSet = new HashSet<>();
 
     private Wardrope wardrope;
 
@@ -47,23 +47,24 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ward -> {
                     wardrope = ward;
-                    checkedSet = wardrope.getThingIds();
+                    thingsSet = wardrope.getThingIds();
                     getViewState().initView(wardrope);
                 }));
     }
 
     public void addThingId(long id) {
-        int length = checkedSet.size();
-        checkedSet.add(id);
-        if (length == checkedSet.size()) {
-            checkedSet.remove(id);
+        int length = thingsSet.size();
+        thingsSet.add(id);
+        if (length == thingsSet.size()) {
+            thingsSet.remove(id);
         }
-        getViewState().setCount(checkedSet.size());
+        getViewState().setCount(thingsSet.size());
     }
 
     public void save(String name) {
         wardrope.setName(name);
-        unsubscribeOnDestroy(wardropes.putWardropeWithThings(wardrope, checkedSet)
+        wardrope.setThingsCount(thingsSet.size());
+        unsubscribeOnDestroy(wardropes.putWardropeWithThings(wardrope, thingsSet)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {

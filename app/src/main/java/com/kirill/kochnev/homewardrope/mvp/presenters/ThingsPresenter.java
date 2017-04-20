@@ -50,18 +50,13 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     }
 
     public void refreshList() {
-        unsubscribeOnDestroy(things.getNextList(AppConstants.DEFAULT_ID).subscribe(list -> getViewState().initList(list), e -> e.printStackTrace()));
+        unsubscribeOnDestroy(things.getNextList(AppConstants.DEFAULT_ID).subscribe(list -> getViewState().onLoadFinished(list),
+                e -> e.printStackTrace()));
         if (isWardropeMode) {
             things.getWardropeThingIds(wardropeId).subscribe(set -> {
                 getViewState().addThingIdsToAdapter(set);
             });
         }
-    }
-
-    @Override
-    public void attachView(IThingsView view) {
-        super.attachView(view);
-        refreshList();
     }
 
     @Override

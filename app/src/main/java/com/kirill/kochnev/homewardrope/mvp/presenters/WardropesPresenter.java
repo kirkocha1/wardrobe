@@ -25,7 +25,7 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
  */
 @InjectViewState
 public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
-    public static final String TAG = "WardropesPresenter";
+    private static final String TAG = "WardropesPresenter";
 
     @Inject
     protected AbstractWardropeRepository wardropes;
@@ -34,16 +34,10 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
         WardropeApplication.getComponent().inject(this);
     }
 
-    public void refreshList() {
+    protected void refreshList() {
         unsubscribeOnDestroy(wardropes.getNextList(AppConstants.DEFAULT_ID).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().initList(list), e -> e.printStackTrace()));
-    }
-
-    @Override
-    public void attachView(IWardropeView view) {
-        super.attachView(view);
-        refreshList();
+                .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
     }
 
     @Override
