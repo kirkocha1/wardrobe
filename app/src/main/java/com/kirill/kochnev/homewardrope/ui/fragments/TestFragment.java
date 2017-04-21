@@ -3,14 +3,17 @@ package com.kirill.kochnev.homewardrope.ui.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.ui.views.TestView;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.ui.views.CollageItemView;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,14 +25,21 @@ import butterknife.ButterKnife;
 public class TestFragment extends Fragment {
 
     @BindView(R.id.collage_view)
-    FrameLayout collage;
+    LinearLayout collage;
 
-    TestView pic;
-    TestView pic1;
+    @BindView(R.id.image_one)
+    CollageItemView pic;
+
+    @BindView(R.id.image_two)
+    CollageItemView pic1;
+
+    @Inject
+    AbstractThingRepository rep;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        WardropeApplication.getComponent().inject(this);
         View view = inflater.inflate(R.layout.fragment_test, container, false);
         ButterKnife.bind(this, view);
         initUi();
@@ -37,15 +47,9 @@ public class TestFragment extends Fragment {
     }
 
     private void initUi() {
-        pic = new TestView(getContext());
-        pic1 = new TestView(getContext());
-        pic.setMaxWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics()));
-        pic1.setMaxWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
-
-//        pic.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        pic1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        collage.addView(pic);
-        collage.addView(pic1);
+        rep.getItem(1).subscribe(thing -> {
+            WardropeApplication.loadImage(thing.getFullImagePath(), pic);
+            WardropeApplication.loadImage(thing.getFullImagePath(), pic1);
+        });
     }
 }
