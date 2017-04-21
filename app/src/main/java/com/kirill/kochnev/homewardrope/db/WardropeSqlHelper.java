@@ -5,9 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.CREATE_LOOKS_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.CREATE_THINGS_TABLE;
-import static com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable.CREATE_THINGS_WARDROPES_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.CREATE_WARDROPES_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable.CREATE_LOOKS_THINGS_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksWardropesTable.CREATE_LOOKS_WARDROPES_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable.CREATE_THINGS_WARDROPES_TABLE;
 
 /**
  * Created by Kirill Kochnev on 26.02.17.
@@ -16,7 +19,7 @@ import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.CREATE_WAR
 public class WardropeSqlHelper extends SQLiteOpenHelper {
     private static final String TAG = "WardropeSqlHelper";
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String DB_NAME = "wardrope.db";
 
     public static final String CREATION_DATE = "creation_date";
@@ -42,9 +45,23 @@ public class WardropeSqlHelper extends SQLiteOpenHelper {
                     createTables(db);
                     oldVersion++;
                     break;
+                case 1:
+                    createLooks(db);
+                    oldVersion++;
+                    break;
             }
             updateDb(db, oldVersion, newVersion);
         }
+    }
+
+    private void createLooks(SQLiteDatabase db) {
+        Log.d(TAG, CREATE_LOOKS_TABLE);
+        Log.d(TAG, CREATE_LOOKS_THINGS_TABLE);
+        Log.d(TAG, CREATE_LOOKS_WARDROPES_TABLE);
+
+        db.execSQL(CREATE_LOOKS_TABLE);
+        db.execSQL(CREATE_LOOKS_WARDROPES_TABLE);
+        db.execSQL(CREATE_LOOKS_THINGS_TABLE);
     }
 
     private void createTables(SQLiteDatabase db) {

@@ -9,5 +9,5 @@ public class AppConstants {
     public static final int REQ_HEIGHT = 640;
     public static final int REQ_WIDTH = 480;
     public static final int DEFAULT_ID = -1;
-    public static final int LIMIT = 20;
+    public static final int LIMIT = 6;
 }

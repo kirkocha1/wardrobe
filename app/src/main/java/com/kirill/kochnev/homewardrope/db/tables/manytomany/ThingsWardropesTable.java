@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.db.tables;
+package com.kirill.kochnev.homewardrope.db.tables.manytomany;
 
 import android.provider.BaseColumns;
 

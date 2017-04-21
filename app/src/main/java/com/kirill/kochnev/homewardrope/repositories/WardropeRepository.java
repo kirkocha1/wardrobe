@@ -2,7 +2,7 @@ package com.kirill.kochnev.homewardrope.repositories;
 
 import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
-import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
+import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;

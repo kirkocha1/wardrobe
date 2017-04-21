@@ -4,6 +4,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
+import com.kirill.kochnev.homewardrope.db.models.Look;
+import com.kirill.kochnev.homewardrope.db.models.LookStorIOSQLiteDeleteResolver;
+import com.kirill.kochnev.homewardrope.db.models.LookStorIOSQLiteGetResolver;
+import com.kirill.kochnev.homewardrope.db.models.LookStorIOSQLitePutResolver;
+import com.kirill.kochnev.homewardrope.db.models.LooksThings;
+import com.kirill.kochnev.homewardrope.db.models.LooksThingsStorIOSQLiteDeleteResolver;
+import com.kirill.kochnev.homewardrope.db.models.LooksThingsStorIOSQLiteGetResolver;
+import com.kirill.kochnev.homewardrope.db.models.LooksThingsStorIOSQLitePutResolver;
+import com.kirill.kochnev.homewardrope.db.models.LooksWardropes;
+import com.kirill.kochnev.homewardrope.db.models.LooksWardropesStorIOSQLiteDeleteResolver;
+import com.kirill.kochnev.homewardrope.db.models.LooksWardropesStorIOSQLiteGetResolver;
+import com.kirill.kochnev.homewardrope.db.models.LooksWardropesStorIOSQLitePutResolver;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.db.models.ThingStorIOSQLiteDeleteResolver;
 import com.kirill.kochnev.homewardrope.db.models.ThingStorIOSQLiteGetResolver;
@@ -58,10 +70,25 @@ public class DbModule {
                         .getResolver(new ThingStorIOSQLiteGetResolver())
                         .deleteResolver(new ThingStorIOSQLiteDeleteResolver())
                         .build())
+                .addTypeMapping(Look.class, SQLiteTypeMapping.<Look>builder()
+                        .putResolver(new LookStorIOSQLitePutResolver())
+                        .getResolver(new LookStorIOSQLiteGetResolver())
+                        .deleteResolver(new LookStorIOSQLiteDeleteResolver())
+                        .build())
                 .addTypeMapping(ThingsWardropes.class, SQLiteTypeMapping.<ThingsWardropes>builder()
                         .putResolver(new ThingsWardropesStorIOSQLitePutResolver())
                         .getResolver(new ThingsWardropesStorIOSQLiteGetResolver())
-                        .deleteResolver(new ThingsWardropesStorIOSQLiteDeleteResolver())
+                        .deleteResolver(new ThingsWardropesStorIOSQLiteDeleteResolver()).build())
+
+                .addTypeMapping(LooksThings.class, SQLiteTypeMapping.<LooksThings>builder()
+                        .putResolver(new LooksThingsStorIOSQLitePutResolver())
+                        .getResolver(new LooksThingsStorIOSQLiteGetResolver())
+                        .deleteResolver(new LooksThingsStorIOSQLiteDeleteResolver())
+                        .build())
+                .addTypeMapping(LooksWardropes.class, SQLiteTypeMapping.<LooksWardropes>builder()
+                        .putResolver(new LooksWardropesStorIOSQLitePutResolver())
+                        .getResolver(new LooksWardropesStorIOSQLiteGetResolver())
+                        .deleteResolver(new LooksWardropesStorIOSQLiteDeleteResolver())
                         .build())
                 .build();
     }

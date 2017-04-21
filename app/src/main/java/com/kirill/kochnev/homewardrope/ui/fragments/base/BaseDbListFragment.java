@@ -128,6 +128,9 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     public void notifyListChanges(M model) {
         if (adapter != null) {
             adapter.onRemoveItem(model);
+            if (adapter.getItemCount() == 0) {
+                blankImg.setVisibility(View.VISIBLE);
+            }
         }
     }
 
