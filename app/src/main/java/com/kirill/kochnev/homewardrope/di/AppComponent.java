@@ -2,10 +2,10 @@ package com.kirill.kochnev.homewardrope.di;
 
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
-import com.kirill.kochnev.homewardrope.ui.fragments.TestFragment;
-import com.kirill.kochnev.homewardrope.ui.views.CollageItemView;
+import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateLookActivity;
 
 import javax.inject.Singleton;
 
@@ -27,5 +27,9 @@ public interface AppComponent {
 
     void inject(AddUpdateThingPresenter presenter);
 
-    void inject(TestFragment fragment);
+    void inject(LooksPresenter presenter);
+
+    void inject(AddUpdateLookActivity activity);
+
+
 }

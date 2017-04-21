@@ -29,6 +29,10 @@
             android:name=".ui.activities.AddUpdateWardropeActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.activities.AddUpdateLookActivity"
+            android:screenOrientation="portrait" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.kirill.kochnev.homewardrope"

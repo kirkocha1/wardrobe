@@ -2,21 +2,13 @@ package com.kirill.kochnev.homewardrope.ui.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.net.Uri;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.ImageView;
 
-import com.kirill.kochnev.homewardrope.WardropeApplication;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.utils.RotationGestureDetector;
-
-import java.io.File;
-
-import javax.inject.Inject;
 
 import static android.view.MotionEvent.INVALID_POINTER_ID;
 
@@ -133,7 +125,9 @@ public class CollageItemView extends ImageView {
         canvas.scale(mScaleFactor, mScaleFactor);
         canvas.translate(mPosX, mPosY);
         canvas.rotate(mRotationAngle);
-        getDrawable().draw(canvas);
+        if (getDrawable() != null) {
+            getDrawable().draw(canvas);
+        }
         canvas.restore();
     }
 

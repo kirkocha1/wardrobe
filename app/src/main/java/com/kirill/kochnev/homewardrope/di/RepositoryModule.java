@@ -1,7 +1,9 @@
 package com.kirill.kochnev.homewardrope.di;
 
+import com.kirill.kochnev.homewardrope.repositories.LookRepository;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.WardropeRepository;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -29,4 +31,11 @@ public class RepositoryModule {
     AbstractWardropeRepository provideWardropeRepository(StorIOSQLite storIOSQLite) {
         return new WardropeRepository(storIOSQLite);
     }
+
+    @Singleton
+    @Provides
+    AbstractLookRepository provideLookRepository(StorIOSQLite storIOSQLite) {
+        return new LookRepository(storIOSQLite);
+    }
+
 }

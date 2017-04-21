@@ -27,14 +27,6 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
     WardropesPresenter presenter;
 
     @Override
-    public void onLoadFinished(List<Wardrope> data) {
-        list.post(() -> {
-            isLoading = false;
-            adapter.addData(data);
-        });
-    }
-
-    @Override
     public BaseDbAdapter<Wardrope, WardropeHolder> initAdapter() {
         return new WardropesAdapter();
     }

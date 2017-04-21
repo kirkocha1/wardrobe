@@ -1,11 +1,7 @@
-package com.kirill.kochnev.homewardrope.ui.fragments;
+package com.kirill.kochnev.homewardrope.ui.activities;
 
-import android.app.Fragment;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.kirill.kochnev.homewardrope.R;
@@ -19,10 +15,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Kirill Kochnev on 26.02.17.
+ * Created by kirill on 21.04.17.
  */
 
-public class TestFragment extends Fragment {
+public class AddUpdateLookActivity extends BaseActionBarActivity {
 
     @BindView(R.id.collage_view)
     LinearLayout collage;
@@ -36,20 +32,25 @@ public class TestFragment extends Fragment {
     @Inject
     AbstractThingRepository rep;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        WardropeApplication.getComponent().inject(this);
-        View view = inflater.inflate(R.layout.fragment_test, container, false);
-        ButterKnife.bind(this, view);
-        initUi();
-        return view;
-    }
 
-    private void initUi() {
+    @Override
+    public void onInitUi(View baseLayout) {
+        setContentView(R.layout.fragment_test);
+        ButterKnife.bind(this);
+        WardropeApplication.getComponent().inject(this);
         rep.getItem(1).subscribe(thing -> {
             WardropeApplication.loadImage(thing.getFullImagePath(), pic);
             WardropeApplication.loadImage(thing.getFullImagePath(), pic1);
-        });
+        }, e -> Log.d("ERR", e.getMessage()));
+    }
+
+    @Override
+    public boolean isMenuActive() {
+        return false;
+    }
+
+    @Override
+    public boolean isSearchActive() {
+        return false;
     }
 }
