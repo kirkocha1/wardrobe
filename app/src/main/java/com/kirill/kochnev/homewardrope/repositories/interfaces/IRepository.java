@@ -1,5 +1,7 @@
 package com.kirill.kochnev.homewardrope.repositories.interfaces;
 
+import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
+
 import java.util.List;
 
 import io.reactivex.Single;
@@ -10,13 +12,16 @@ import io.reactivex.Single;
 
 public interface IRepository<M> {
 
-    Single<List<M>> getNextList(long id);
-
     Single<Boolean> putItem(M model);
 
     Single<M> getItem(long id);
 
     Single<Boolean> deletItem(M model);
 
+    Single<List<M>> query(long id);
+
+    Single<List<M>> query();
+
+    Single<List<M>> query(ISpecification filterSpecification);
 
 }

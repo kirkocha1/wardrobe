@@ -53,4 +53,9 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
     public M getItem(int position) {
         return models.get(position);
     }
+
+
+    public long getLastId() {
+        return getItem(getItemCount() - 1).getId();
+    }
 }

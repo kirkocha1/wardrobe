@@ -32,16 +32,16 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     }
 
     @Override
-    public void loadMoreData(long modelId) {
+    public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(looks.getNextList(modelId).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(looks.query(lastId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
     }
 
     @Override
     protected void refreshList() {
-        unsubscribeOnDestroy(looks.getNextList(AppConstants.DEFAULT_ID).subscribe(list -> getViewState().onLoadFinished(list),
+        unsubscribeOnDestroy(looks.query(AppConstants.DEFAULT_ID).subscribe(list -> getViewState().onLoadFinished(list),
                 e -> e.printStackTrace()));
     }
 

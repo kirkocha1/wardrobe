@@ -19,4 +19,6 @@ public interface IAddUpdateWardropeView extends MvpView {
 
     void onSave();
 
+    void changeFragmentMode(boolean mode);
+
 }

@@ -35,15 +35,15 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     }
 
     protected void refreshList() {
-        unsubscribeOnDestroy(wardropes.getNextList(AppConstants.DEFAULT_ID).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(wardropes.query(AppConstants.DEFAULT_ID).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
     }
 
     @Override
-    public void loadMoreData(long id) {
+    public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(wardropes.getNextList(id).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(wardropes.query(lastId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
     }

@@ -116,6 +116,7 @@ public class CollageItemView extends ImageView {
     private void initUi() {
         mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
         mRotationDetector = new RotationGestureDetector(new RotationListener());
+        setAdjustViewBounds(true);
     }
 
 
@@ -125,9 +126,7 @@ public class CollageItemView extends ImageView {
         canvas.scale(mScaleFactor, mScaleFactor);
         canvas.translate(mPosX, mPosY);
         canvas.rotate(mRotationAngle);
-        if (getDrawable() != null) {
-            getDrawable().draw(canvas);
-        }
+        super.onDraw(canvas);
         canvas.restore();
     }
 

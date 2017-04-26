@@ -17,26 +17,30 @@ import java.util.HashSet;
 public class ThingsAdapter extends BaseDbAdapter<Thing, ThingHolder> {
 
     private HashSet<Long> ids;
-
-    private boolean wardropeMode;
-
-    public ThingsAdapter(boolean wardropeMode) {
-        this.wardropeMode = wardropeMode;
-    }
+    private boolean isEdit;
 
     public void setIds(HashSet<Long> ids) {
         this.ids = ids;
+        isEdit = true;
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(ThingHolder holder, int position) {
+        holder.setEdit(isEdit);
         holder.setUsedIds(ids);
         super.onBindViewHolder(holder, position);
     }
 
     @Override
+    public void clear() {
+        super.clear();
+        ids = null;
+        isEdit = false;
+    }
+
+    @Override
     public ThingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ThingHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false), ids, wardropeMode);
+        return new ThingHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false), ids);
     }
 }

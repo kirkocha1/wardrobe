@@ -25,7 +25,7 @@ import io.reactivex.schedulers.Schedulers;
 public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardropeView> {
 
     public static final String TAG = "AddUpdateWardrope";
-
+    private boolean isEditableMode = false;
     @Inject
     protected AbstractWardropeRepository wardropes;
 
@@ -59,6 +59,11 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
             thingsSet.remove(id);
         }
         getViewState().setCount(thingsSet.size());
+    }
+
+    public void toggleMode() {
+        isEditableMode = !isEditableMode;
+        getViewState().changeFragmentMode(isEditableMode);
     }
 
     public void save(String name) {

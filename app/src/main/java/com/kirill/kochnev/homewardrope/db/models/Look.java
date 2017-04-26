@@ -1,7 +1,5 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import android.provider.BaseColumns;
-
 import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
@@ -9,10 +7,10 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import java.util.Date;
 
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOKS_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_FULL_IMAGE_PATH;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_ICON_IMAGE_PATH;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_NAME;
-import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOKS_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_TAG;
 
 /**
@@ -22,7 +20,7 @@ import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_TAG;
 @StorIOSQLiteType(table = LOOKS_TABLE)
 public class Look implements IDbModel {
 
-    @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
+    @StorIOSQLiteColumn(key = true, name = _ID)
     Long _id;
 
     @StorIOSQLiteColumn(name = WardropeSqlHelper.CREATION_DATE)

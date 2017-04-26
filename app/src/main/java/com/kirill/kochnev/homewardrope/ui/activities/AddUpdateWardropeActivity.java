@@ -1,7 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.activities;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,10 +31,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     FrameLayout frame;
 
     @BindView(R.id.wardrope_show_frame)
-    Button select;
-
-    @BindView(R.id.hide_frame)
-    Button hide;
+    FloatingActionButton select;
 
     @BindView(R.id.save_wardrope)
     Button save;
@@ -50,7 +47,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     private long wardropeId;
 
-    private Fragment fragment;
+    private ThingsFragment fragment;
 
     @ProvidePresenter
     AddUpdateWardropePresenter providePresenter() {
@@ -69,9 +66,10 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         setBackButtonEnabled(true);
         setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
         ButterKnife.bind(this, baseLayout);
-        select.setOnClickListener(v -> showFragment());
-        hide.setOnClickListener(v -> setItemsVisibility(true));
+        name.setEnabled(false);
+        select.setOnClickListener(v -> presenter.toggleMode());
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
+        showFragment();
     }
 
     @Override
@@ -84,23 +82,18 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         return false;
     }
 
-
     private void showFragment() {
-        if (fragment == null) {
-            fragment = ThingsFragment.createInstance(ThingsFragment.WARDROPE_MODE, wardropeId);
-        }
+        fragment = ThingsFragment.createInstance(ThingsFragment.WARDROPE_MODE, false, wardropeId);
         getFragmentManager().beginTransaction()
                 .replace(R.id.frame_id, fragment)
                 .commit();
-        setItemsVisibility(false);
-
     }
 
-    private void setItemsVisibility(boolean isHide) {
-        hide.setVisibility(isHide ? View.GONE : View.VISIBLE);
-        frame.setVisibility(isHide ? View.GONE : View.VISIBLE);
-        select.setVisibility(isHide ? View.VISIBLE : View.GONE);
 
+    @Override
+    public void changeFragmentMode(boolean mode) {
+        name.setEnabled(mode);
+        fragment.setEditableMode(mode);
     }
 
     @Override

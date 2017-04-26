@@ -31,6 +31,7 @@ public class WardropeApplication extends Application {
 
     public static void loadImage(String url, ImageView imageView) {
         Uri uriToFile = url != null ? Uri.fromFile(new File(url)) : null;
+
         Picasso.with(getContext()).load(uriToFile).placeholder(R.drawable.image_placeholder).into(imageView);
     }
 

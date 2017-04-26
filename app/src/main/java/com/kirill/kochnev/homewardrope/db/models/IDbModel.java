@@ -12,6 +12,7 @@ import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
    so the only proper decision was to make common interface
 */
 public interface IDbModel extends BaseColumns {
+
     Long getId();
 
     void inflateHolder(BaseHolder holder);

@@ -8,7 +8,7 @@ import com.pushtorefresh.storio.sqlite.StorIOSQLite;
  * Created by kirill on 21.04.17.
  */
 
-public class AbstractLookRepository extends AbstractRepository<Look>{
+public abstract class AbstractLookRepository extends AbstractRepository<Look> {
 
     public AbstractLookRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
@@ -23,4 +23,6 @@ public class AbstractLookRepository extends AbstractRepository<Look>{
     public String getTableName() {
         return LooksTable.LOOKS_TABLE;
     }
+
+
 }

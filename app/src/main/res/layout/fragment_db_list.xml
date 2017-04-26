@@ -16,18 +16,34 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="25dp"
+        android:layout_margin="@dimen/fab_btn_margin"
         android:adjustViewBounds="true"
         android:background="@color/colorAccent"
         android:src="@drawable/ic_add_black_24px"
-        app:fabSize="mini" />
+        app:fabSize="normal" />
 
-    <ImageView
+    <RelativeLayout
         android:id="@+id/blank_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/image_placeholder"
-        android:visibility="gone" />
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/empty_list_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/blank_list" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/empty_list_icon"
+            android:layout_centerHorizontal="true"
+            android:text="@string/empty_list_text"
+            android:textSize="@dimen/text_size" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
