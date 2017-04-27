@@ -21,7 +21,11 @@ public class ThingsAdapter extends BaseDbAdapter<Thing, ThingHolder> {
 
     public void setIds(HashSet<Long> ids) {
         this.ids = ids;
-        isEdit = true;
+        notifyDataSetChanged();
+    }
+
+    public void setEdit(boolean edit) {
+        isEdit = edit;
         notifyDataSetChanged();
     }
 

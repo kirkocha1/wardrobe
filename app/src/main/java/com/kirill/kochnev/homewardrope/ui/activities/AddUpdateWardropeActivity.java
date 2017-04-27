@@ -3,7 +3,6 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -34,7 +33,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     FloatingActionButton select;
 
     @BindView(R.id.save_wardrope)
-    Button save;
+    FloatingActionButton save;
 
     @BindView(R.id.new_wardrope_name)
     EditText name;
@@ -66,7 +65,6 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         setBackButtonEnabled(true);
         setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
         ButterKnife.bind(this, baseLayout);
-        name.setEnabled(false);
         select.setOnClickListener(v -> presenter.toggleMode());
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
         showFragment();
@@ -92,6 +90,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void changeFragmentMode(boolean mode) {
+        save.setVisibility(mode ? View.VISIBLE : View.GONE);
         name.setEnabled(mode);
         fragment.setEditableMode(mode);
     }

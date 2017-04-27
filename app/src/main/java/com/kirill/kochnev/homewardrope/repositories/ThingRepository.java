@@ -7,6 +7,7 @@ import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -69,9 +70,15 @@ public class ThingRepository extends AbstractThingRepository {
     public Single<List<Thing>> query(ISpecification filterSpecification) {
         return Single.create(sub -> {
             try {
-                List<Thing> models = storIOSQLite.get().listOfObjects(getEntityClass())
-                        .withQuery(filterSpecification.getRawQueryStatement()
-                                .build()).prepare().executeAsBlocking();
+                List<Thing> models;
+                PreparedGetListOfObjects.Builder<Thing> builder = storIOSQLite.get().listOfObjects(getEntityClass());
+                if (filterSpecification.isRow()) {
+                    models = builder.withQuery(filterSpecification.getRawQueryStatement()
+                            .build()).prepare().executeAsBlocking();
+                } else {
+                    models = builder.withQuery(filterSpecification.getQueryStatement()
+                            .build()).prepare().executeAsBlocking();
+                }
 
                 sub.onSuccess(new ArrayList<>(models));
 

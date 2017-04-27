@@ -9,7 +9,6 @@ import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.CREATE_LOOKS_
 import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.CREATE_THINGS_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.CREATE_WARDROPES_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable.CREATE_LOOKS_THINGS_TABLE;
-import static com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksWardropesTable.CREATE_LOOKS_WARDROPES_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable.CREATE_THINGS_WARDROPES_TABLE;
 
 /**
@@ -57,10 +56,8 @@ public class WardropeSqlHelper extends SQLiteOpenHelper {
     private void createLooks(SQLiteDatabase db) {
         Log.d(TAG, CREATE_LOOKS_TABLE);
         Log.d(TAG, CREATE_LOOKS_THINGS_TABLE);
-        Log.d(TAG, CREATE_LOOKS_WARDROPES_TABLE);
 
         db.execSQL(CREATE_LOOKS_TABLE);
-        db.execSQL(CREATE_LOOKS_WARDROPES_TABLE);
         db.execSQL(CREATE_LOOKS_THINGS_TABLE);
     }
 

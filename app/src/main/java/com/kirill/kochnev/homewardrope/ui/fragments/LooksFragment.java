@@ -8,7 +8,7 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
-import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateLookActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
@@ -36,6 +36,6 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     @Override
     public void onInitUi() {
         setTitle(R.string.looks_title);
-        addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateLookActivity.class)));
+        addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), CreationLookActivity.class)));
     }
 }

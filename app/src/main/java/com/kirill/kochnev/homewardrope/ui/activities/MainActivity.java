@@ -3,6 +3,7 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.ui.activities.base.DrawerActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.LooksFragment;
@@ -14,7 +15,7 @@ public class MainActivity extends DrawerActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new LooksFragment());
+        setContentView(new WardropesFragment());
         initUi();
     }
 
@@ -26,7 +27,7 @@ public class MainActivity extends DrawerActivity {
     public void openItem(int menuItemId) {
         switch (menuItemId) {
             case R.id.nav_things:
-                setFragmentContent(ThingsFragment.createInstance(-1, false, -1));
+                setFragmentContent(ThingsFragment.createInstance(AppConstants.DEFAULT_ID, false, AppConstants.DEFAULT_ID));
                 break;
             case R.id.nav_wardropes:
                 setFragmentContent(new WardropesFragment());
@@ -36,7 +37,7 @@ public class MainActivity extends DrawerActivity {
                 break;
 
             default:
-                setFragmentContent(new LooksFragment());
+                setFragmentContent(new WardropesFragment());
         }
     }
 }

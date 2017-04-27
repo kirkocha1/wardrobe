@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.ui.activities;
+package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.util.Log;
 import android.view.View;
@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.ui.activities.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.ui.views.CollageItemView;
 
 import javax.inject.Inject;

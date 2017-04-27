@@ -30,4 +30,5 @@ public class BaseActionBarFragment extends MvpFragment {
             barController.setTitle(resId);
         }
     }
+
 }

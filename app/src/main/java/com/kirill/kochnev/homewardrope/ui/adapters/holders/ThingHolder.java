@@ -48,10 +48,12 @@ public class ThingHolder extends BaseHolder<Thing> {
     }
 
     private void updateusedIds(long id) {
-        if (usedIds.contains(id)) {
-            usedIds.remove(id);
-        } else {
-            usedIds.add(id);
+        if (usedIds != null) {
+            if (usedIds.contains(id)) {
+                usedIds.remove(id);
+            } else {
+                usedIds.add(id);
+            }
         }
     }
 

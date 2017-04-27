@@ -12,10 +12,6 @@ import com.kirill.kochnev.homewardrope.db.models.LooksThings;
 import com.kirill.kochnev.homewardrope.db.models.LooksThingsStorIOSQLiteDeleteResolver;
 import com.kirill.kochnev.homewardrope.db.models.LooksThingsStorIOSQLiteGetResolver;
 import com.kirill.kochnev.homewardrope.db.models.LooksThingsStorIOSQLitePutResolver;
-import com.kirill.kochnev.homewardrope.db.models.LooksWardropes;
-import com.kirill.kochnev.homewardrope.db.models.LooksWardropesStorIOSQLiteDeleteResolver;
-import com.kirill.kochnev.homewardrope.db.models.LooksWardropesStorIOSQLiteGetResolver;
-import com.kirill.kochnev.homewardrope.db.models.LooksWardropesStorIOSQLitePutResolver;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.db.models.ThingStorIOSQLiteDeleteResolver;
 import com.kirill.kochnev.homewardrope.db.models.ThingStorIOSQLiteGetResolver;
@@ -84,11 +80,6 @@ public class DbModule {
                         .putResolver(new LooksThingsStorIOSQLitePutResolver())
                         .getResolver(new LooksThingsStorIOSQLiteGetResolver())
                         .deleteResolver(new LooksThingsStorIOSQLiteDeleteResolver())
-                        .build())
-                .addTypeMapping(LooksWardropes.class, SQLiteTypeMapping.<LooksWardropes>builder()
-                        .putResolver(new LooksWardropesStorIOSQLitePutResolver())
-                        .getResolver(new LooksWardropesStorIOSQLiteGetResolver())
-                        .deleteResolver(new LooksWardropesStorIOSQLiteDeleteResolver())
                         .build())
                 .build();
     }

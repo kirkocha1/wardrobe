@@ -46,31 +46,6 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         initMode(mode, filterId);
     }
 
-    private void initMode(ViewMode mode, long wardropeId) {
-        viewMode = mode;
-        this.filterId = wardropeId;
-    }
-
-    private Single<List<Thing>> resolveObservable(long lastId) {
-        Single<List<Thing>> observable;
-        observable = things.query(lastId);
-        switch (viewMode) {
-            case WARDROPE_MODE:
-                if (isEdit) {
-                    things.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
-                } else {
-                    observable = things.query(new ThingsByWardropeSpecification(lastId, filterId));
-                }
-                break;
-        }
-        return observable;
-    }
-
-    private Disposable getListDisposable(Single<List<Thing>> obsevable) {
-        return obsevable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, "refreshList: " + e.getMessage()));
-    }
 
     public void refreshList() {
         unsubscribeOnDestroy(getListDisposable(resolveObservable(AppConstants.DEFAULT_ID)));
@@ -78,6 +53,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     public void updateModeState(boolean mode) {
         isEdit = mode;
+        getViewState().setEditMode(isEdit);
         refreshList();
     }
 
@@ -99,17 +75,57 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         }
     }
 
+
     @Override
     public void onItemClick(IDbModel model) {
-        Thing thing = (Thing) model;
-        if (viewMode != ViewMode.WARDROPE_MODE) {
-            getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(model.getId(), true));
-        } else {
-            if (isEdit) {
-                getViewState().addThingId(thing.getId());
-            } else {
-                getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(model.getId(), false));
-            }
+        resolveClick((Thing) model);
+    }
+
+    private void initMode(ViewMode mode, long wardropeId) {
+        viewMode = mode;
+        this.filterId = wardropeId;
+        getViewState().setEditMode(isEdit);
+    }
+
+    private Single<List<Thing>> resolveObservable(long lastId) {
+        Single<List<Thing>> observable;
+        observable = things.query(lastId);
+        switch (viewMode) {
+            case WARDROPE_MODE:
+                if (isEdit) {
+                    things.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
+                } else {
+                    observable = things.query(new ThingsByWardropeSpecification(lastId, filterId));
+                }
+                break;
         }
+        return observable;
+    }
+
+    private void resolveClick(Thing thing) {
+        switch (viewMode) {
+            case WARDROPE_MODE:
+                if (isEdit) {
+                    getViewState().addThingId(thing.getId());
+                } else {
+                    getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
+                }
+                break;
+            case LOOK_MODE:
+                if (isEdit) {
+                    getViewState().addThingId(thing.getId());
+                }
+                break;
+
+            default:
+                getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), true));
+        }
+
+    }
+
+    private Disposable getListDisposable(Single<List<Thing>> obsevable) {
+        return obsevable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, "refreshList: " + e.getMessage()));
     }
 }

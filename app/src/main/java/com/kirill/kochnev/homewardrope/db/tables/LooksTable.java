@@ -13,6 +13,7 @@ public class LooksTable implements BaseColumns {
     public static final String LOOKS_TABLE = "looks";
     public static final String LOOK_NAME = "look_name";
     public static final String LOOK_TAG = "look_tag";
+    public static final String LOOK_WARDROPE_ID = "look_wardrope_id";
     public static final String LOOK_FULL_IMAGE_PATH = "look_full_image_path";
     public static final String LOOK_ICON_IMAGE_PATH = "look_icon_image_path";
 
@@ -22,6 +23,8 @@ public class LooksTable implements BaseColumns {
             CREATION_DATE + " TEXT, " +
             LOOK_TAG + " TEXT, " +
             LOOK_FULL_IMAGE_PATH + " TEXT, " +
-            LOOK_ICON_IMAGE_PATH + " TEXT)";
-
+            LOOK_ICON_IMAGE_PATH + " TEXT, " +
+            LOOK_WARDROPE_ID + " TEXT, " +
+            "FOREIGN KEY (" + LOOK_WARDROPE_ID + ") REFERENCES " + WardropeTable.WARDROPE_TABLE + "(" + WardropeTable._ID + ")" +
+            ")";
 }

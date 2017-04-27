@@ -15,8 +15,6 @@ import android.widget.FrameLayout;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.ui.activities.BaseActionBarActivity;
 
-import java.util.function.Consumer;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

@@ -14,6 +14,7 @@ import java.util.HashSet;
  * Created by Kirill Kochnev on 25.02.17.
  */
 
+@StateStrategyType(SingleStateStrategy.class)
 public interface IThingsView extends IPaginationView<Thing> {
 
     @StateStrategyType(SkipStrategy.class)
@@ -21,7 +22,7 @@ public interface IThingsView extends IPaginationView<Thing> {
 
     void addThingId(long id);
 
-    @StateStrategyType(SingleStateStrategy.class)
     void addThingIdsToAdapter(HashSet<Long> set);
 
+    void setEditMode(boolean isEditMode);
 }

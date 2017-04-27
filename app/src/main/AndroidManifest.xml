@@ -28,10 +28,14 @@
         <activity
             android:name=".ui.activities.AddUpdateWardropeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name=".ui.activities.AddUpdateLookActivity"
+            android:name=".ui.activities.look.AddUpdateLookActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.activities.look.CreationLookActivity"
             android:screenOrientation="portrait" />
 
         <provider

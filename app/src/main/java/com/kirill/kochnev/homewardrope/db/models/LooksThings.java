@@ -26,8 +26,8 @@ public class LooksThings {
     public LooksThings() {
     }
 
-    public LooksThings(long wardropeId, long thingId) {
-        this.lookId = wardropeId;
+    public LooksThings(long lookId, long thingId) {
+        this.lookId = lookId;
         this.thingId = thingId;
     }
 

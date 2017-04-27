@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.repositories.utils;
 
 import android.util.Log;
 
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.db.tables.ThingsTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
@@ -26,11 +27,14 @@ public class ThingsByWardropeSpecification implements ISpecification {
 
     @Override
     public boolean isRow() {
-        return false;
+        return true;
     }
 
     private String queryThings(long id, long wardropeId) {
-        String result;
+        String result = "";
+        if (wardropeId == AppConstants.DEFAULT_ID) {
+            return result;
+        }
 
         String select = ThingsTable.THINGS_TABLE + "." + ThingsTable._ID + ", "
                 + ThingsTable.THINGS_TABLE + "." + WardropeSqlHelper.CREATION_DATE + ", "
@@ -39,11 +43,11 @@ public class ThingsByWardropeSpecification implements ISpecification {
                 + ThingsTable.THINGS_TABLE + "." + ThingsTable.THING_FULL_IMAGE_PATH + ", "
                 + ThingsTable.THINGS_TABLE + "." + ThingsTable.THING_ICON_IMAGE_PATH;
 
-        String join = wardropeId != -1 ? "JOIN " + ThingsWardropesTable.THINGS_WARDROPES_TABLE +
-                " ON " + ThingsWardropesTable.THINGS_WARDROPES_THING_ID + " = " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID : "";
+        String join = "JOIN " + ThingsWardropesTable.THINGS_WARDROPES_TABLE +
+                " ON " + ThingsWardropesTable.THINGS_WARDROPES_THING_ID + " = " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID;
 
-        String where = wardropeId != -1 ? "WHERE " + ThingsWardropesTable.THINGS_WARDROPES_TABLE + "."
-                + ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + " = " + wardropeId : "";
+        String where = "WHERE " + ThingsWardropesTable.THINGS_WARDROPES_TABLE + "."
+                + ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + " = " + wardropeId;
         if (id == -1) {
             result = "SELECT " + select + " FROM " + ThingsTable.THINGS_TABLE + " " + join + " " + where +
                     " ORDER BY " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID +

@@ -6,12 +6,14 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import java.util.Date;
+import java.util.HashSet;
 
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOKS_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_FULL_IMAGE_PATH;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_ICON_IMAGE_PATH;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_NAME;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_TAG;
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_WARDROPE_ID;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
@@ -38,7 +40,14 @@ public class Look implements IDbModel {
     @StorIOSQLiteColumn(name = LOOK_ICON_IMAGE_PATH)
     String iconImagePath;
 
+    @StorIOSQLiteColumn(name = LOOK_WARDROPE_ID)
+    Long wardropeId;
+
+
+    private HashSet<Long> thingIds;
+
     public Look() {
+        thingIds = new HashSet<>();
         this.creationDate = new Date().toString();
     }
 
@@ -96,10 +105,24 @@ public class Look implements IDbModel {
         this._id = _id;
     }
 
+    public HashSet<Long> getThingIds() {
+        return thingIds;
+    }
+
+    public void setThingIds(HashSet<Long> thingIds) {
+        this.thingIds = thingIds;
+    }
+
     @Override
     public void inflateHolder(BaseHolder holder) {
 
     }
 
+    public Long getWardropeId() {
+        return wardropeId;
+    }
 
+    public void setWardropeId(Long wardropeId) {
+        this.wardropeId = wardropeId;
+    }
 }
