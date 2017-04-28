@@ -11,17 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import java.util.List;
 
@@ -110,10 +109,10 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 if (addBtn.isActivated()) {
                     switch (newState) {
                         case RecyclerView.SCROLL_STATE_DRAGGING:
-                            animateBtn(true);
+                            AnimationHelper.hideShowAnimation(addBtn, true);
                             break;
                         case RecyclerView.SCROLL_STATE_IDLE:
-                            animateBtn(false);
+                            AnimationHelper.hideShowAnimation(addBtn, false);
                             break;
                     }
                 }
@@ -152,13 +151,6 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
         if (adapter != null) {
             adapter.clear();
         }
-    }
-
-
-    private void animateBtn(boolean isHide) {
-        addBtn.startAnimation(AnimationUtils.loadAnimation(WardropeApplication.getContext(),
-                isHide ? R.anim.add_btn_hide : R.anim.add_btn_show));
-        addBtn.setVisibility(isHide ? View.GONE : View.VISIBLE);
     }
 
     public void openUpdateActivity(Intent intent) {

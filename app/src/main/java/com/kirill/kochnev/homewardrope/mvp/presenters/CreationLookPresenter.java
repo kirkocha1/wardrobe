@@ -18,14 +18,14 @@ import javax.inject.Inject;
  */
 
 @InjectViewState
-public class FirstStepCreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLookView> {
+public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLookView> {
 
     private Look model;
 
     @Inject
     AbstractLookRepository looks;
 
-    public FirstStepCreationLookPresenter() {
+    public CreationLookPresenter() {
         WardropeApplication.getComponent().inject(this);
         model = new Look();
     }
@@ -39,6 +39,10 @@ public class FirstStepCreationLookPresenter extends BaseMvpPresenter<IFirstStepC
         } else {
             Toast.makeText(WardropeApplication.getContext(), "thing with id: " + id + " was added to look", Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    public void processLook() {
 
     }
 

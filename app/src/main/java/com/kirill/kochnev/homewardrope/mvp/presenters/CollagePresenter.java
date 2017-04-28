@@ -1,18 +1,20 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters;
 
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByIdsSpecofication;
+import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,21 +29,27 @@ import io.reactivex.schedulers.Schedulers;
 public class CollagePresenter extends BaseMvpPresenter<ICollageView> {
 
     public static final String TAG = "CollagePresenter";
+    private SparseArray<Bitmap> imageCache = new SparseArray<>();
 
     @Inject
     protected AbstractThingRepository things;
 
-    private List<String> paths = new ArrayList<>();
-
     public CollagePresenter(HashSet<Long> thingIds) {
         WardropeApplication.getComponent().inject(this);
         things.query(new ThingsByIdsSpecofication(thingIds))
-                .subscribeOn(Schedulers.io())
+                .map(list -> {
+                    int i = 0;
+                    for (Thing thing : list) {
+                        Bitmap bitmap = ImageHelper.makeImage(thing.getFullImagePath());
+                        imageCache.put(i, bitmap);
+                        i++;
+                    }
+                    return new Object();
+                }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
-                    getViewState().constructView(list, CollageMode.getByNum(list.size()));
+                    getViewState().constructView(imageCache, CollageMode.getByNum(imageCache.size()));
                 }, e -> Log.e(TAG, e.getMessage()));
-
     }
 
 }

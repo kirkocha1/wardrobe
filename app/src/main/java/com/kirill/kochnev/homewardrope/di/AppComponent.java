@@ -3,11 +3,10 @@ package com.kirill.kochnev.homewardrope.di;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.CollagePresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.FirstStepCreationLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
-import com.kirill.kochnev.homewardrope.ui.activities.look.AddUpdateLookActivity;
 
 import javax.inject.Singleton;
 
@@ -31,9 +30,7 @@ public interface AppComponent {
 
     void inject(LooksPresenter presenter);
 
-    void inject(AddUpdateLookActivity activity);
-
-    void inject(FirstStepCreationLookPresenter activity);
+    void inject(CreationLookPresenter activity);
 
     void inject(CollagePresenter presenter);
 

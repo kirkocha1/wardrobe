@@ -116,7 +116,6 @@ public class CollageItemView extends ImageView {
     private void initUi() {
         mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
         mRotationDetector = new RotationGestureDetector(new RotationListener());
-        setAdjustViewBounds(true);
     }
 
 

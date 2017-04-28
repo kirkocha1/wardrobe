@@ -1,16 +1,16 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.CollagePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
@@ -18,7 +18,6 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseActionBarFragment;
 import com.kirill.kochnev.homewardrope.ui.views.CollageView;
 
 import java.util.HashSet;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +31,7 @@ public class CollageFragment extends BaseActionBarFragment implements ICollageVi
     public static final String THINGS_SET = "things_set";
 
     @BindView(R.id.collage_container)
-    LinearLayout conatiner;
+    CollageView conatiner;
 
     @InjectPresenter
     CollagePresenter presenter;
@@ -60,9 +59,7 @@ public class CollageFragment extends BaseActionBarFragment implements ICollageVi
     }
 
     @Override
-    public void constructView(List<Thing> things, CollageMode mode) {
-        CollageView collageView = new CollageView(getContext(), mode);
-        conatiner.addView(collageView);
-        collageView.setThings(things);
+    public void constructView(SparseArray<Bitmap> cache, CollageMode mode) {
+
     }
 }

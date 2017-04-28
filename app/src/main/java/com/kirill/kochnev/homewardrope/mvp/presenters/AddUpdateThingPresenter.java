@@ -16,7 +16,6 @@ import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,9 +27,9 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.kirill.kochnev.homewardrope.AppConstants.COMPRESSION_PERCENT;
-import static com.kirill.kochnev.homewardrope.AppConstants.REQ_HEIGHT;
-import static com.kirill.kochnev.homewardrope.AppConstants.REQ_WIDTH;
+import static com.kirill.kochnev.homewardrope.utils.ImageHelper.calculateInSampleSize;
+import static com.kirill.kochnev.homewardrope.utils.ImageHelper.makeImage;
+import static com.kirill.kochnev.homewardrope.utils.ImageHelper.saveIcon;
 
 
 @InjectViewState
@@ -97,25 +96,15 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
             Log.e(TAG, "problems with creating image uri, error: " + ex.getMessage());
         }
         if (photoFile != null) {
-            Uri photoURI = FileProvider.getUriForFile(WardropeApplication.getContext(), "com.kirill.kochnev.homewardrope",
-                    photoFile);
+            Uri photoURI = FileProvider.getUriForFile(WardropeApplication.getContext(), "com.kirill.kochnev.homewardrope", photoFile);
             getViewState().sendMakePhotoIntent(photoURI);
         }
-    }
-
-    private Bitmap makeImage(String imagePath) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(imagePath, options);
-        options.inSampleSize = calculateInSampleSize(options);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(imagePath, options);
     }
 
     public void processImage() {
         Single<Bitmap> getCropImage = Single.create(sub -> {
             Bitmap cropImage = makeImage(imagePath);
-            saveIcon(cropImage);
+            saveIcon(iconPath, cropImage);
             if (cropImage != null) {
                 sub.onSuccess(cropImage);
             } else {
@@ -128,28 +117,5 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
                 .subscribe(img -> getViewState().setImage(img), ex -> getViewState().showError(ex.getMessage())));
     }
 
-    private void saveIcon(Bitmap cropImage) throws IOException {
-        FileOutputStream out = new FileOutputStream(iconPath);
-        cropImage.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_PERCENT, out);
-        out.flush();
-        out.close();
-    }
-
-    private int calculateInSampleSize(BitmapFactory.Options options, int height, int width) {
-        int inSampleSize = 1;
-        if (options.outHeight > height || options.outWidth > width) {
-            int halfHeight = options.outHeight / 2;
-            int halfWidth = options.outWidth / 2;
-            while ((halfHeight / inSampleSize) >= REQ_HEIGHT
-                    && (halfWidth / inSampleSize) >= REQ_WIDTH) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
-    }
-
-    private int calculateInSampleSize(BitmapFactory.Options options) {
-        return calculateInSampleSize(options, REQ_HEIGHT, REQ_WIDTH);
-    }
 
 }

@@ -1,16 +1,16 @@
 package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.mvp.presenters.FirstStepCreationLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.ui.activities.BaseActionBarActivity;
-import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 
 import java.util.HashSet;
@@ -18,11 +18,15 @@ import java.util.HashSet;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment.THINGS_SET;
+
 /**
  * Created by kirill on 27.04.17.
  */
 
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
+
+    public static final int COLLAGE_CODE = 1;
 
     @BindView(R.id.all_things)
     Button allThings;
@@ -33,7 +37,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     Fragment fragment;
 
     @InjectPresenter
-    FirstStepCreationLookPresenter presenter;
+    CreationLookPresenter presenter;
 
     @Override
     public void onInitUi(View baseLayout) {
@@ -73,6 +77,16 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
-        initFragment(CollageFragment.createInstance(thingIds));
+        Intent intent = new Intent(this, CollageActivity.class);
+        intent.putExtra(THINGS_SET, thingIds);
+        startActivityForResult(intent, COLLAGE_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == COLLAGE_CODE && resultCode == RESULT_OK) {
+            presenter.processLook();
+        }
     }
 }
