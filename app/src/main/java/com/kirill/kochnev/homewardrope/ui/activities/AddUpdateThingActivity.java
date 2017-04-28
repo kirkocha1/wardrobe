@@ -17,6 +17,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,10 +84,8 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     }
 
     private void initBtns() {
-        changeMode(isEditMode);
+        changeMode(isEditMode || thingsId == AppConstants.DEFAULT_ID);
         edit.setVisibility(thingsId == AppConstants.DEFAULT_ID ? View.GONE : View.VISIBLE);
-        name.setEnabled(thingsId == AppConstants.DEFAULT_ID);
-        tag.setEnabled(thingsId == AppConstants.DEFAULT_ID);
         edit.setOnClickListener(v -> {
             isEditMode = !isEditMode;
             changeMode(isEditMode);
@@ -96,10 +95,12 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     }
 
     private void changeMode(boolean isEditMode) {
-        captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
-        save.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
         name.setEnabled(isEditMode);
         tag.setEnabled(isEditMode);
+        captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+        save.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+        AnimationHelper.hideShowAnimation(save, !isEditMode);
+        AnimationHelper.hideShowAnimation(captureBtn, !isEditMode);
     }
 
 

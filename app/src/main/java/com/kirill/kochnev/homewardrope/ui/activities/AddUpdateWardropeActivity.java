@@ -15,6 +15,7 @@ import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,6 +103,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     @Override
     public void changeFragmentMode(boolean mode) {
         save.setVisibility(mode ? View.VISIBLE : GONE);
+        AnimationHelper.hideShowAnimation(save, mode);
         name.setEnabled(mode);
         fragment.setEditableMode(mode);
     }
