@@ -1,24 +1,27 @@
 package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.app.Fragment;
-import android.content.Intent;
+import android.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.ui.activities.BaseActionBarActivity;
+import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
+import com.kirill.kochnev.homewardrope.ui.fragments.WardropesFragment;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment.THINGS_SET;
 
 /**
  * Created by kirill on 27.04.17.
@@ -26,13 +29,17 @@ import static com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment.THING
 
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
 
-    public static final int COLLAGE_CODE = 1;
-
     @BindView(R.id.all_things)
     Button allThings;
 
     @BindView(R.id.create)
     Button create;
+
+    @BindView(R.id.look_fragment_container)
+    FrameLayout container;
+
+    @BindView(R.id.save_collage)
+    Button save;
 
     Fragment fragment;
 
@@ -45,19 +52,25 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         setBackButtonEnabled(true);
         setTitleText(getString(R.string.looks_creation_title));
         ButterKnife.bind(this);
-        initFragment(ThingsFragment.createInstance(ThingsFragment.LOOK_MODE, true, AppConstants.DEFAULT_ID));
+        container.setDrawingCacheEnabled(true);
         create.setOnClickListener(v -> {
-            presenter.createLook();
+            presenter.startCreationProcess();
         });
         allThings.setOnClickListener(v -> {
+            initFragment(ThingsFragment.createInstance(ThingsFragment.LOOK_MODE, true, AppConstants.DEFAULT_ID));
         });
+        save.setOnClickListener(v -> {
+            presenter.processLook(container.getDrawingCache());
+        });
+
+        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE));
     }
 
     private void initFragment(Fragment fragment) {
         this.fragment = fragment;
-        getFragmentManager().beginTransaction()
-                .replace(R.id.look_fragment_container, fragment)
-                .commit();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.look_fragment_container);
     }
 
     @Override
@@ -77,16 +90,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
-        Intent intent = new Intent(this, CollageActivity.class);
-        intent.putExtra(THINGS_SET, thingIds);
-        startActivityForResult(intent, COLLAGE_CODE);
+        initFragment(CollageFragment.createInstance(thingIds));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == COLLAGE_CODE && resultCode == RESULT_OK) {
-            presenter.processLook();
-        }
-    }
 }

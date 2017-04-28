@@ -24,6 +24,7 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 import java.util.HashSet;
 
+import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
 /**
@@ -33,7 +34,6 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
 public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> implements IThingsView {
     public static final int WARDROPE_MODE = 1;
     public static final int LOOK_MODE = 2;
-    public static final String FRAGMENT_MODE = "mode";
     public static final String FRAGMENT_IS_EDIT = "is_edit";
 
     private ViewMode mode;
@@ -69,7 +69,9 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
 
     @Override
     public void onInitUi() {
-        setTitle(R.string.things_title);
+        if (mode == ViewMode.THING_MODE) {
+            setTitle(R.string.things_title);
+        }
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
         addBtn.setActivated(mode == ViewMode.DEFAULT);
         addBtn.setVisibility(mode == ViewMode.DEFAULT ? View.VISIBLE : View.GONE);
@@ -114,6 +116,7 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
     public void onDetach() {
         super.onDetach();
         wardropeView = null;
+        lookCreationView = null;
     }
 
 

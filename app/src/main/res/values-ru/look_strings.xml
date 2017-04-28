@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="looks_title">Образы</string>
+    <string name="looks_all_things_btn">Все вещи</string>
+    <string name="looks_create_btn">Создать</string>
+    <string name="looks_collage_save_btn">Сохранить</string>
+
 </resources>

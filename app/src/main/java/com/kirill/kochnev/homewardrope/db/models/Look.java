@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
+import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -115,7 +116,8 @@ public class Look implements IDbModel {
 
     @Override
     public void inflateHolder(BaseHolder holder) {
-
+        ((LookHolder) holder).item.setName(name);
+        ((LookHolder) holder).item.setImage(iconImagePath);
     }
 
     public Long getWardropeId() {

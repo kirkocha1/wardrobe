@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.ui.activities.base.DrawerActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.LooksFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
@@ -15,7 +16,7 @@ public class MainActivity extends DrawerActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new WardropesFragment());
+        setContentView(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));
         initUi();
     }
 
@@ -30,7 +31,7 @@ public class MainActivity extends DrawerActivity {
                 setFragmentContent(ThingsFragment.createInstance(AppConstants.DEFAULT_ID, false, AppConstants.DEFAULT_ID));
                 break;
             case R.id.nav_wardropes:
-                setFragmentContent(new WardropesFragment());
+                setFragmentContent(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));
                 break;
             case R.id.nav_looks:
                 setFragmentContent(new LooksFragment());

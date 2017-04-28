@@ -5,6 +5,7 @@ import com.kirill.kochnev.homewardrope.db.models.LooksThings;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
 import java.util.List;
 
@@ -25,10 +26,12 @@ public class LookRepository extends AbstractLookRepository {
         return Single.create(sub -> {
             if (model.getThingIds().size() != 0) {
                 storIOSQLite.lowLevel().beginTransaction();
-                storIOSQLite.put().object(model);
+                PutResult result = storIOSQLite.put().object(model).prepare().executeAsBlocking();
+                model.setId(result.insertedId());
                 for (Long thingId : model.getThingIds()) {
-                    storIOSQLite.put().object(new LooksThings(model.getId(), thingId));
+                    storIOSQLite.put().object(new LooksThings(model.getId(), thingId)).prepare().executeAsBlocking();
                 }
+                storIOSQLite.lowLevel().setTransactionSuccessful();
                 storIOSQLite.lowLevel().endTransaction();
             } else {
                 storIOSQLite.put().object(model);

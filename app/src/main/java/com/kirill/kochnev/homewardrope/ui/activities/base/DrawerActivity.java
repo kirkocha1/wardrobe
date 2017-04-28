@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.activities.base;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
 import android.support.design.widget.NavigationView;
@@ -63,7 +64,9 @@ public abstract class DrawerActivity extends BaseActionBarActivity implements Dr
     }
 
     private void setContentView() {
-        AnimationHelper.animateFragmentReplace(getFragmentManager(), fragment, R.id.content);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.content);
+        getFragmentManager().executePendingTransactions();
         Log.d(TAG, "set fragment " + fragment.getClass());
     }
 

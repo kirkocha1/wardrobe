@@ -1,7 +1,6 @@
 package com.kirill.kochnev.homewardrope.utils;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.annotation.IdRes;
 import android.view.View;
@@ -15,11 +14,9 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
  */
 
 public class AnimationHelper {
-    public static void animateFragmentReplace(FragmentManager manager, Fragment fragment, @IdRes int containerId) {
-        FragmentTransaction transaction = manager.beginTransaction();
+    public static void animateFragmentReplace(FragmentTransaction transaction, Fragment fragment, @IdRes int containerId) {
         transaction.setCustomAnimations(R.animator.slide_out_left, R.animator.slide_in_right);
-        transaction.replace(R.id.content, fragment).commit();
-        manager.executePendingTransactions();
+        transaction.replace(containerId, fragment).commit();
     }
 
     public static void hideShowAnimation(View view, boolean isHide) {

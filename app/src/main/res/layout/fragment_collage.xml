@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<com.kirill.kochnev.homewardrope.ui.views.CollageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/collage_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.kirill.kochnev.homewardrope.ui.views.CollageView
-        android:id="@+id/collage_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/create_look_btn"
-        style="@style/CommonButtnoStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/content_save"
-        app:fabSize="normal" />
-
-</RelativeLayout>
+    android:layout_height="match_parent" />
 

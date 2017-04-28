@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.repositories.interfaces.IRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     public Single<Boolean> putItem(M model) {
         return Single.create(sub -> {
             try {
-                storIOSQLite.put().object(model).prepare().executeAsBlocking();
+                PutResult res = storIOSQLite.put().object(model).prepare().executeAsBlocking();
                 sub.onSuccess(true);
             } catch (Exception ex) {
                 sub.onError(ex);

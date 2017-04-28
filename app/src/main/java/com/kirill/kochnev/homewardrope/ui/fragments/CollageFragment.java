@@ -60,6 +60,6 @@ public class CollageFragment extends BaseActionBarFragment implements ICollageVi
 
     @Override
     public void constructView(SparseArray<Bitmap> cache, CollageMode mode) {
-
+        conatiner.inflateItems(mode, cache);
     }
 }

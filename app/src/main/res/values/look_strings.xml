@@ -2,4 +2,7 @@
 <resources>
     <string name="looks_title">Looks</string>
     <string name="looks_creation_title">Look creation</string>
+    <string name="looks_all_things_btn">All Things</string>
+    <string name="looks_collage_save_btn">Save</string>
+    <string name="looks_create_btn">Create</string>
 </resources>
