@@ -28,7 +28,7 @@ public class MainActivity extends DrawerActivity {
     public void openItem(int menuItemId) {
         switch (menuItemId) {
             case R.id.nav_things:
-                setFragmentContent(ThingsFragment.createInstance(AppConstants.DEFAULT_ID, false, AppConstants.DEFAULT_ID));
+                setFragmentContent(ThingsFragment.createInstance(ViewMode.THING_MODE, false, AppConstants.DEFAULT_ID));
                 break;
             case R.id.nav_wardropes:
                 setFragmentContent(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));

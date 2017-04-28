@@ -11,12 +11,15 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.view.View.GONE;
 
 /**
  * Created by kirill on 30.03.17.
@@ -65,9 +68,17 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         setBackButtonEnabled(true);
         setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
         ButterKnife.bind(this, baseLayout);
+        initBtns();
+        showFragment();
+    }
+
+    private void initBtns() {
         select.setOnClickListener(v -> presenter.toggleMode());
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
-        showFragment();
+        save.setOnClickListener(v -> presenter.save(name.getText().toString()));
+        select.setVisibility(wardropeId == -1 ? View.GONE : View.VISIBLE);
+        save.setVisibility(wardropeId == -1 ? View.VISIBLE : View.GONE);
+        name.setEnabled(wardropeId == -1);
     }
 
     @Override
@@ -81,7 +92,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     }
 
     private void showFragment() {
-        fragment = ThingsFragment.createInstance(ThingsFragment.WARDROPE_MODE, false, wardropeId);
+        fragment = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardropeId == -1, wardropeId);
         getFragmentManager().beginTransaction()
                 .replace(R.id.frame_id, fragment)
                 .commit();
@@ -90,7 +101,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void changeFragmentMode(boolean mode) {
-        save.setVisibility(mode ? View.VISIBLE : View.GONE);
+        save.setVisibility(mode ? View.VISIBLE : GONE);
         name.setEnabled(mode);
         fragment.setEditableMode(mode);
     }
@@ -108,9 +119,10 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void initView(Wardrope wardrope) {
-        setTitleText(wardrope.getName() == null ? "новый гардероб" : wardrope.getName());
+        setTitleText(wardrope.getName() == null ? "нет названия" : wardrope.getName());
         countView.setText(wardrope.getThingIds().size() + "");
         name.setText(wardrope.getName());
+
     }
 
     @Override

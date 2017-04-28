@@ -5,13 +5,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
@@ -35,13 +36,16 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     EditText tag;
 
     @BindView(R.id.shoot_btn)
-    ImageView captureBtn;
+    FloatingActionButton captureBtn;
 
     @BindView(R.id.photo_thing)
     ImageView pic;
 
     @BindView(R.id.thing_save_btn)
-    ImageView save;
+    FloatingActionButton save;
+
+    @BindView(R.id.things_show_frame)
+    FloatingActionButton edit;
 
     @InjectPresenter
     AddUpdateThingPresenter presenter;
@@ -52,7 +56,6 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
         intent.putExtra(IS_EDIT, isEditMode);
         return intent;
     }
-
 
 
     @ProvidePresenter
@@ -76,13 +79,29 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
         setTitleText(thingsId == -1 ? "новая вещь" : "");
         setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
         ButterKnife.bind(this, baseLayout);
-        captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
-        save.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
-        name.setFocusable(isEditMode);
-        tag.setFocusable(isEditMode);
+        initBtns();
+    }
+
+    private void initBtns() {
+        changeMode(isEditMode);
+        edit.setVisibility(thingsId == AppConstants.DEFAULT_ID ? View.GONE : View.VISIBLE);
+        name.setEnabled(thingsId == AppConstants.DEFAULT_ID);
+        tag.setEnabled(thingsId == AppConstants.DEFAULT_ID);
+        edit.setOnClickListener(v -> {
+            isEditMode = !isEditMode;
+            changeMode(isEditMode);
+        });
         captureBtn.setOnClickListener(v -> presenter.createUri());
         save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
     }
+
+    private void changeMode(boolean isEditMode) {
+        captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+        save.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+        name.setEnabled(isEditMode);
+        tag.setEnabled(isEditMode);
+    }
+
 
     @Override
     public boolean isMenuActive() {

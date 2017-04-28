@@ -42,10 +42,10 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
     private IAddUpdateWardropeView wardropeView;
     private IFirstStepCreationLookView lookCreationView;
 
-    public static ThingsFragment createInstance(int mode, boolean isEdit, long wardropeId) {
+    public static ThingsFragment createInstance(ViewMode mode, boolean isEdit, long wardropeId) {
         ThingsFragment fragment = new ThingsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(FRAGMENT_MODE, mode);
+        bundle.putInt(FRAGMENT_MODE, mode.getModeNum());
         bundle.putLong(WARDROPE_ID, wardropeId);
         bundle.putBoolean(FRAGMENT_IS_EDIT, isEdit);
         fragment.setArguments(bundle);
@@ -73,8 +73,8 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
             setTitle(R.string.things_title);
         }
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
-        addBtn.setActivated(mode == ViewMode.DEFAULT);
-        addBtn.setVisibility(mode == ViewMode.DEFAULT ? View.VISIBLE : View.GONE);
+        addBtn.setActivated(mode == ViewMode.THING_MODE);
+        addBtn.setVisibility(mode == ViewMode.THING_MODE ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -94,7 +94,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
             case WARDROPE_MODE:
                 if (isEdit) {
                     things.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
-                } else {
+                } else if (filterId != AppConstants.DEFAULT_ID) {
                     observable = things.query(new ThingsByWardropeSpecification(lastId, filterId));
                 }
                 break;
@@ -118,7 +118,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
                 break;
 
             default:
-                getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), true));
+                getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
         }
 
     }

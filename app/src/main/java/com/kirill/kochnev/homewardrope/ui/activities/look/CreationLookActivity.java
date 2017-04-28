@@ -57,7 +57,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
             presenter.startCreationProcess();
         });
         allThings.setOnClickListener(v -> {
-            initFragment(ThingsFragment.createInstance(ThingsFragment.LOOK_MODE, true, AppConstants.DEFAULT_ID));
+            initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID));
         });
         save.setOnClickListener(v -> {
             presenter.processLook(container.getDrawingCache());
@@ -93,4 +93,8 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         initFragment(CollageFragment.createInstance(thingIds));
     }
 
+    @Override
+    public void onSuccess() {
+        finish();
+    }
 }

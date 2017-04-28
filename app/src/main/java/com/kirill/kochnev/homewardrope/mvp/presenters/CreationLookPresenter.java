@@ -61,14 +61,14 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
             ImageHelper.saveIcon(model.getIconImagePath(), bitmap);
             Log.e(TAG, model.getIconImagePath());
             model.setName("test");
-            looks.putItem(model).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-
-            );
+            looks.putItem(model).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(o -> getViewState().onSuccess());
         } catch (Exception ex) {
 
         }
 
     }
+
 
     private File createImageFile() throws IOException {
         // Create an image file name

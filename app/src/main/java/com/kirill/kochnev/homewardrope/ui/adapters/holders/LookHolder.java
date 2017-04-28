@@ -22,5 +22,6 @@ public class LookHolder extends BaseHolder<Look> {
     public LookHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        item.setBoxVisibility(false);
     }
 }

@@ -36,6 +36,7 @@ public class LookRepository extends AbstractLookRepository {
             } else {
                 storIOSQLite.put().object(model);
             }
+            sub.onSuccess(true);
         });
     }
 

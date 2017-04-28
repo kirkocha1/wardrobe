@@ -18,4 +18,6 @@ public interface IFirstStepCreationLookView extends MvpView {
     void addThingId(long id);
 
     void openCollageFragment(HashSet<Long> thingIds);
+
+    void onSuccess();
 }

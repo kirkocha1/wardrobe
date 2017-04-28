@@ -4,5 +4,6 @@
     <string name="looks_all_things_btn">Все вещи</string>
     <string name="looks_create_btn">Создать</string>
     <string name="looks_collage_save_btn">Сохранить</string>
+    <string name="looks_creation_title">Создание образа</string>
 
 </resources>
