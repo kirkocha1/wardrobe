@@ -20,8 +20,6 @@ import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.view.View.GONE;
-
 /**
  * Created by kirill on 30.03.17.
  */
@@ -102,8 +100,8 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void changeFragmentMode(boolean mode) {
-        save.setVisibility(mode ? View.VISIBLE : GONE);
-        AnimationHelper.hideShowAnimation(save, mode);
+        save.setVisibility(mode ? View.VISIBLE : View.GONE);
+        AnimationHelper.hideShowAnimation(save, !mode);
         name.setEnabled(mode);
         fragment.setEditableMode(mode);
     }

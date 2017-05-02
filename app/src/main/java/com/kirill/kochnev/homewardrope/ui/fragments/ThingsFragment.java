@@ -32,8 +32,6 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
  */
 
 public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> implements IThingsView {
-    public static final int WARDROPE_MODE = 1;
-    public static final int LOOK_MODE = 2;
     public static final String FRAGMENT_IS_EDIT = "is_edit";
 
     private ViewMode mode;

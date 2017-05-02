@@ -2,9 +2,10 @@ package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
@@ -17,6 +18,7 @@ import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.WardropesFragment;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
+import com.kirill.kochnev.homewardrope.utils.DialogHelper;
 
 import java.util.HashSet;
 
@@ -29,17 +31,22 @@ import butterknife.ButterKnife;
 
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
 
+    public static final String START_FRAGMENT_TAG = "start";
+
+    @BindView(R.id.creation_look_main_container)
+    LinearLayout root;
+
     @BindView(R.id.all_things)
-    Button allThings;
+    FloatingActionButton allThings;
 
     @BindView(R.id.create)
-    Button create;
+    FloatingActionButton create;
 
     @BindView(R.id.look_fragment_container)
     FrameLayout container;
 
     @BindView(R.id.save_collage)
-    Button save;
+    FloatingActionButton save;
 
     Fragment fragment;
 
@@ -57,19 +64,21 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
             presenter.startCreationProcess();
         });
         allThings.setOnClickListener(v -> {
-            initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID));
+            presenter.clearIds();
+            initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), START_FRAGMENT_TAG);
         });
         save.setOnClickListener(v -> {
             presenter.processLook(container.getDrawingCache());
         });
 
-        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE));
+        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), null);
     }
 
-    private void initFragment(Fragment fragment) {
+    private void initFragment(Fragment fragment, String transactionName) {
         this.fragment = fragment;
+        dropBackStack();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(transactionName);
         AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.look_fragment_container);
     }
 
@@ -90,11 +99,41 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
-        initFragment(CollageFragment.createInstance(thingIds));
+        initFragment(CollageFragment.createInstance(thingIds), null);
+        changeBtnsVisibillity(false);
     }
 
     @Override
     public void onSuccess() {
         finish();
+    }
+
+    private void changeBtnsVisibillity(boolean isBack) {
+        save.setVisibility(isBack ? View.GONE : View.VISIBLE);
+        create.setVisibility(isBack ? View.VISIBLE : View.GONE);
+        allThings.setVisibility(isBack ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        changeBtnsVisibillity(true);
+        if (getFragmentManager().getBackStackEntryCount() == 1) {
+            finish();
+        } else {
+            presenter.clearIds();
+            super.onBackPressed();
+        }
+    }
+
+    private void dropBackStack() {
+        for (int i = 0; i < getFragmentManager().getBackStackEntryCount() - 1; i++) {
+            getFragmentManager().popBackStackImmediate();
+        }
+
+    }
+
+    @Override
+    public void showError(boolean isMin) {
+        DialogHelper.showErrorSnackBar(this, isMin ? R.string.looks_error_message_min : R.string.looks_error_message_max, root);
     }
 }

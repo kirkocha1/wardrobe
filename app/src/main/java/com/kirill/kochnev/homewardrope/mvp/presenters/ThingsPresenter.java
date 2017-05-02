@@ -65,7 +65,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     @Override
     public void onLongItemClick(IDbModel model) {
-        if (viewMode != ViewMode.WARDROPE_MODE) {
+        if (viewMode == ViewMode.THING_MODE) {
             unsubscribeOnDestroy(things.deletItem((Thing) model)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -95,6 +95,11 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
                 if (isEdit) {
                     things.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
                 } else if (filterId != AppConstants.DEFAULT_ID) {
+                    observable = things.query(new ThingsByWardropeSpecification(lastId, filterId));
+                }
+                break;
+            case LOOK_MODE:
+                if (isEdit && filterId != AppConstants.DEFAULT_ID) {
                     observable = things.query(new ThingsByWardropeSpecification(lastId, filterId));
                 }
                 break;

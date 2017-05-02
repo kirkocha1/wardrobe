@@ -20,4 +20,6 @@ public interface IFirstStepCreationLookView extends MvpView {
     void openCollageFragment(HashSet<Long> thingIds);
 
     void onSuccess();
+
+    void showError(boolean isMin);
 }

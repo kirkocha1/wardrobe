@@ -5,5 +5,7 @@
     <string name="looks_create_btn">Создать</string>
     <string name="looks_collage_save_btn">Сохранить</string>
     <string name="looks_creation_title">Создание образа</string>
+    <string name="looks_error_message_max">максимальное количество вещей 4</string>
+    <string name="looks_error_message_min">необходимо выбрать минимум 2 вещи</string>
 
 </resources>

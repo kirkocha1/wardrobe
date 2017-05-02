@@ -3,9 +3,9 @@ package com.kirill.kochnev.homewardrope.mvp.presenters;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
@@ -48,10 +48,13 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
         thingsSet.add(id);
         if (length == thingsSet.size()) {
             thingsSet.remove(id);
-        } else {
-            Toast.makeText(WardropeApplication.getContext(), "thing with id: " + id + " was added to look", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    public void clearIds() {
+        if (model != null) {
+            model.getThingIds().clear();
+        }
     }
 
     public void processLook(Bitmap bitmap) {
@@ -83,7 +86,13 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     }
 
     public void startCreationProcess() {
-        getViewState().openCollageFragment(model.getThingIds());
+        int size = model.getThingIds().size();
+        if (size >= AppConstants.MIN_COLLAGE_COUNT && size <= AppConstants.MAX_COLLAGE_COUNT) {
+            getViewState().openCollageFragment(model.getThingIds());
+        } else {
+            getViewState().showError(size <= AppConstants.MIN_COLLAGE_COUNT);
+        }
+
     }
 
 }

@@ -1,35 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/all_things"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/looks_all_things_btn" />
-
-        <Button
-            android:id="@+id/create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/looks_create_btn" />
-
-        <Button
-            android:id="@+id/save_collage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/looks_collage_save_btn" />
-
-
-    </LinearLayout>
-
 
     <FrameLayout
         android:id="@+id/look_fragment_container"
@@ -37,4 +11,41 @@
         android:layout_height="match_parent"
         android:background="@color/white" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/creation_look_main_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/save_collage"
+            style="@style/CommonButtnoStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/content_save"
+            android:text="@string/looks_collage_save_btn"
+            android:visibility="gone" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/all_things"
+            style="@style/CommonButtnoStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/thing"
+            android:text="@string/looks_all_things_btn" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/create"
+            style="@style/CommonButtnoStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_black_24px"
+            android:text="@string/looks_create_btn" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

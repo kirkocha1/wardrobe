@@ -8,6 +8,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
@@ -30,8 +31,11 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     @Inject
     protected AbstractWardropeRepository wardropes;
 
-    public WardropesPresenter() {
+    private ViewMode mode;
+
+    public WardropesPresenter(ViewMode mode) {
         WardropeApplication.getComponent().inject(this);
+        this.mode = mode;
     }
 
     protected void refreshList() {
@@ -50,19 +54,31 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
 
     @Override
     public void onLongItemClick(IDbModel model) {
-        unsubscribeOnDestroy(wardropes.deletItem((Wardrope) model)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isDel -> {
-                    getViewState().notifyListChanges((Wardrope) model);
-                }));
+        if (mode == ViewMode.WARDROPE_MODE) {
+            unsubscribeOnDestroy(wardropes.deletItem((Wardrope) model)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(isDel -> {
+                        getViewState().notifyListChanges((Wardrope) model);
+                    }));
+        }
+    }
 
+    private void resolveClick(IDbModel model) {
+        switch (mode) {
+            case WARDROPE_MODE:
+                Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateWardropeActivity.class);
+                intent.putExtra(WARDROPE_ID, model.getId());
+                getViewState().openUpdateActivity(intent);
+                break;
+            case LOOK_MODE:
+                getViewState().setThingsByWardrope(model.getId());
+                break;
+        }
     }
 
     @Override
     public void onItemClick(IDbModel model) {
-        Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateWardropeActivity.class);
-        intent.putExtra(WARDROPE_ID, model.getId());
-        getViewState().openUpdateActivity(intent);
+        resolveClick(model);
     }
 }
