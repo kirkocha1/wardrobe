@@ -2,9 +2,10 @@ package com.kirill.kochnev.homewardrope.repositories;
 
 import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
-import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
+import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
+import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
@@ -91,6 +92,11 @@ public class WardropeRepository extends AbstractWardropeRepository {
             }
 
         });
+    }
+
+    @Override
+    public Single<List<Wardrope>> query(ISpecification filterSpecification) {
+        return null;
     }
 
     @Override

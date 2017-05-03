@@ -19,17 +19,15 @@ import butterknife.ButterKnife;
 public class ThingHolder extends BaseHolder<Thing> {
 
     private HashSet<Long> usedIds;
-    private boolean isWardropeMode;
+    private boolean isEdit;
 
     @BindView(R.id.item)
     public ListItemView item;
 
-    public ThingHolder(View itemView, HashSet<Long> usedIds, boolean isWardropeMode) {
+    public ThingHolder(View itemView, HashSet<Long> usedIds) {
         super(itemView);
         this.usedIds = usedIds;
-        this.isWardropeMode = isWardropeMode;
         ButterKnife.bind(this, itemView);
-        item.setBoxVisibility(isWardropeMode);
     }
 
     public void setUsedIds(HashSet<Long> usedIds) {
@@ -38,17 +36,24 @@ public class ThingHolder extends BaseHolder<Thing> {
 
     @Override
     public void beforeClick(View view) {
-        if (isWardropeMode) {
+        if (isEdit) {
             updateusedIds(getModel().getId());
             item.toogleCheck();
         }
     }
 
+    public void setEdit(boolean edit) {
+        isEdit = edit;
+        item.setBoxVisibility(isEdit);
+    }
+
     private void updateusedIds(long id) {
-        if (usedIds.contains(id)) {
-            usedIds.remove(id);
-        } else {
-            usedIds.add(id);
+        if (usedIds != null) {
+            if (usedIds.contains(id)) {
+                usedIds.remove(id);
+            } else {
+                usedIds.add(id);
+            }
         }
     }
 
@@ -63,5 +68,4 @@ public class ThingHolder extends BaseHolder<Thing> {
             item.setCheck(usedIds.contains(model.getId()));
         }
     }
-
 }

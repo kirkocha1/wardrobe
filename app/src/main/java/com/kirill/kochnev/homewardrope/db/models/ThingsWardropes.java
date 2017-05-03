@@ -2,7 +2,7 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
 
-import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
+import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
@@ -11,7 +11,7 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
  * Created by kirill on 30.03.17.
  */
 
-@StorIOSQLiteType(table = "things_wardropes")
+@StorIOSQLiteType(table = ThingsWardropesTable.THINGS_WARDROPES_TABLE)
 public class ThingsWardropes implements IDbModel {
 
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)

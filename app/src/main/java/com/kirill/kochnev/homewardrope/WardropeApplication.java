@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.kirill.kochnev.homewardrope.di.AppComponent;
 import com.kirill.kochnev.homewardrope.di.DaggerAppComponent;
 import com.kirill.kochnev.homewardrope.di.DbModule;
+import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -17,12 +18,16 @@ public class WardropeApplication extends Application {
     public static final String TAG = "WardropeApplication";
     private static AppComponent component;
     private static Context context;
+    private static Picasso picasso;
 
     @Override
     public void onCreate() {
         super.onCreate();
         component = buildComponent();
-        context = this;
+        context = getApplicationContext();
+        picasso = new Picasso.Builder(context)
+                .memoryCache(new LruCache(5 * AppConstants.BYTES_MB_COEFF))
+                .build();
     }
 
     private AppComponent buildComponent() {

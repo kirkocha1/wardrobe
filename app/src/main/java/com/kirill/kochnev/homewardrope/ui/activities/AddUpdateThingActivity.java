@@ -7,16 +7,18 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,22 +28,37 @@ import static com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter.THI
 public class AddUpdateThingActivity extends BaseActionBarActivity implements IAddUpdateThingView {
 
     private static final int REQUEST_TAKE_PHOTO = 2;
+    public static final String IS_EDIT = "is_edit";
+
 
     @BindView(R.id.new_thing_name)
     EditText name;
+
     @BindView(R.id.new_thing_tag)
     EditText tag;
+
     @BindView(R.id.shoot_btn)
-    ImageView captureBtn;
+    FloatingActionButton captureBtn;
 
     @BindView(R.id.photo_thing)
     ImageView pic;
 
     @BindView(R.id.thing_save_btn)
-    ImageView save;
+    FloatingActionButton save;
+
+    @BindView(R.id.things_show_frame)
+    FloatingActionButton edit;
 
     @InjectPresenter
     AddUpdateThingPresenter presenter;
+
+    public static Intent createIntent(long thingsId, boolean isEditMode) {
+        Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
+        intent.putExtra(THINGS_ID, thingsId);
+        intent.putExtra(IS_EDIT, isEditMode);
+        return intent;
+    }
+
 
     @ProvidePresenter
     AddUpdateThingPresenter providePresenter() {
@@ -49,10 +66,12 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     }
 
     private long thingsId;
+    private boolean isEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         thingsId = getIntent().getLongExtra(THINGS_ID, -1);
+        isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
         super.onCreate(savedInstanceState);
     }
 
@@ -62,9 +81,29 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
         setTitleText(thingsId == -1 ? "новая вещь" : "");
         setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
         ButterKnife.bind(this, baseLayout);
+        initBtns();
+    }
+
+    private void initBtns() {
+        changeMode(isEditMode || thingsId == AppConstants.DEFAULT_ID);
+        edit.setVisibility(thingsId == AppConstants.DEFAULT_ID ? View.GONE : View.VISIBLE);
+        edit.setOnClickListener(v -> {
+            isEditMode = !isEditMode;
+            changeMode(isEditMode);
+        });
         captureBtn.setOnClickListener(v -> presenter.createUri());
         save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
     }
+
+    private void changeMode(boolean isEditMode) {
+        name.setEnabled(isEditMode);
+        tag.setEnabled(isEditMode);
+        captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+        save.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
+        AnimationHelper.hideShowAnimation(save, !isEditMode);
+        AnimationHelper.hideShowAnimation(captureBtn, !isEditMode);
+    }
+
 
     @Override
     public boolean isMenuActive() {

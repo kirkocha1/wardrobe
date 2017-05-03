@@ -14,5 +14,8 @@ import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 public interface IWardropeView extends IPaginationView<Wardrope> {
 
     void openUpdateActivity(Intent intent);
+
+    void setThingsByWardrope(long id);
+
 }
 

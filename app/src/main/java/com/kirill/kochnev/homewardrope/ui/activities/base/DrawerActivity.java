@@ -1,7 +1,6 @@
 package com.kirill.kochnev.homewardrope.ui.activities.base;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MenuRes;
@@ -13,9 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.ui.activities.BaseActionBarActivity;
-
-import java.util.function.Consumer;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,11 +63,9 @@ public abstract class DrawerActivity extends BaseActionBarActivity implements Dr
     }
 
     private void setContentView() {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.animator.slide_out_left, R.animator.slide_in_right);
-        transaction.replace(R.id.content, fragment).commit();
-        manager.executePendingTransactions();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.content);
+        getFragmentManager().executePendingTransactions();
         Log.d(TAG, "set fragment " + fragment.getClass());
     }
 

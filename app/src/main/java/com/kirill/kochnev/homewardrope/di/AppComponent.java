@@ -2,6 +2,9 @@ package com.kirill.kochnev.homewardrope.di;
 
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.CollagePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
 
@@ -24,5 +27,12 @@ public interface AppComponent {
     void inject(ThingsPresenter presenter);
 
     void inject(AddUpdateThingPresenter presenter);
+
+    void inject(LooksPresenter presenter);
+
+    void inject(CreationLookPresenter activity);
+
+    void inject(CollagePresenter presenter);
+
 
 }

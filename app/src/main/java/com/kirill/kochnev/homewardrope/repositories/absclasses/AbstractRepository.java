@@ -2,8 +2,10 @@ package com.kirill.kochnev.homewardrope.repositories.absclasses;
 
 import android.provider.BaseColumns;
 
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.repositories.interfaces.IRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
@@ -27,21 +29,20 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     }
 
     @Override
-    public Single<List<M>> getNextList(long id) {
+    public Single<List<M>> query() {
+        return query(AppConstants.DEFAULT_ID);
+    }
+
+    @Override
+    public Single<List<M>> query(long id) {
         return Single.create(sub -> {
             try {
-                List<M> models = null;
+                Query.CompleteBuilder builder = Query.builder().table(getTableName()).limit(LIMIT);
                 if (id != -1) {
-                    models = storIOSQLite.get().listOfObjects(getEntityClass()).withQuery(Query.builder().table(getTableName())
-                            .where(BaseColumns._ID + " > ?")
-                            .whereArgs(id + "")
-                            .limit(LIMIT)
-                            .build()).prepare().executeAsBlocking();
-                } else {
-                    models = storIOSQLite.get().listOfObjects(getEntityClass()).withQuery(Query.builder().table(getTableName())
-                            .limit(LIMIT)
-                            .build()).prepare().executeAsBlocking();
+                    builder.where(BaseColumns._ID + " > ? ").whereArgs(id + "");
                 }
+                List<M> models = storIOSQLite.get().listOfObjects(getEntityClass()).withQuery(builder.build())
+                        .prepare().executeAsBlocking();
                 sub.onSuccess(new ArrayList<>(models));
 
             } catch (Exception ex) {
@@ -58,7 +59,7 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     public Single<Boolean> putItem(M model) {
         return Single.create(sub -> {
             try {
-                storIOSQLite.put().object(model).prepare().executeAsBlocking();
+                PutResult res = storIOSQLite.put().object(model).prepare().executeAsBlocking();
                 sub.onSuccess(true);
             } catch (Exception ex) {
                 sub.onError(ex);
@@ -93,5 +94,6 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
             }
         });
     }
+
 
 }

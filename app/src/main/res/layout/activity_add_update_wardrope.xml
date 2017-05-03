@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/thing_data"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/wardrope_data"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <EditText
@@ -12,48 +13,30 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@null"
-        android:hint="Wardrope name" />
-
+        android:enabled="false"
+        android:hint="@string/wardropes_name_hint"
+        />
 
     <LinearLayout
         android:id="@+id/photo_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/new_wardrope_name"
         android:layout_margin="10dp"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="SELECTED: "/>
+            android:text="@string/wardropes_selected" />
+
         <TextView
             android:id="@+id/things_count"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="0"/>
-
-        <Button
-            android:id="@+id/hide_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="СВЕРНУТЬ"
-            android:visibility="gone"/>
-
-        <Button
-            android:id="@+id/wardrope_show_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="ВЫБРАТЬ" />
-
-        <Button
-            android:id="@+id/save_wardrope"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="СОХРАНИТЬ" />
+            android:text="0" />
 
 
     </LinearLayout>
@@ -61,15 +44,38 @@
     <FrameLayout
         android:id="@+id/frame_id"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/photo_buttons" />
 
-    <ImageView
-        android:id="@+id/photo_thing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_btn_margin">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/save_wardrope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/content_save"
+            android:visibility="gone"
+            app:fabSize="normal" />
 
-</LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/wardrope_show_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/save_wardrope"
+            android:adjustViewBounds="true"
+            android:src="@drawable/pencil"
+            app:fabSize="normal" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
 
 
 

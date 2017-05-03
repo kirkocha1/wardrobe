@@ -1,4 +1,4 @@
-<resources xmlns:card_view="http://schemas.android.com/apk/res-auto">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -19,6 +19,7 @@
     <style name="EditTextStyle">
         <item name="android:background">@null</item>
         <item name="android:padding">5dp</item>
+        <item name="android:textColor">@drawable/edit_text_selector</item>
     </style>
 
     <style name="TitleTextStyle">
@@ -27,11 +28,15 @@
     </style>
 
 
-    <style name="ButtonTransparentStyle">
-        <item name="android:layout_margin">10dp</item>
+    <style name="ButtonTransparentStyle" parent="CommonButtnoStyle">
         <item name="android:background">@null</item>
+    </style>
+
+    <style name="CommonButtnoStyle">
+        <item name="android:layout_margin">10dp</item>
         <item name="android:padding">5dp</item>
     </style>
+
 
 
 </resources>

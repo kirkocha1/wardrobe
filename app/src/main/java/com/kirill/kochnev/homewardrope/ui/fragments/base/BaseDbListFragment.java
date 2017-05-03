@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
@@ -20,6 +20,7 @@ import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     protected FloatingActionButton addBtn;
 
     @BindView(R.id.blank_image)
-    protected ImageView blankImg;
+    protected RelativeLayout blankImg;
 
     private LinearLayoutManager layoutManager;
     protected boolean isLoading = false;
@@ -98,7 +99,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 if (!isAllLoaded && !isLoading && isScrollDown) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                         isLoading = true;
-                        getPresenter().loadMoreData(visibleItemCount + firstVisibleItemPosition);
+                        getPresenter().loadMoreData(adapter.getLastId());
                     }
                 }
             }
@@ -108,10 +109,10 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 if (addBtn.isActivated()) {
                     switch (newState) {
                         case RecyclerView.SCROLL_STATE_DRAGGING:
-                            addBtn.setVisibility(View.GONE);
+                            AnimationHelper.hideShowAnimation(addBtn, true);
                             break;
                         case RecyclerView.SCROLL_STATE_IDLE:
-                            addBtn.setVisibility(View.VISIBLE);
+                            AnimationHelper.hideShowAnimation(addBtn, false);
                             break;
                     }
                 }
@@ -128,12 +129,16 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     public void notifyListChanges(M model) {
         if (adapter != null) {
             adapter.onRemoveItem(model);
+            if (adapter.getItemCount() == 0) {
+                blankImg.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Override
     public void onLoadFinished(List<M> data) {
-        blankImg.setVisibility(data == null || data.size() == 0 ? View.VISIBLE : View.GONE);
+        boolean isBlank = adapter.getItemCount() == 0 && (data == null || data.size() == 0);
+        blankImg.setVisibility(isBlank ? View.VISIBLE : View.GONE);
         list.post(() -> {
             isLoading = false;
             isAllLoaded = data != null && data.size() < LIMIT;

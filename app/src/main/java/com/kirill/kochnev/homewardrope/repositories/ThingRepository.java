@@ -3,12 +3,15 @@ package com.kirill.kochnev.homewardrope.repositories;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.tables.ThingsTable;
-import com.kirill.kochnev.homewardrope.db.tables.ThingsWardropesTable;
+import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -45,7 +48,6 @@ public class ThingRepository extends AbstractThingRepository {
                 sub.onError(ex);
             }
 
-
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(o -> (HashSet<Long>) o);
@@ -61,6 +63,28 @@ public class ThingRepository extends AbstractThingRepository {
                     .prepare()
                     .executeAsBlocking();
             return b;
+        });
+    }
+
+    @Override
+    public Single<List<Thing>> query(ISpecification filterSpecification) {
+        return Single.create(sub -> {
+            try {
+                List<Thing> models;
+                PreparedGetListOfObjects.Builder<Thing> builder = storIOSQLite.get().listOfObjects(getEntityClass());
+                if (filterSpecification.isRow()) {
+                    models = builder.withQuery(filterSpecification.getRawQueryStatement()
+                            .build()).prepare().executeAsBlocking();
+                } else {
+                    models = builder.withQuery(filterSpecification.getQueryStatement()
+                            .build()).prepare().executeAsBlocking();
+                }
+
+                sub.onSuccess(new ArrayList<>(models));
+
+            } catch (Exception ex) {
+                sub.onError(new Exception("nothing to load"));
+            }
         });
     }
 

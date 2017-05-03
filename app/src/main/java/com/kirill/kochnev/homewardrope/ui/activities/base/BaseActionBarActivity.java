@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.ui.activities;
+package com.kirill.kochnev.homewardrope.ui.activities.base;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -82,4 +82,18 @@ public abstract class BaseActionBarActivity extends MvpAppCompatActivity impleme
         void accept(T t);
     }
 
+    public void dropBackStack() {
+        for (int i = 0; i < getFragmentManager().getBackStackEntryCount() - 1; i++) {
+            getFragmentManager().popBackStackImmediate();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() == 1) {
+            finish();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
