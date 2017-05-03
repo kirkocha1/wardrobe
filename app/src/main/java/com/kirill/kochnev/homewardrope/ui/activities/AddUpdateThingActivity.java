@@ -31,10 +31,10 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     public static final String IS_EDIT = "is_edit";
 
 
-    @BindView(R.id.new_thing_name)
+    @BindView(R.id.new_name)
     EditText name;
 
-    @BindView(R.id.new_thing_tag)
+    @BindView(R.id.new_tag)
     EditText tag;
 
     @BindView(R.id.shoot_btn)

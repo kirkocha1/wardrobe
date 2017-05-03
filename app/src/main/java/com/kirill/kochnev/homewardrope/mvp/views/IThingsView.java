@@ -17,8 +17,7 @@ import java.util.HashSet;
 
 public interface IThingsView extends IPaginationView<Thing> {
 
-    @StateStrategyType(SkipStrategy.class)
-    void openUpdateActivity(Intent bundle);
+
 
     void addThingId(long id);
 

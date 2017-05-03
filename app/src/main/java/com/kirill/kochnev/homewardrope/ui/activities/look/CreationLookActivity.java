@@ -74,8 +74,8 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
                 dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
             }
             DialogHelper.showOKCancelDialog(this, "Выберите имя", dialogView, (dialog, which) -> {
-                String name = ((TextView) dialogView.findViewById(R.id.new_thing_name)).getText().toString();
-                String tag = ((TextView) dialogView.findViewById(R.id.new_thing_tag)).getText().toString();
+                String name = ((TextView) dialogView.findViewById(R.id.new_name)).getText().toString();
+                String tag = ((TextView) dialogView.findViewById(R.id.new_tag)).getText().toString();
                 presenter.processLook(name, tag, container.getDrawingCache());
                 dialog.dismiss();
             }, null);

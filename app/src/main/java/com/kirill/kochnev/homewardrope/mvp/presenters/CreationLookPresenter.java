@@ -58,7 +58,7 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
             model.setTag(tag);
             model.setFullImagePath(ImageHelper.createImageFile("look").getAbsolutePath());
             model.setIconImagePath(ImageHelper.createIconImageFile("look").getAbsolutePath());
-            ImageHelper.saveCropImageObservable(model.getIconImagePath(), bitmap)
+            ImageHelper.saveImageAndIconObservable(model.getFullImagePath(), model.getIconImagePath(), bitmap)
                     .flatMap(cropImg -> looks.putItem(model))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

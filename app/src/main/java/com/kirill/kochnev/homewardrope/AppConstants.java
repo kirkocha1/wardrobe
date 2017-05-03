@@ -13,7 +13,6 @@ public class AppConstants {
     public static final int LIMIT = 6;
     public static final int MAX_COLLAGE_COUNT = 4;
     public static final int MIN_COLLAGE_COUNT = 2;
-    public static final int BYTES_MB_COEFF = 1000*1000;
-
-
+    public static final int BYTES_MB_COEFF = 1000 * 1000;
+    public static final int ALL_PERCENTS = 100;
 }

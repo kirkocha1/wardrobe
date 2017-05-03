@@ -10,6 +10,7 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
+import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 
 import javax.inject.Inject;
 
@@ -58,7 +59,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
 
     @Override
     public void onItemClick(IDbModel model) {
-
+        getViewState().openUpdateActivity(UpdateLookActivity.createIntent(model.getId()));
     }
 
 }
