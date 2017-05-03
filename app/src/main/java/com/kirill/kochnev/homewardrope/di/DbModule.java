@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.di;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Pair;
 
 import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.db.models.Look;

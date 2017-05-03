@@ -24,9 +24,9 @@ public class WardropeApplication extends Application {
     public void onCreate() {
         super.onCreate();
         component = buildComponent();
-        context = this;
+        context = getApplicationContext();
         picasso = new Picasso.Builder(context)
-                .memoryCache(new LruCache(240000))
+                .memoryCache(new LruCache(5 * AppConstants.BYTES_MB_COEFF))
                 .build();
     }
 

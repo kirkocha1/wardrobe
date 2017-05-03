@@ -37,5 +37,6 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     public void onInitUi() {
         setTitle(R.string.looks_title);
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), CreationLookActivity.class)));
+        addBtn.setActivated(true);
     }
 }

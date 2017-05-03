@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
+import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
@@ -47,7 +48,12 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
 
     @Override
     public void onLongItemClick(IDbModel model) {
-
+        unsubscribeOnDestroy(looks.deletItem((Look) model)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isDel -> {
+                    getViewState().notifyListChanges((Look) model);
+                }));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters;
 
 import android.graphics.Bitmap;
-import android.os.Environment;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
@@ -13,11 +12,6 @@ import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -57,33 +51,22 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
         }
     }
 
-    public void processLook(Bitmap bitmap) {
+    public void processLook(String name, String tag, Bitmap bitmap) {
         try {
-            createImageFile();
-            ImageHelper.saveIcon(model.getFullImagePath(), bitmap);
-            ImageHelper.saveIcon(model.getIconImagePath(), bitmap);
-            Log.e(TAG, model.getIconImagePath());
-            model.setName("test");
-            looks.putItem(model).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread()).subscribe(o -> getViewState().onSuccess());
+            model.setName(name);
+            model.setTag(tag);
+            model.setFullImagePath(ImageHelper.createImageFile("look").getAbsolutePath());
+            model.setIconImagePath(ImageHelper.createIconImageFile("look").getAbsolutePath());
+            ImageHelper.saveCropImageObservable(model.getIconImagePath(), bitmap)
+                    .flatMap(cropImg -> looks.putItem(model))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(o -> getViewState().onSuccess());
         } catch (Exception ex) {
-
+            Log.e(TAG, ex.getMessage());
         }
-
     }
 
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = WardropeApplication.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageUri = File.createTempFile(imageFileName, ".jpg", storageDir);
-        File iconUri = File.createTempFile(imageFileName + "min_icon", ".jpg", storageDir);
-        model.setIconImagePath(iconUri.getAbsolutePath());
-        model.setFullImagePath(imageUri.getAbsolutePath());
-        return imageUri;
-    }
 
     public void startCreationProcess() {
         int size = model.getThingIds().size();
@@ -92,7 +75,5 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
         } else {
             getViewState().showError(size <= AppConstants.MIN_COLLAGE_COUNT);
         }
-
     }
-
 }

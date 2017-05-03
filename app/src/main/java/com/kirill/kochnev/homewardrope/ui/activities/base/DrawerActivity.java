@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.ui.activities.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;

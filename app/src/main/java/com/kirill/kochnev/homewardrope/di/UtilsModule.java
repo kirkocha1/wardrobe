@@ -15,9 +15,5 @@ import dagger.Provides;
 @Singleton
 public class UtilsModule {
 
-    @Provides
-    ImageHelper provideImageHelper() {
-        return new ImageHelper();
-    }
 
 }

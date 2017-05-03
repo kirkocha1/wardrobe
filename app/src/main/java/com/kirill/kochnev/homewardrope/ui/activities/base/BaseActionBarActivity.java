@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.ui.activities;
+package com.kirill.kochnev.homewardrope.ui.activities.base;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

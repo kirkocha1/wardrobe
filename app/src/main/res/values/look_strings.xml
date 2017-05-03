@@ -7,5 +7,5 @@
     <string name="looks_create_btn">Create</string>
     <string name="looks_error_message_max">Max things count is 4</string>
     <string name="looks_error_message_min">Min things count is 2</string>
-
+    <string name="looks_save_message">Are you sure, you want to save?</string>
 </resources>

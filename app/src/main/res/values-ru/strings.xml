@@ -4,5 +4,7 @@
     <string name="navigation_drawer_close">Closed</string>
     <string name="empty_list_text">Список пуст</string>
 
+    <string name="yes">да</string>
+    <string name="no">нет</string>
 
 </resources>

@@ -3,6 +3,8 @@
     <string name="navigation_drawer_open">Opened</string>
     <string name="navigation_drawer_close">Closed</string>
     <string name="empty_list_text">Empty list</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
 
 
 </resources>

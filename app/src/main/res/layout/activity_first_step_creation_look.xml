@@ -38,12 +38,13 @@
 
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/create"
+            android:id="@+id/create_look"
             style="@style/CommonButtnoStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_black_24px"
-            android:text="@string/looks_create_btn" />
+            android:text="@string/looks_create_btn"
+            android:visibility="gone" />
 
     </LinearLayout>
 
