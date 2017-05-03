@@ -38,6 +38,12 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     @BindView(R.id.new_tag)
     EditText tag;
 
+    @BindView(R.id.look_shoot_btn)
+    FloatingActionButton captureBtn;
+
+    @BindView(R.id.look_save_btn)
+    FloatingActionButton save;
+
     @BindView(R.id.photo_look)
     ImageView pic;
 
@@ -48,9 +54,6 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     UpdateLookPresenter providePresenter() {
         return new UpdateLookPresenter(getIntent().getLongExtra(LOOK_ID, AppConstants.DEFAULT_ID));
     }
-
-    public static final String WARDROPE_ID = "wardrope_id";
-
 
     public static Intent createIntent(long lookId) {
         Intent intent = new Intent(WardropeApplication.getContext(), UpdateLookActivity.class);
@@ -63,6 +66,26 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
         setBackButtonEnabled(true);
         setContentView(View.inflate(this, R.layout.activity_update_look, null));
         ButterKnife.bind(this, baseLayout);
+        changeBtnStatus(true);
+        select.setOnClickListener(v -> {
+            boolean isVisible = save.getVisibility() != View.GONE;
+            changeBtnStatus(isVisible);
+        });
+        save.setOnClickListener(v -> {
+            presenter.saveLook(name.getText().toString(), tag.getText().toString());
+        });
+    }
+
+    private void changeBtnStatus(boolean isVisible) {
+        save.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
+        captureBtn.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
+        name.setEnabled(!isVisible);
+        tag.setEnabled(!isVisible);
+    }
+
+    @Override
+    public void onSave() {
+        finish();
     }
 
     @Override

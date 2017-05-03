@@ -12,4 +12,7 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 public interface IUpdateLook extends MvpView {
 
     void setLookData(Look look);
+
+    void onSave();
+
 }

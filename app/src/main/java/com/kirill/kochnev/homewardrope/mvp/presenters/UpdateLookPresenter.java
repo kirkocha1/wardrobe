@@ -48,4 +48,13 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
                     }
                 });
     }
+
+    public void saveLook(String name, String tag) {
+        model.setName(name);
+        model.setTag(tag);
+        unsubscribeOnDestroy(looks.putItem(model)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isPut -> getViewState().onSave()));
+    }
 }

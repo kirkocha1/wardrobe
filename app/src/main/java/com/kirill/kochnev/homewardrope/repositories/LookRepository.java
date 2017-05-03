@@ -4,12 +4,9 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.LooksThings;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
-import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
-
-import java.util.List;
 
 import io.reactivex.Single;
 
@@ -36,7 +33,7 @@ public class LookRepository extends AbstractLookRepository {
                 storIOSQLite.lowLevel().setTransactionSuccessful();
                 storIOSQLite.lowLevel().endTransaction();
             } else {
-                storIOSQLite.put().object(model);
+                storIOSQLite.put().object(model).prepare().executeAsBlocking();
             }
             sub.onSuccess(true);
         });

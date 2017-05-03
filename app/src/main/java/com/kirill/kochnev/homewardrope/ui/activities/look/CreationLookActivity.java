@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
@@ -33,6 +35,8 @@ import butterknife.ButterKnife;
 
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
 
+    public static final String LOOK_ID = "look_id";
+
     @BindView(R.id.creation_look_main_container)
     LinearLayout root;
 
@@ -52,7 +56,15 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @InjectPresenter
     CreationLookPresenter presenter;
+
     private View dialogView;
+
+
+    public static Intent createIntent(long lookId) {
+        Intent intent = new Intent(WardropeApplication.getContext(), UpdateLookActivity.class);
+        intent.putExtra(LOOK_ID, lookId);
+        return intent;
+    }
 
     @Override
     public void onInitUi(View baseLayout) {
