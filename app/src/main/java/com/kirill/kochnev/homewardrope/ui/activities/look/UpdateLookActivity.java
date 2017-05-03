@@ -28,7 +28,7 @@ import static com.kirill.kochnev.homewardrope.utils.ImageHelper.makeImage;
 public class UpdateLookActivity extends BaseActionBarActivity implements IUpdateLook {
 
     public static final String LOOK_ID = "look_id";
-
+    public static final int UPDATE_LOOK_CODE = 2;
     @BindView(R.id.looks_show_frame)
     FloatingActionButton select;
 
@@ -73,6 +73,9 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
         });
         save.setOnClickListener(v -> {
             presenter.saveLook(name.getText().toString(), tag.getText().toString());
+        });
+        captureBtn.setOnClickListener(v -> {
+            startActivityForResult(CreationLookActivity.createIntent(getIntent().getLongExtra(LOOK_ID, -1)), UPDATE_LOOK_CODE);
         });
     }
 

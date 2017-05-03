@@ -22,11 +22,11 @@ public class LookRepository extends AbstractLookRepository {
 
     @Override
     public Single<Boolean> putItem(Look model) {
-        return Single.create(sub -> {
+        Single<Boolean> putObservable = Single.create(sub -> {
             if (model.getThingIds().size() != 0) {
                 storIOSQLite.lowLevel().beginTransaction();
                 PutResult result = storIOSQLite.put().object(model).prepare().executeAsBlocking();
-                model.setId(result.insertedId());
+                model.setId(model.getId() != null ? model.getId() : result.insertedId());
                 for (Long thingId : model.getThingIds()) {
                     storIOSQLite.put().object(new LooksThings(model.getId(), thingId)).prepare().executeAsBlocking();
                 }
@@ -37,6 +37,11 @@ public class LookRepository extends AbstractLookRepository {
             }
             sub.onSuccess(true);
         });
+        if (model.getId() != null) {
+            return deletItem(model).flatMap(bool -> putObservable);
+        } else {
+            return putObservable;
+        }
     }
 
     @Override
