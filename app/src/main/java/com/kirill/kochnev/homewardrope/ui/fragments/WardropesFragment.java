@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
@@ -68,7 +69,7 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
 
     @Override
     public void setThingsByWardrope(long id) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction().addToBackStack(null);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction().addToBackStack(CreationLookState.WARDROPES.toString());
         AnimationHelper.animateFragmentReplace(transaction, ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, id), R.id.look_fragment_container);
     }
 

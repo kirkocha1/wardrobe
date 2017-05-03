@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
@@ -32,8 +33,6 @@ import butterknife.ButterKnife;
 
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
 
-    public static final String START_FRAGMENT_TAG = "start";
-    public static final String COLLAGE_FRAGMENT_TAG = "collage";
     @BindView(R.id.creation_look_main_container)
     LinearLayout root;
 
@@ -67,8 +66,9 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         });
         allThings.setOnClickListener(v -> {
             presenter.clearIds();
-            initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), null);
+            initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), CreationLookState.ALL_THINGS.toString());
         });
+
         save.setOnClickListener(v -> {
             if (dialogView == null) {
                 dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
@@ -80,25 +80,16 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
                 dialog.dismiss();
             }, null);
         });
+
         getFragmentManager().addOnBackStackChangedListener(() -> {
             int count = getFragmentManager().getBackStackEntryCount() - 1;
             String transactionName = getFragmentManager().getBackStackEntryAt(count).getName();
             if (transactionName != null) {
-                switch (transactionName) {
-                    case START_FRAGMENT_TAG:
-                        changeBtnsState(true);
-                        break;
-                    case COLLAGE_FRAGMENT_TAG:
-                        changeBtnsState(false);
-                        create.hide();
-                        break;
-                }
-            } else {
-                changeBtnsState(false);
-                allThings.setVisibility(View.GONE);
+                presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
             }
         });
-        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), START_FRAGMENT_TAG);
+
+        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START.toString());
     }
 
     private void initFragment(Fragment fragment, String transactionName) {
@@ -126,8 +117,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
-        initFragment(CollageFragment.createInstance(thingIds), COLLAGE_FRAGMENT_TAG);
-        save.show();
+        initFragment(CollageFragment.createInstance(thingIds), CreationLookState.COLLAGE.toString());
     }
 
     @Override
@@ -135,27 +125,17 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         finish();
     }
 
-
-    private void changeBtnsState(boolean isStart) {
-        create.setVisibility(isStart ? View.GONE : View.VISIBLE);
-        allThings.setVisibility(isStart ? View.VISIBLE : View.GONE);
+    @Override
+    public void onBackPressed() {
+        presenter.clearIds();
+        super.onBackPressed();
     }
 
     @Override
-    public void onBackPressed() {
-        save.hide();
-        if (getFragmentManager().getBackStackEntryCount() == 1) {
-            finish();
-        } else {
-            presenter.clearIds();
-            super.onBackPressed();
-        }
-    }
-
-    private void dropBackStack() {
-        for (int i = 0; i < getFragmentManager().getBackStackEntryCount() - 1; i++) {
-            getFragmentManager().popBackStackImmediate();
-        }
+    public void setBtnsState(boolean isCreateVisible, boolean isSaveVisible, boolean isAllThingsVisible) {
+        create.setVisibility(isCreateVisible ? View.VISIBLE : View.GONE);
+        allThings.setVisibility(isAllThingsVisible ? View.VISIBLE : View.GONE);
+        save.setVisibility(isSaveVisible ? View.VISIBLE : View.GONE);
     }
 
     @Override

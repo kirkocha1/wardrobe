@@ -7,6 +7,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
+import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
@@ -67,6 +68,20 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
         }
     }
 
+    public void resolveBtnsState(CreationLookState state) {
+        switch (state) {
+            case ALL_THINGS:
+            case WARDROPES:
+                getViewState().setBtnsState(true, false, false);
+                break;
+            case START:
+                getViewState().setBtnsState(false, false, true);
+                break;
+            case COLLAGE:
+                getViewState().setBtnsState(false, true, false);
+                break;
+        }
+    }
 
     public void startCreationProcess() {
         int size = model.getThingIds().size();

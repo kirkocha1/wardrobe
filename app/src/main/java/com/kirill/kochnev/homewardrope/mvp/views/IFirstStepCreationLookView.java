@@ -22,4 +22,7 @@ public interface IFirstStepCreationLookView extends MvpView {
     void onSuccess();
 
     void showError(boolean isMin);
+
+    void setBtnsState(boolean isCreateVisible, boolean isSaveVisible, boolean isAllThingsVisible);
+
 }
