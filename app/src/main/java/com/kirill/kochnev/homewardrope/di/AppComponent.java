@@ -1,13 +1,13 @@
 package com.kirill.kochnev.homewardrope.di;
 
-import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.CollagePresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.LooksPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.UpdateLookPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.CollagePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
 
 import javax.inject.Singleton;
 
@@ -18,7 +18,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {RepositoryModule.class, DbModule.class, InteractorModule.class})
+@Component(modules = {RepositoryModule.class, DbModule.class, InteractorsModule.class})
 public interface AppComponent {
 
     void inject(AddUpdateWardropePresenter presenter);

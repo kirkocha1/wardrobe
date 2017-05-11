@@ -12,7 +12,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
-import com.kirill.kochnev.homewardrope.mvp.presenters.UpdateLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 

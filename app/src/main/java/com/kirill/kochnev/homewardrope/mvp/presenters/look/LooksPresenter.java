@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.mvp.presenters;
+package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
 import android.util.Log;
 

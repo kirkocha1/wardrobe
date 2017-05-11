@@ -16,7 +16,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
@@ -63,9 +63,6 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         return new CreationLookPresenter(getIntent().getLongExtra(LOOK_ID, -1));
     }
 
-    private View dialogView;
-
-
     public static Intent createIntent(long lookId, long wardropeId) {
         Intent intent = new Intent(WardropeApplication.getContext(), CreationLookActivity.class);
         intent.putExtra(LOOK_ID, lookId);
@@ -110,9 +107,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @Override
     public void showSaveDialog(String oldName, String oldTag) {
-        if (dialogView == null) {
-            dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
-        }
+        View dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
         TextView nameView = (TextView) dialogView.findViewById(R.id.new_name);
         TextView tagView = (TextView) dialogView.findViewById(R.id.new_tag);
         if (oldName != null) {

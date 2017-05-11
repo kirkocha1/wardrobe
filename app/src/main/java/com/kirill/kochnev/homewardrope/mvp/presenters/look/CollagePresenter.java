@@ -1,18 +1,14 @@
-package com.kirill.kochnev.homewardrope.mvp.presenters;
+package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
-import android.graphics.Bitmap;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
-import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
+import com.kirill.kochnev.homewardrope.interactors.interfaces.ICollageInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
-import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByIdsSpecofication;
-import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
 import java.util.HashSet;
 
@@ -29,26 +25,19 @@ import io.reactivex.schedulers.Schedulers;
 public class CollagePresenter extends BaseMvpPresenter<ICollageView> {
 
     public static final String TAG = "CollagePresenter";
-    private SparseArray<Bitmap> imageCache = new SparseArray<>();
-
     @Inject
     protected AbstractThingRepository things;
 
+    @Inject
+    protected ICollageInteractor interactor;
+
+
     public CollagePresenter(HashSet<Long> thingIds) {
         WardropeApplication.getComponent().inject(this);
-        things.query(new ThingsByIdsSpecofication(thingIds))
-                .map(list -> {
-                    int i = 0;
-                    for (Thing thing : list) {
-                        Bitmap bitmap = ImageHelper.makeImage(thing.getFullImagePath());
-                        imageCache.put(i, bitmap);
-                        i++;
-                    }
-                    return new Object();
-                }).subscribeOn(Schedulers.io())
+        interactor.getImages(thingIds).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> {
-                    getViewState().constructView(imageCache, CollageMode.getByNum(imageCache.size()));
+                .subscribe(cache -> {
+                    getViewState().constructView(cache, CollageMode.getByNum(cache.size()));
                 }, e -> Log.e(TAG, e.getMessage()));
     }
 
