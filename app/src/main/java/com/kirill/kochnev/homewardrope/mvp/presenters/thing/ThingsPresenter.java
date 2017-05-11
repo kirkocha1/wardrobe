@@ -71,7 +71,8 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(lastId, filterId)));
+        unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+                AppConstants.DEFAULT_ID : filterId)));
     }
 
     @Override
