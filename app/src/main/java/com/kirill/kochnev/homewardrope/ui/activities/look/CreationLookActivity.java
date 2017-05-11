@@ -96,9 +96,13 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             int count = getSupportFragmentManager().getBackStackEntryCount() - 1;
-            String transactionName = getSupportFragmentManager().getBackStackEntryAt(count).getName();
-            if (transactionName != null) {
-                presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
+            if (count != -1) {
+                String transactionName = getSupportFragmentManager().getBackStackEntryAt(count).getName();
+                if (transactionName != null) {
+                    presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
+                }
+            } else {
+                finish();
             }
         });
         initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START.toString());

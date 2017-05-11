@@ -8,9 +8,9 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
+import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
 import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 
 import javax.inject.Inject;
@@ -31,7 +31,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     private long wardropeId;
 
     @Inject
-    protected AbstractLookRepository looks;
+    ILooksInteractor interactor;
 
     public LooksPresenter(ViewMode mode, boolean isEdit, long wardropeId) {
         WardropeApplication.getComponent().inject(this);
@@ -43,20 +43,22 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(looks.query(lastId).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(interactor.getLooks(lastId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, e.getMessage())));
+                .subscribe(list -> getViewState().onLoadFinished(list),
+                        e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override
     protected void refreshList() {
-        unsubscribeOnDestroy(looks.query(AppConstants.DEFAULT_ID).subscribe(list -> getViewState().onLoadFinished(list),
-                e -> Log.e(TAG, e.getMessage())));
+        unsubscribeOnDestroy(interactor.getLooks(AppConstants.DEFAULT_ID)
+                .subscribe(list -> getViewState().onLoadFinished(list),
+                        e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override
     public void onLongItemClick(IDbModel model) {
-        unsubscribeOnDestroy(looks.deletItem((Look) model)
+        unsubscribeOnDestroy(interactor.deleteLook((Look) model)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isDel -> {
@@ -68,5 +70,4 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     public void onItemClick(IDbModel model) {
         getViewState().openUpdateActivity(UpdateLookActivity.createIntent(model.getId()));
     }
-
 }
