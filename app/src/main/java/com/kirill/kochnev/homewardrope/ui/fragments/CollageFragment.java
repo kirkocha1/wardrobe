@@ -12,7 +12,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.CollagePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.CollagePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseActionBarFragment;
 import com.kirill.kochnev.homewardrope.ui.views.CollageView;

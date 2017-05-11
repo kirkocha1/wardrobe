@@ -12,7 +12,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateWardropePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
@@ -93,11 +93,10 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     private void showFragment() {
         fragment = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardropeId == -1, wardropeId);
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_id, fragment)
                 .commit();
     }
-
 
     @Override
     public void changeFragmentMode(boolean mode) {
@@ -111,7 +110,6 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     public void setCount(int count) {
         countView.setText("" + count);
     }
-
 
     @Override
     public void addThingId(long id) {

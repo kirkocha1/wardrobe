@@ -1,9 +1,9 @@
 package com.kirill.kochnev.homewardrope.ui.activities.look;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -16,7 +16,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
 
     public static final String LOOK_ID = "look_id";
-
+    public static final String WARDROPE_ID = "wardrope_id";
     @BindView(R.id.creation_look_main_container)
     LinearLayout root;
 
@@ -63,12 +63,10 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         return new CreationLookPresenter(getIntent().getLongExtra(LOOK_ID, -1));
     }
 
-    private View dialogView;
-
-
-    public static Intent createIntent(long lookId) {
+    public static Intent createIntent(long lookId, long wardropeId) {
         Intent intent = new Intent(WardropeApplication.getContext(), CreationLookActivity.class);
         intent.putExtra(LOOK_ID, lookId);
+        intent.putExtra(WARDROPE_ID, wardropeId);
         return intent;
     }
 
@@ -93,11 +91,15 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
             presenter.save();
         });
 
-        getFragmentManager().addOnBackStackChangedListener(() -> {
-            int count = getFragmentManager().getBackStackEntryCount() - 1;
-            String transactionName = getFragmentManager().getBackStackEntryAt(count).getName();
-            if (transactionName != null) {
-                presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            int count = getSupportFragmentManager().getBackStackEntryCount() - 1;
+            if (count != -1) {
+                String transactionName = getSupportFragmentManager().getBackStackEntryAt(count).getName();
+                if (transactionName != null) {
+                    presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
+                }
+            } else {
+                finish();
             }
         });
         initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START.toString());
@@ -105,9 +107,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @Override
     public void showSaveDialog(String oldName, String oldTag) {
-        if (dialogView == null) {
-            dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
-        }
+        View dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
         TextView nameView = (TextView) dialogView.findViewById(R.id.new_name);
         TextView tagView = (TextView) dialogView.findViewById(R.id.new_tag);
         if (oldName != null) {
@@ -128,7 +128,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     private void initFragment(Fragment fragment, String transactionName) {
         this.fragment = fragment;
         dropBackStack();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(transactionName);
         AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.look_fragment_container);
     }

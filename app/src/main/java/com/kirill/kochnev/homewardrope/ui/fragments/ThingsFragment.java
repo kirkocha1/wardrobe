@@ -11,7 +11,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
@@ -24,6 +24,7 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 import java.util.HashSet;
 
+import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
@@ -32,7 +33,6 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
  */
 
 public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> implements IThingsView {
-    public static final String FRAGMENT_IS_EDIT = "is_edit";
 
     private ViewMode mode;
     private long wardropeId;

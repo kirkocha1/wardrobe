@@ -15,7 +15,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
-import com.kirill.kochnev.homewardrope.mvp.presenters.AddUpdateThingPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
@@ -23,7 +23,7 @@ import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter.THINGS_ID;
+import static com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter.THINGS_ID;
 
 public class AddUpdateThingActivity extends BaseActionBarActivity implements IAddUpdateThingView {
 
