@@ -94,18 +94,14 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
 
     private void resolveClick(Thing thing) {
+        if (viewMode != ViewMode.THING_MODE && isEdit) {
+            getViewState().addThingId(thing.getId());
+        }
         switch (viewMode) {
             case WARDROPE_MODE:
-                if (isEdit) {
-                    getViewState().addThingId(thing.getId());
-                } else {
-                    getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
-                }
+                getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
                 break;
             case LOOK_MODE:
-                if (isEdit) {
-                    getViewState().addThingId(thing.getId());
-                }
                 break;
             default:
                 getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));

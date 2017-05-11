@@ -16,7 +16,7 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
 
 public class AnimationHelper {
     public static void animateFragmentReplace(FragmentTransaction transaction, Fragment fragment, @IdRes int containerId) {
-//        transaction.setCustomAnimations(R.animator.slide_out_left, R.animator.slide_in_right);
+        transaction.setCustomAnimations(R.anim.slide_out_left, R.anim.slide_in_right);
         transaction.replace(containerId, fragment).commit();
     }
 
