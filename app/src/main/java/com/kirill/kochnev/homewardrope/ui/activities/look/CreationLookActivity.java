@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -9,8 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
@@ -33,6 +36,8 @@ import butterknife.ButterKnife;
 
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
 
+    public static final String LOOK_ID = "look_id";
+
     @BindView(R.id.creation_look_main_container)
     LinearLayout root;
 
@@ -52,7 +57,20 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @InjectPresenter
     CreationLookPresenter presenter;
+
+    @ProvidePresenter
+    CreationLookPresenter providePresenter() {
+        return new CreationLookPresenter(getIntent().getLongExtra(LOOK_ID, -1));
+    }
+
     private View dialogView;
+
+
+    public static Intent createIntent(long lookId) {
+        Intent intent = new Intent(WardropeApplication.getContext(), CreationLookActivity.class);
+        intent.putExtra(LOOK_ID, lookId);
+        return intent;
+    }
 
     @Override
     public void onInitUi(View baseLayout) {
@@ -61,24 +79,18 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         setTitleText(getString(R.string.looks_creation_title));
         ButterKnife.bind(this);
         container.setDrawingCacheEnabled(true);
+
         create.setOnClickListener(v -> {
             presenter.startCreationProcess();
         });
+
         allThings.setOnClickListener(v -> {
             presenter.clearIds();
             initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), CreationLookState.ALL_THINGS.toString());
         });
 
         save.setOnClickListener(v -> {
-            if (dialogView == null) {
-                dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
-            }
-            DialogHelper.showOKCancelDialog(this, "Выберите имя", dialogView, (dialog, which) -> {
-                String name = ((TextView) dialogView.findViewById(R.id.new_thing_name)).getText().toString();
-                String tag = ((TextView) dialogView.findViewById(R.id.new_thing_tag)).getText().toString();
-                presenter.processLook(name, tag, container.getDrawingCache());
-                dialog.dismiss();
-            }, null);
+            presenter.save();
         });
 
         getFragmentManager().addOnBackStackChangedListener(() -> {
@@ -88,8 +100,29 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
                 presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
             }
         });
-
         initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START.toString());
+    }
+
+    @Override
+    public void showSaveDialog(String oldName, String oldTag) {
+        if (dialogView == null) {
+            dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
+        }
+        TextView nameView = (TextView) dialogView.findViewById(R.id.new_name);
+        TextView tagView = (TextView) dialogView.findViewById(R.id.new_tag);
+        if (oldName != null) {
+            nameView.setText(oldName);
+        }
+        if (oldTag != null) {
+            tagView.setText(oldTag);
+        }
+        DialogHelper.showOKCancelDialog(this, "Выберите имя", dialogView, (dialog, which) -> {
+            String name = ((TextView) dialogView.findViewById(R.id.new_name)).getText().toString();
+            String tag = ((TextView) dialogView.findViewById(R.id.new_tag)).getText().toString();
+            presenter.processLook(name, tag, container.getDrawingCache());
+            dialog.dismiss();
+        }, null);
+
     }
 
     private void initFragment(Fragment fragment, String transactionName) {

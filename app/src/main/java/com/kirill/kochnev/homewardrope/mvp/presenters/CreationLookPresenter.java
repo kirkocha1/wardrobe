@@ -32,9 +32,24 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     @Inject
     AbstractLookRepository looks;
 
-    public CreationLookPresenter() {
+    public CreationLookPresenter(long id) {
         WardropeApplication.getComponent().inject(this);
-        model = new Look();
+        initModel(id);
+    }
+
+    private void initModel(long id) {
+        if (id == -1) {
+            model = new Look();
+        } else {
+            looks.getItem(id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(look -> {
+                        if (look != null) {
+                            model = look;
+                        }
+                    });
+        }
     }
 
     public void addThingId(long id) {
@@ -58,7 +73,7 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
             model.setTag(tag);
             model.setFullImagePath(ImageHelper.createImageFile("look").getAbsolutePath());
             model.setIconImagePath(ImageHelper.createIconImageFile("look").getAbsolutePath());
-            ImageHelper.saveCropImageObservable(model.getIconImagePath(), bitmap)
+            ImageHelper.saveImageAndIconObservable(model.getFullImagePath(), model.getIconImagePath(), bitmap)
                     .flatMap(cropImg -> looks.putItem(model))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -81,6 +96,10 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
                 getViewState().setBtnsState(false, true, false);
                 break;
         }
+    }
+
+    public void save() {
+        getViewState().showSaveDialog(model.getName(), model.getTag());
     }
 
     public void startCreationProcess() {

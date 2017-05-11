@@ -4,12 +4,9 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.LooksThings;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
-import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
-
-import java.util.List;
 
 import io.reactivex.Single;
 
@@ -25,21 +22,26 @@ public class LookRepository extends AbstractLookRepository {
 
     @Override
     public Single<Boolean> putItem(Look model) {
-        return Single.create(sub -> {
+        Single<Boolean> putObservable = Single.create(sub -> {
             if (model.getThingIds().size() != 0) {
                 storIOSQLite.lowLevel().beginTransaction();
                 PutResult result = storIOSQLite.put().object(model).prepare().executeAsBlocking();
-                model.setId(result.insertedId());
+                model.setId(model.getId() != null ? model.getId() : result.insertedId());
                 for (Long thingId : model.getThingIds()) {
                     storIOSQLite.put().object(new LooksThings(model.getId(), thingId)).prepare().executeAsBlocking();
                 }
                 storIOSQLite.lowLevel().setTransactionSuccessful();
                 storIOSQLite.lowLevel().endTransaction();
             } else {
-                storIOSQLite.put().object(model);
+                storIOSQLite.put().object(model).prepare().executeAsBlocking();
             }
             sub.onSuccess(true);
         });
+        if (model.getId() != null) {
+            return deletItem(model).flatMap(bool -> putObservable);
+        } else {
+            return putObservable;
+        }
     }
 
     @Override

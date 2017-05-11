@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,12 @@ import static com.kirill.kochnev.homewardrope.AppConstants.REQ_WIDTH;
 
 public class ImageHelper {
 
+    private static void saveIcon(String iconPath, Bitmap cropImage, boolean withCompession) throws IOException {
+        FileOutputStream out = new FileOutputStream(iconPath);
+        cropImage.compress(Bitmap.CompressFormat.JPEG, withCompession ? COMPRESSION_PERCENT : AppConstants.ALL_PERCENTS, out);
+        out.flush();
+        out.close();
+    }
 
     public static Bitmap makeImage(String imagePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -37,17 +44,10 @@ public class ImageHelper {
         return BitmapFactory.decodeFile(imagePath, options);
     }
 
-    private static void saveIcon(String iconPath, Bitmap cropImage) throws IOException {
-        FileOutputStream out = new FileOutputStream(iconPath);
-        cropImage.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_PERCENT, out);
-        out.flush();
-        out.close();
-    }
-
     public static Single<Bitmap> getAndSaveCropImageObservable(String fullImagePath, String iconPath) {
         return Single.create(sub -> {
             Bitmap cropImage = makeImage(fullImagePath);
-            saveIcon(iconPath, cropImage);
+            saveIcon(iconPath, cropImage, true);
             if (cropImage != null) {
                 sub.onSuccess(cropImage);
             } else {
@@ -56,10 +56,11 @@ public class ImageHelper {
         });
     }
 
-    public static Single<Bitmap> saveCropImageObservable(String iconPath, @NotNull Bitmap bitmap) {
+    public static Single<Bitmap> saveImageAndIconObservable(String imagePath, String iconPath, @NotNull Bitmap bitmap) {
         return Single.create(sub -> {
             try {
-                saveIcon(iconPath, bitmap);
+                saveIcon(imagePath, bitmap, false);
+                saveIcon(iconPath, bitmap, true);
                 sub.onSuccess(bitmap);
             } catch (Exception e) {
                 sub.onError(new Exception("can't get image"));
@@ -80,7 +81,6 @@ public class ImageHelper {
         File storageDir = WardropeApplication.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName + "min_icon", ".jpg", storageDir);
     }
-
 
     public static int calculateInSampleSize(BitmapFactory.Options options) {
         return calculateInSampleSize(options, REQ_HEIGHT, REQ_WIDTH);

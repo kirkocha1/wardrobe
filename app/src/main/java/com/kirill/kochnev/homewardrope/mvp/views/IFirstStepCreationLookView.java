@@ -5,16 +5,14 @@ import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by kirill on 27.04.17.
  */
 
-
 @StateStrategyType(SkipStrategy.class)
 public interface IFirstStepCreationLookView extends MvpView {
-
+    void showSaveDialog(String name, String tag);
     void addThingId(long id);
 
     void openCollageFragment(HashSet<Long> thingIds);

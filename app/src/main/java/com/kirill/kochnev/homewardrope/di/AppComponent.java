@@ -6,6 +6,7 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.CollagePresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.ThingsPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.UpdateLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.WardropesPresenter;
 
 import javax.inject.Singleton;
@@ -33,6 +34,6 @@ public interface AppComponent {
     void inject(CreationLookPresenter activity);
 
     void inject(CollagePresenter presenter);
-
+    void inject(UpdateLookPresenter presenter);
 
 }
