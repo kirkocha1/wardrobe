@@ -10,9 +10,9 @@
     </style>
 
     <style name="CardViewStyle">
-        <item name="cardCornerRadius">10dp</item>
-        <item name="contentPadding">10dp</item>
-        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="contentPadding">2dp</item>
+        <item name="cardBackgroundColor">@color/lead</item>
     </style>
 
     <style name="EditTextStyle">
