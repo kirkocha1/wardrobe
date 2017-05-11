@@ -93,11 +93,10 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     private void showFragment() {
         fragment = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardropeId == -1, wardropeId);
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_id, fragment)
                 .commit();
     }
-
 
     @Override
     public void changeFragmentMode(boolean mode) {
@@ -111,7 +110,6 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     public void setCount(int count) {
         countView.setText("" + count);
     }
-
 
     @Override
     public void addThingId(long id) {

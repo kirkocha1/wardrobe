@@ -18,7 +18,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {RepositoryModule.class, DbModule.class})
+@Component(modules = {RepositoryModule.class, DbModule.class, InteractorModule.class})
 public interface AppComponent {
 
     void inject(AddUpdateWardropePresenter presenter);
@@ -34,6 +34,7 @@ public interface AppComponent {
     void inject(CreationLookPresenter activity);
 
     void inject(CollagePresenter presenter);
+
     void inject(UpdateLookPresenter presenter);
 
 }

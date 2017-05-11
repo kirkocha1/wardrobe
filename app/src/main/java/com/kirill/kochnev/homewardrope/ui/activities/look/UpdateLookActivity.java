@@ -75,7 +75,7 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
             presenter.saveLook(name.getText().toString(), tag.getText().toString());
         });
         captureBtn.setOnClickListener(v -> {
-            startActivityForResult(CreationLookActivity.createIntent(getIntent().getLongExtra(LOOK_ID, -1)), UPDATE_LOOK_CODE);
+            startActivityForResult(CreationLookActivity.createIntent(getIntent().getLongExtra(LOOK_ID, -1), -1), UPDATE_LOOK_CODE);
         });
     }
 

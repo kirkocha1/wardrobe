@@ -1,9 +1,9 @@
 package com.kirill.kochnev.homewardrope.ui.activities.look;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
 
     public static final String LOOK_ID = "look_id";
-
+    public static final String WARDROPE_ID = "wardrope_id";
     @BindView(R.id.creation_look_main_container)
     LinearLayout root;
 
@@ -66,9 +66,10 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     private View dialogView;
 
 
-    public static Intent createIntent(long lookId) {
+    public static Intent createIntent(long lookId, long wardropeId) {
         Intent intent = new Intent(WardropeApplication.getContext(), CreationLookActivity.class);
         intent.putExtra(LOOK_ID, lookId);
+        intent.putExtra(WARDROPE_ID, wardropeId);
         return intent;
     }
 
@@ -128,7 +129,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     private void initFragment(Fragment fragment, String transactionName) {
         this.fragment = fragment;
         dropBackStack();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.addToBackStack(transactionName);
         AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.look_fragment_container);
     }

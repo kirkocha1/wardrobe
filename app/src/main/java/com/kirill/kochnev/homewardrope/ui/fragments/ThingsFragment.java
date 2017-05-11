@@ -24,6 +24,7 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 
 import java.util.HashSet;
 
+import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
@@ -32,7 +33,6 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
  */
 
 public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> implements IThingsView {
-    public static final String FRAGMENT_IS_EDIT = "is_edit";
 
     private ViewMode mode;
     private long wardropeId;

@@ -34,7 +34,7 @@ public class MainActivity extends DrawerActivity {
                 setFragmentContent(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));
                 break;
             case R.id.nav_looks:
-                setFragmentContent(new LooksFragment());
+                setFragmentContent(LooksFragment.newInstance(ViewMode.LOOK_MODE, false, AppConstants.DEFAULT_ID));
                 break;
 
             default:
