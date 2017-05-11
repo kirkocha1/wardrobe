@@ -58,19 +58,13 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     public void updateModeState(boolean mode) {
         isEdit = mode;
         getViewState().setEditMode(isEdit);
-        switch (viewMode) {
-            case LOOK_MODE:
-            case WARDROPE_MODE:
-                if (isEdit) {
-                    interactor.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
-                    unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
-                } else {
-                    refreshList();
-                }
-                break;
-            default:
+        if (viewMode != ViewMode.THING_MODE) {
+            if (isEdit) {
+                interactor.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
+                unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
+            } else {
                 refreshList();
-                break;
+            }
         }
     }
 

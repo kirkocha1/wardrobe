@@ -70,15 +70,15 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     @Override
     public Single<M> getItem(long id) {
         return Single.create(sub -> {
-            M thing = storIOSQLite.get().object(getEntityClass()).withQuery(Query.builder().table(getTableName())
+            M item = storIOSQLite.get().object(getEntityClass()).withQuery(Query.builder().table(getTableName())
                     .where(BaseColumns._ID + " = ?").whereArgs(id + "")
                     .build())
                     .prepare()
                     .executeAsBlocking();
-            if (thing != null) {
-                sub.onSuccess(thing);
+            if (item != null) {
+                sub.onSuccess(item);
             } else {
-                sub.onError(new Exception("no thing with this id"));
+                sub.onError(new Exception("no item with this id"));
             }
         });
     }

@@ -3,12 +3,10 @@ package com.kirill.kochnev.homewardrope.mvp.presenters;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 
 import java.util.HashSet;
 
@@ -26,30 +24,24 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
 
     public static final String TAG = "AddUpdateWardrope";
     private boolean isEditableMode = false;
+
     @Inject
-    protected AbstractWardropeRepository wardropes;
+    IAddUpdateWardropeInteractor interactor;
 
     private HashSet<Long> thingsSet = new HashSet<>();
 
-    private Wardrope wardrope;
-
     public AddUpdateWardropePresenter(long id) {
         WardropeApplication.getComponent().inject(this);
-        if (id == AppConstants.DEFAULT_ID) {
-            wardrope = new Wardrope();
-        } else {
-            initWardrope(id);
-        }
+        initWardrope(id);
     }
 
     private void initWardrope(long id) {
-        unsubscribeOnDestroy(wardropes.getItem(id).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(interactor.getWardrope(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ward -> {
-                    wardrope = ward;
-                    thingsSet = wardrope.getThingIds();
-                    getViewState().initView(wardrope);
-                }));
+                    thingsSet = ward.getThingIds();
+                    getViewState().initView(ward);
+                }, e -> Log.e(TAG, e.getMessage())));
     }
 
     public void addThingId(long id) {
@@ -67,15 +59,13 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     }
 
     public void save(String name) {
-        wardrope.setName(name);
-        wardrope.setThingsCount(thingsSet.size());
-        unsubscribeOnDestroy(wardropes.putWardropeWithThings(wardrope, thingsSet)
+        unsubscribeOnDestroy(interactor.saveWardrope(name, thingsSet)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> {
                     Log.d(TAG, "put wardrope");
                     getViewState().onSave();
-                }, e -> e.printStackTrace()));
+                }, e -> Log.e(TAG, e.getMessage())));
 
     }
 

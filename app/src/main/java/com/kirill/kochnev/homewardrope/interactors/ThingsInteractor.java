@@ -9,8 +9,6 @@ import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardropeSpecif
 import java.util.HashSet;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.Single;
 
 /**
@@ -19,7 +17,6 @@ import io.reactivex.Single;
 
 public class ThingsInteractor implements IThingInteractor {
 
-    @Inject
     protected AbstractThingRepository things;
 
     public ThingsInteractor(AbstractThingRepository things) {

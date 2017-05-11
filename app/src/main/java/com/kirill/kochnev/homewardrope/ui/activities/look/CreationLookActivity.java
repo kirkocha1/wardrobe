@@ -94,9 +94,9 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
             presenter.save();
         });
 
-        getFragmentManager().addOnBackStackChangedListener(() -> {
-            int count = getFragmentManager().getBackStackEntryCount() - 1;
-            String transactionName = getFragmentManager().getBackStackEntryAt(count).getName();
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            int count = getSupportFragmentManager().getBackStackEntryCount() - 1;
+            String transactionName = getSupportFragmentManager().getBackStackEntryAt(count).getName();
             if (transactionName != null) {
                 presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
             }

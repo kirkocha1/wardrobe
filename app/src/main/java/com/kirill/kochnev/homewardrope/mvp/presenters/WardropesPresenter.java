@@ -9,9 +9,9 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
+import com.kirill.kochnev.homewardrope.interactors.interfaces.IWardropesInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
 
 import javax.inject.Inject;
@@ -29,7 +29,7 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     private static final String TAG = "WardropesPresenter";
 
     @Inject
-    protected AbstractWardropeRepository wardropes;
+    IWardropesInteractor interactor;
 
     private ViewMode mode;
 
@@ -38,29 +38,28 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
         this.mode = mode;
     }
 
+
     protected void refreshList() {
-        unsubscribeOnDestroy(wardropes.query(AppConstants.DEFAULT_ID).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(interactor.getWardropes(AppConstants.DEFAULT_ID).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
+                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(wardropes.query(lastId).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(interactor.getWardropes(lastId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> e.printStackTrace()));
+                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override
     public void onLongItemClick(IDbModel model) {
         if (mode == ViewMode.WARDROPE_MODE) {
-            unsubscribeOnDestroy(wardropes.deletItem((Wardrope) model)
+            unsubscribeOnDestroy(interactor.deleteWardropes((Wardrope) model)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(isDel -> {
-                        getViewState().notifyListChanges((Wardrope) model);
-                    }));
+                    .subscribe(isDel -> getViewState().notifyListChanges((Wardrope) model)));
         }
     }
 
