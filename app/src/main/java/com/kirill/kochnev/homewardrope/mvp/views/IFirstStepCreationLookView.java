@@ -12,8 +12,8 @@ import java.util.HashSet;
 
 @StateStrategyType(SkipStrategy.class)
 public interface IFirstStepCreationLookView extends MvpView {
+
     void showSaveDialog(String name, String tag);
-    void addThingId(long id);
 
     void openCollageFragment(HashSet<Long> thingIds);
 

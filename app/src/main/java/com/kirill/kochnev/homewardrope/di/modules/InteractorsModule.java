@@ -1,18 +1,15 @@
-package com.kirill.kochnev.homewardrope.di;
+package com.kirill.kochnev.homewardrope.di.modules;
 
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.interactors.CollageInteractor;
-import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.WardropesInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.ICollageInteractor;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IWardropesInteractor;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 
@@ -46,13 +43,4 @@ public class InteractorsModule {
         return new WardropesInteractor(repository);
     }
 
-    @Provides
-    ILooksInteractor provideLookssInteractor(AbstractLookRepository repository) {
-        return new LooksInteractor(repository);
-    }
-
-    @Provides
-    ICollageInteractor provideCollageInteractor(AbstractThingRepository repository) {
-        return new CollageInteractor(repository);
-    }
 }

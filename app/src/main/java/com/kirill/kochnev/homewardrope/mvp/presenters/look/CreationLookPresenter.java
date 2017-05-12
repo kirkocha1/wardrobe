@@ -10,6 +10,7 @@ import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
+import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
 
@@ -26,14 +27,14 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     public static final String TAG = "CreationLook";
 
     @Inject
+    IdBus bus;
+
+    @Inject
     ILooksInteractor interactor;
 
     public CreationLookPresenter(long id) {
-        WardropeApplication.getComponent().inject(this);
-    }
-
-    public void addThingId(long id) {
-        interactor.addThingId(id);
+        WardropeApplication.getLookComponent().inject(this);
+        unsubscribeOnDestroy(bus.register(thingId -> interactor.addThingId(thingId)));
     }
 
     public void clearIds() {

@@ -1,6 +1,8 @@
 package com.kirill.kochnev.homewardrope.repositories.interfaces;
 
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
 import java.util.List;
 
@@ -12,11 +14,11 @@ import io.reactivex.Single;
 
 public interface IRepository<M> {
 
-    Single<Boolean> putItem(M model);
+    Single<PutResult> putItem(M model);
 
     Single<M> getItem(long id);
 
-    Single<Boolean> deletItem(M model);
+    Single<DeleteResult> deletItem(M model);
 
     Single<List<M>> query(long id);
 

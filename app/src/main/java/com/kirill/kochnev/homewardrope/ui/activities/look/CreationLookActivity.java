@@ -78,31 +78,21 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         ButterKnife.bind(this);
         container.setDrawingCacheEnabled(true);
 
-        create.setOnClickListener(v -> {
-            presenter.startCreationProcess();
-        });
-
+        create.setOnClickListener(v -> presenter.startCreationProcess());
+        save.setOnClickListener(v -> presenter.save());
         allThings.setOnClickListener(v -> {
             presenter.clearIds();
-            initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), CreationLookState.ALL_THINGS.toString());
+            initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), CreationLookState.ALL_THINGS);
         });
 
-        save.setOnClickListener(v -> {
-            presenter.save();
-        });
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             int count = getSupportFragmentManager().getBackStackEntryCount() - 1;
-            if (count != -1) {
-                String transactionName = getSupportFragmentManager().getBackStackEntryAt(count).getName();
-                if (transactionName != null) {
-                    presenter.resolveBtnsState(CreationLookState.valueOf(transactionName));
-                }
-            } else {
-                finish();
-            }
+            CreationLookState transactionState = count == AppConstants.DEFAULT_ID ? CreationLookState.START :
+                    CreationLookState.valueOf(getSupportFragmentManager().getBackStackEntryAt(count).getName());
+            presenter.resolveBtnsState(transactionState);
         });
-        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START.toString());
+        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START);
     }
 
     @Override
@@ -125,11 +115,12 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     }
 
-    private void initFragment(Fragment fragment, String transactionName) {
+    private void initFragment(Fragment fragment, CreationLookState state) {
         this.fragment = fragment;
-        dropBackStack();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.addToBackStack(transactionName);
+        if (state != CreationLookState.START) {
+            transaction.addToBackStack(state.toString());
+        }
         AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.look_fragment_container);
     }
 
@@ -143,14 +134,10 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         return false;
     }
 
-    @Override
-    public void addThingId(long id) {
-        presenter.addThingId(id);
-    }
 
     @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
-        initFragment(CollageFragment.createInstance(thingIds), CreationLookState.COLLAGE.toString());
+        initFragment(CollageFragment.createInstance(thingIds), CreationLookState.COLLAGE);
     }
 
     @Override

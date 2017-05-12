@@ -81,19 +81,4 @@ public abstract class BaseActionBarActivity extends MvpAppCompatActivity impleme
     public interface Consumer<T> {
         void accept(T t);
     }
-
-    public void dropBackStack() {
-        for (int i = 0; i < getFragmentManager().getBackStackEntryCount() - 1; i++) {
-            getFragmentManager().popBackStackImmediate();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() == 1) {
-            finish();
-        } else {
-            super.onBackPressed();
-        }
-    }
 }

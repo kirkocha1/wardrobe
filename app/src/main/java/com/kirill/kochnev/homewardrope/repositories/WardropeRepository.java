@@ -29,8 +29,9 @@ public class WardropeRepository extends AbstractWardropeRepository {
     }
 
     @Override
-    public Single<Object> putWardropeWithThings(Wardrope wardrope, HashSet<Long> thingIds) {
+    public Single<PutResult> putWardropeWithThings(Wardrope wardrope, HashSet<Long> thingIds) {
         return Single.create(sub -> {
+            storIOSQLite.lowLevel().beginTransaction();
             try {
                 if (wardrope.getId() != null) {
                     storIOSQLite.delete().byQuery(DeleteQuery.builder()
@@ -48,10 +49,12 @@ public class WardropeRepository extends AbstractWardropeRepository {
                     thingsWardropes.add(new ThingsWardropes(wardropeId, id));
                 }
                 storIOSQLite.put().objects(thingsWardropes).prepare().executeAsBlocking();
-                sub.onSuccess(new Object());
-
-            } catch (Exception ex) {
-                sub.onError(ex);
+                storIOSQLite.lowLevel().setTransactionSuccessful();
+                sub.onSuccess(result);
+            } catch (Exception e) {
+                sub.onError(new Exception("wardrope wasn't inserted"));
+            } finally {
+                storIOSQLite.lowLevel().endTransaction();
             }
         });
     }
@@ -74,23 +77,23 @@ public class WardropeRepository extends AbstractWardropeRepository {
     }
 
     @Override
-    public Single<Boolean> deletItem(Wardrope model) {
+    public Single<DeleteResult> deletItem(Wardrope model) {
         return Single.create(sub -> {
+            storIOSQLite.lowLevel().beginTransaction();
             try {
                 storIOSQLite.delete().byQuery(DeleteQuery.builder()
                         .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
                         .where(ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + "=?")
                         .whereArgs(model.getId()).build()).prepare().executeAsBlocking();
-                DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
-                if (result.numberOfRowsDeleted() == 1) {
-                    sub.onSuccess(true);
-                } else {
-                    sub.onSuccess(false);
-                }
-            } catch (Exception ex) {
-                sub.onError(ex);
-            }
 
+                DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
+                storIOSQLite.lowLevel().setTransactionSuccessful();
+                sub.onSuccess(result);
+            } catch (Exception e) {
+                sub.onError(new Exception("wardrope wasn't deleted"));
+            } finally {
+                storIOSQLite.lowLevel().endTransaction();
+            }
         });
     }
 

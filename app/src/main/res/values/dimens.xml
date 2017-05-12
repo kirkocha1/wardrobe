@@ -6,5 +6,8 @@
     <dimen name="wardrope_icon_size">40dp</dimen>
     <dimen name="text_size">20sp</dimen>
     <dimen name="fab_btn_margin">25dp</dimen>
+    <dimen name="card_image_view_width">200dp</dimen>
+    <dimen name="card_image_view_height">200dp</dimen>
+
     <dimen name="design_fab_image_size" tools:override="true">34dp</dimen>
 </resources>

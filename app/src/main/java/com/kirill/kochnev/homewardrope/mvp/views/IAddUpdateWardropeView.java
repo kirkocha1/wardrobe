@@ -13,8 +13,6 @@ public interface IAddUpdateWardropeView extends MvpView {
 
     void setCount(int count);
 
-    void addThingId(long id);
-
     void initView(Wardrope wardrope);
 
     void onSave();

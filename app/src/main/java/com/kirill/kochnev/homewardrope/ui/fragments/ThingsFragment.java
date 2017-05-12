@@ -1,6 +1,5 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,10 +10,8 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
-import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
+import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.ThingsAdapter;
@@ -37,8 +34,6 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
     private ViewMode mode;
     private long wardropeId;
     private boolean isEdit;
-    private IAddUpdateWardropeView wardropeView;
-    private IFirstStepCreationLookView lookCreationView;
 
     public static ThingsFragment createInstance(ViewMode mode, boolean isEdit, long wardropeId) {
         ThingsFragment fragment = new ThingsFragment();
@@ -89,34 +84,6 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
         adapter.clear();
         presenter.updateModeState(mode);
     }
-
-    @Override
-    public void addThingId(long id) {
-        if (wardropeView != null) {
-            wardropeView.addThingId(id);
-        } else {
-            lookCreationView.addThingId(id);
-        }
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof IAddUpdateWardropeView) {
-            wardropeView = (IAddUpdateWardropeView) context;
-        } else if (context instanceof IFirstStepCreationLookView) {
-            lookCreationView = (IFirstStepCreationLookView) context;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        wardropeView = null;
-        lookCreationView = null;
-    }
-
 
     @Override
     public void setEditMode(boolean isEditMode) {
