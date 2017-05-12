@@ -7,6 +7,7 @@ import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
@@ -54,37 +55,40 @@ public class ThingRepository extends AbstractThingRepository {
     }
 
     @Override
-    public Single<Boolean> deletItem(Thing model) {
-        return super.deletItem(model).map(b -> {
-            storIOSQLite.delete().byQuery(DeleteQuery.builder()
-                    .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
-                    .where(ThingsWardropesTable.THINGS_WARDROPES_THING_ID + "=?")
-                    .whereArgs(model.getId()).build())
-                    .prepare()
-                    .executeAsBlocking();
-            return b;
+    public Single<DeleteResult> deletItem(Thing model) {
+        return Single.create(sub -> {
+            storIOSQLite.lowLevel().beginTransaction();
+            try {
+                storIOSQLite.delete().byQuery(DeleteQuery.builder()
+                        .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
+                        .where(ThingsWardropesTable.THINGS_WARDROPES_THING_ID + "=?")
+                        .whereArgs(model.getId()).build())
+                        .prepare()
+                        .executeAsBlocking();
+                DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
+                storIOSQLite.lowLevel().setTransactionSuccessful();
+                sub.onSuccess(result);
+            } catch (Exception e) {
+                sub.onError(new Exception("thing wasn't delete"));
+            } finally {
+                storIOSQLite.lowLevel().endTransaction();
+            }
         });
     }
 
     @Override
     public Single<List<Thing>> query(ISpecification filterSpecification) {
         return Single.create(sub -> {
-            try {
-                List<Thing> models;
-                PreparedGetListOfObjects.Builder<Thing> builder = storIOSQLite.get().listOfObjects(getEntityClass());
-                if (filterSpecification.isRow()) {
-                    models = builder.withQuery(filterSpecification.getRawQueryStatement()
-                            .build()).prepare().executeAsBlocking();
-                } else {
-                    models = builder.withQuery(filterSpecification.getQueryStatement()
-                            .build()).prepare().executeAsBlocking();
-                }
-
-                sub.onSuccess(new ArrayList<>(models));
-
-            } catch (Exception ex) {
-                sub.onError(new Exception("nothing to load"));
+            List<Thing> models;
+            PreparedGetListOfObjects.Builder<Thing> builder = storIOSQLite.get().listOfObjects(getEntityClass());
+            if (filterSpecification.isRow()) {
+                models = builder.withQuery(filterSpecification.getRawQueryStatement()
+                        .build()).prepare().executeAsBlocking();
+            } else {
+                models = builder.withQuery(filterSpecification.getQueryStatement()
+                        .build()).prepare().executeAsBlocking();
             }
+            sub.onSuccess(new ArrayList<>(models));
         });
     }
 

@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.repositories.interfaces.IRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -56,13 +57,13 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     public abstract String getTableName();
 
     @Override
-    public Single<Boolean> putItem(M model) {
+    public Single<PutResult> putItem(M model) {
         return Single.create(sub -> {
-            try {
-                PutResult res = storIOSQLite.put().object(model).prepare().executeAsBlocking();
-                sub.onSuccess(true);
-            } catch (Exception ex) {
-                sub.onError(ex);
+            PutResult res = storIOSQLite.put().object(model).prepare().executeAsBlocking();
+            if (res.wasInserted()) {
+                sub.onSuccess(res);
+            } else {
+                sub.onError(new Exception("model wasn't inserted"));
             }
         });
     }
@@ -84,16 +85,17 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     }
 
 
-    public Single<Boolean> deletItem(M model) {
+    public Single<DeleteResult> deletItem(M model) {
         return Single.create(sub -> {
-            try {
-                storIOSQLite.delete().object(model).prepare().executeAsBlocking();
-                sub.onSuccess(true);
-            } catch (Exception ex) {
-                sub.onError(ex);
+            DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
+            if (result.numberOfRowsDeleted() != 0) {
+                sub.onSuccess(result);
+            } else {
+                sub.onError(new Exception("no row was deleted"));
             }
         });
     }
+
 
 
 }

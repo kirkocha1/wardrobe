@@ -5,6 +5,7 @@ import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardropeSpecification;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ThingsInteractor implements IThingInteractor {
     }
 
     @Override
-    public Single<Boolean> deleteThings(Thing model) {
+    public Single<DeleteResult> deleteThings(Thing model) {
         return things.deletItem(model);
     }
 
