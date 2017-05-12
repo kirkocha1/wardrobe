@@ -26,7 +26,7 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     protected ILooksInteractor interactor;
 
     public UpdateLookPresenter(long lookId) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getLookComponent().inject(this);
         init(lookId);
     }
 

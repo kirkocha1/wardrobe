@@ -29,7 +29,7 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     ILooksInteractor interactor;
 
     public CreationLookPresenter(long id) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getLookComponent().inject(this);
     }
 
     public void addThingId(long id) {

@@ -60,7 +60,7 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     public Single<PutResult> putItem(M model) {
         return Single.create(sub -> {
             PutResult res = storIOSQLite.put().object(model).prepare().executeAsBlocking();
-            if (res.wasInserted()) {
+            if (res.wasInserted() || res.wasUpdated()) {
                 sub.onSuccess(res);
             } else {
                 sub.onError(new Exception("model wasn't inserted"));
@@ -95,7 +95,6 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
             }
         });
     }
-
 
 
 }

@@ -1,5 +1,8 @@
-package com.kirill.kochnev.homewardrope.di;
+package com.kirill.kochnev.homewardrope.di.components;
 
+import com.kirill.kochnev.homewardrope.di.modules.DbModule;
+import com.kirill.kochnev.homewardrope.di.modules.InteractorsModule;
+import com.kirill.kochnev.homewardrope.di.modules.RepositoryModule;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CollagePresenter;
@@ -21,6 +24,8 @@ import dagger.Component;
 @Component(modules = {RepositoryModule.class, DbModule.class, InteractorsModule.class})
 public interface AppComponent {
 
+    LookComponent plusComponent();
+
     void inject(AddUpdateWardropePresenter presenter);
 
     void inject(WardropesPresenter presenter);
@@ -28,13 +33,5 @@ public interface AppComponent {
     void inject(ThingsPresenter presenter);
 
     void inject(AddUpdateThingPresenter presenter);
-
-    void inject(LooksPresenter presenter);
-
-    void inject(CreationLookPresenter activity);
-
-    void inject(CollagePresenter presenter);
-
-    void inject(UpdateLookPresenter presenter);
 
 }

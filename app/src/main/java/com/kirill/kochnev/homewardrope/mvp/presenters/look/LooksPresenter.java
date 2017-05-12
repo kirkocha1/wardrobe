@@ -34,7 +34,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     ILooksInteractor interactor;
 
     public LooksPresenter(ViewMode mode, boolean isEdit, long wardropeId) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getLookComponent().inject(this);
         this.mode = mode;
         this.isEdit = isEdit;
         this.wardropeId = wardropeId;
@@ -69,5 +69,11 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     @Override
     public void onItemClick(IDbModel model) {
         getViewState().openUpdateActivity(UpdateLookActivity.createIntent(model.getId()));
+    }
+
+    @Override
+    public void onDestroy() {
+        WardropeApplication.clearLookComponent();
+        super.onDestroy();
     }
 }

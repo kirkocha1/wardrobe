@@ -8,6 +8,8 @@ import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +36,7 @@ public class LooksInteractor implements ILooksInteractor {
     }
 
     @Override
-    public Single<Boolean> deleteLook(Look model) {
+    public Single<DeleteResult> deleteLook(Look model) {
         return looks.deletItem(model);
     }
 
@@ -55,14 +57,14 @@ public class LooksInteractor implements ILooksInteractor {
     }
 
     @Override
-    public Single<Boolean> saveLook(String name, String tag) {
+    public Single<PutResult> saveLook(String name, String tag) {
         look.setName(name);
         look.setTag(tag);
         return looks.putItem(look);
     }
 
     @Override
-    public Single<Boolean> saveLookWithBitmap(String name, String tag, Bitmap bitmap) {
+    public Single<PutResult> saveLookWithBitmap(String name, String tag, Bitmap bitmap) {
         return Single.create(sub -> {
             try {
                 look.setName(name);

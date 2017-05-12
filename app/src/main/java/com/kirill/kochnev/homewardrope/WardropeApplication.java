@@ -5,9 +5,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.widget.ImageView;
 
-import com.kirill.kochnev.homewardrope.di.AppComponent;
-import com.kirill.kochnev.homewardrope.di.DaggerAppComponent;
-import com.kirill.kochnev.homewardrope.di.DbModule;
+import com.kirill.kochnev.homewardrope.di.components.AppComponent;
+import com.kirill.kochnev.homewardrope.di.components.DaggerAppComponent;
+import com.kirill.kochnev.homewardrope.di.components.LookComponent;
+import com.kirill.kochnev.homewardrope.di.modules.DbModule;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
@@ -17,6 +18,8 @@ public class WardropeApplication extends Application {
 
     public static final String TAG = "WardropeApplication";
     private static AppComponent component;
+    private static LookComponent lookComponent;
+
     private static Context context;
     private static Picasso picasso;
 
@@ -32,6 +35,17 @@ public class WardropeApplication extends Application {
 
     private AppComponent buildComponent() {
         return DaggerAppComponent.builder().dbModule(new DbModule(this)).build();
+    }
+
+    public static LookComponent getLookComponent() {
+        if (lookComponent == null) {
+            lookComponent = component.plusComponent();
+        }
+        return lookComponent;
+    }
+
+    public static void clearLookComponent() {
+        lookComponent = null;
     }
 
     public static void loadImage(String url, ImageView imageView) {

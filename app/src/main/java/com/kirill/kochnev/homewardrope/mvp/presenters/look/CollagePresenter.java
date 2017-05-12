@@ -33,7 +33,7 @@ public class CollagePresenter extends BaseMvpPresenter<ICollageView> {
 
 
     public CollagePresenter(HashSet<Long> thingIds) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getLookComponent().inject(this);
         interactor.getImages(thingIds).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cache -> {

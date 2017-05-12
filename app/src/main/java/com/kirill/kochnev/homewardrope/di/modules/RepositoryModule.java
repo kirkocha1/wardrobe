@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.di;
+package com.kirill.kochnev.homewardrope.di.modules;
 
 import com.kirill.kochnev.homewardrope.repositories.LookRepository;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;

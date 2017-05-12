@@ -10,6 +10,7 @@ import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class AddUpdateThingsInteractor implements IAddUpdateThingsInteractor {
     }
 
     @Override
-    public Single<Boolean> saveThing(String name, String tag) {
+    public Single<PutResult> saveThing(String name, String tag) {
         thing.setName(name);
         thing.setTag(tag);
         return things.putItem(thing);

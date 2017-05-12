@@ -94,7 +94,6 @@ public class WardropeRepository extends AbstractWardropeRepository {
             } finally {
                 storIOSQLite.lowLevel().endTransaction();
             }
-
         });
     }
 

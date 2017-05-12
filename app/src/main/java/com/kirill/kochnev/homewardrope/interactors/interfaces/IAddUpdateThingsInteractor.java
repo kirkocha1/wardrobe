@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
 import io.reactivex.Single;
 
@@ -15,7 +16,7 @@ public interface IAddUpdateThingsInteractor {
 
     Single<Thing> getThing(long id);
 
-    Single<Boolean> saveThing(String name, String tag);
+    Single<PutResult> saveThing(String name, String tag);
 
     Single<Uri> getPhotoUri();
 
