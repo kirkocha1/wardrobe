@@ -22,12 +22,19 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
 
     public static final String TAG = "UpdateLookPresenter";
 
+    private long lookId;
     @Inject
     protected ILooksInteractor interactor;
 
     public UpdateLookPresenter(long lookId) {
         WardropeApplication.getLookComponent().inject(this);
+        this.lookId = lookId;
+    }
+
+    @Override
+    public void attachView(IUpdateLook view) {
         init(lookId);
+        super.attachView(view);
     }
 
     private void init(long lookId) {

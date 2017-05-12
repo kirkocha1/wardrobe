@@ -43,8 +43,4 @@ public class InteractorsModule {
         return new WardropesInteractor(repository);
     }
 
-    @Provides
-    ICollageInteractor provideCollageInteractor(AbstractThingRepository repository) {
-        return new CollageInteractor(repository);
-    }
 }

@@ -8,7 +8,6 @@ import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.ICollageInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 
 import java.util.HashSet;
 
@@ -25,12 +24,9 @@ import io.reactivex.schedulers.Schedulers;
 public class CollagePresenter extends BaseMvpPresenter<ICollageView> {
 
     public static final String TAG = "CollagePresenter";
-    @Inject
-    protected AbstractThingRepository things;
 
     @Inject
     protected ICollageInteractor interactor;
-
 
     public CollagePresenter(HashSet<Long> thingIds) {
         WardropeApplication.getLookComponent().inject(this);
