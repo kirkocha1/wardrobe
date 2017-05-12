@@ -37,7 +37,6 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     private boolean isEdit;
     private ViewMode viewMode;
 
-
     @Inject
     protected IdBus bus;
 
