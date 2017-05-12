@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.utils;
+package com.kirill.kochnev.homewardrope.utils.interfaces;
 
 import android.content.Intent;
 

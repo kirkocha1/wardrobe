@@ -12,8 +12,6 @@ import java.util.HashSet;
 
 public interface IThingsView extends IPaginationView<Thing> {
 
-    void addThingId(long id);
-
     void addThingIdsToAdapter(HashSet<Long> set);
 
     void setEditMode(boolean isEditMode);

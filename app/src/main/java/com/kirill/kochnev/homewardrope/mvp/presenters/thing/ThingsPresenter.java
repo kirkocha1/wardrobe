@@ -12,6 +12,7 @@ import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
+import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     private long filterId = AppConstants.DEFAULT_ID;
     private boolean isEdit;
     private ViewMode viewMode;
+
+
+    @Inject
+    protected IdBus bus;
 
     @Inject
     protected IThingInteractor interactor;
@@ -81,9 +86,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
             unsubscribeOnDestroy(interactor.deleteThings((Thing) model)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(isDel -> {
-                        getViewState().notifyListChanges((Thing) model);
-                    }));
+                    .subscribe(result -> getViewState().notifyListChanges((Thing) model)));
         }
     }
 
@@ -95,7 +98,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     private void resolveClick(Thing thing) {
         if (viewMode != ViewMode.THING_MODE && isEdit) {
-            getViewState().addThingId(thing.getId());
+            bus.passData(thing.getId());
         } else {
             getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
         }

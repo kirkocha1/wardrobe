@@ -23,6 +23,7 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     public static final String TAG = "UpdateLookPresenter";
 
     private long lookId;
+
     @Inject
     protected ILooksInteractor interactor;
 

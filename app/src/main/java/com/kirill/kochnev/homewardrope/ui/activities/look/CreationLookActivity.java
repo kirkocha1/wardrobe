@@ -144,11 +144,6 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     }
 
     @Override
-    public void addThingId(long id) {
-        presenter.addThingId(id);
-    }
-
-    @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
         initFragment(CollageFragment.createInstance(thingIds), CreationLookState.COLLAGE.toString());
     }

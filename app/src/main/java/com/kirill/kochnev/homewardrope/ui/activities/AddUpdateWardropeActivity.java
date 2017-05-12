@@ -112,11 +112,6 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     }
 
     @Override
-    public void addThingId(long id) {
-        presenter.addThingId(id);
-    }
-
-    @Override
     public void initView(Wardrope wardrope) {
         setTitleText(wardrope.getName() == null ? "нет названия" : wardrope.getName());
         countView.setText(wardrope.getThingIds().size() + "");

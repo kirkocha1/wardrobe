@@ -7,6 +7,7 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import java.util.HashSet;
 
@@ -26,6 +27,9 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     private boolean isEditableMode = false;
 
     @Inject
+    IdBus bus;
+
+    @Inject
     IAddUpdateWardropeInteractor interactor;
 
     private HashSet<Long> thingsSet = new HashSet<>();
@@ -35,22 +39,31 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
         initWardrope(id);
     }
 
+    @Override
+    public void attachView(IAddUpdateWardropeView view) {
+        super.attachView(view);
+    }
+
     private void initWardrope(long id) {
+        registerForThingIds();
         unsubscribeOnDestroy(interactor.getWardrope(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ward -> {
                     thingsSet = ward.getThingIds();
                     getViewState().initView(ward);
+
                 }, e -> Log.e(TAG, e.getMessage())));
     }
 
-    public void addThingId(long id) {
-        int length = thingsSet.size();
-        thingsSet.add(id);
-        if (length == thingsSet.size()) {
-            thingsSet.remove(id);
-        }
-        getViewState().setCount(thingsSet.size());
+    private void registerForThingIds() {
+        unsubscribeOnDestroy(bus.register(id -> {
+            int length = thingsSet.size();
+            thingsSet.add(id);
+            if (length == thingsSet.size()) {
+                thingsSet.remove(id);
+            }
+            getViewState().setCount(thingsSet.size());
+        }));
     }
 
     public void toggleMode() {

@@ -3,7 +3,6 @@ package com.kirill.kochnev.homewardrope.repositories.utils;
 import android.util.Log;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.db.tables.ThingsTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
 import com.pushtorefresh.storio.sqlite.queries.Query;
@@ -36,24 +35,17 @@ public class ThingsByWardropeSpecification implements ISpecification {
             return result;
         }
 
-        String select = ThingsTable.THINGS_TABLE + "." + ThingsTable._ID + ", "
-                + ThingsTable.THINGS_TABLE + "." + WardropeSqlHelper.CREATION_DATE + ", "
-                + ThingsTable.THINGS_TABLE + "." + ThingsTable.THING_NAME + ", "
-                + ThingsTable.THINGS_TABLE + "." + ThingsTable.THING_TAG + ", "
-                + ThingsTable.THINGS_TABLE + "." + ThingsTable.THING_FULL_IMAGE_PATH + ", "
-                + ThingsTable.THINGS_TABLE + "." + ThingsTable.THING_ICON_IMAGE_PATH;
-
         String join = "JOIN " + ThingsWardropesTable.THINGS_WARDROPES_TABLE +
                 " ON " + ThingsWardropesTable.THINGS_WARDROPES_THING_ID + " = " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID;
 
         String where = "WHERE " + ThingsWardropesTable.THINGS_WARDROPES_TABLE + "."
                 + ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + " = " + wardropeId;
         if (id == -1) {
-            result = "SELECT " + select + " FROM " + ThingsTable.THINGS_TABLE + " " + join + " " + where +
+            result = "SELECT " + ThingsTable.THINGS_TABLE + ".*" + " FROM " + ThingsTable.THINGS_TABLE + " " + join + " " + where +
                     " ORDER BY " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID +
                     " LIMIT " + LIMIT;
         } else {
-            result = "SELECT " + select + " FROM " + ThingsTable.THINGS_TABLE + " " + join + " " + where +
+            result = "SELECT " + ThingsTable.THINGS_TABLE + ".*" + " FROM " + ThingsTable.THINGS_TABLE + " " + join + " " + where +
                     " AND " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID + " > " + id +
                     " ORDER BY " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID +
                     " LIMIT " + LIMIT;
