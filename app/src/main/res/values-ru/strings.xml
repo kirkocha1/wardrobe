@@ -6,5 +6,6 @@
 
     <string name="yes">да</string>
     <string name="no">нет</string>
+    <string name="name_hint">имя</string>
 
 </resources>
