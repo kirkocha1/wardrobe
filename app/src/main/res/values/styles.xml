@@ -11,8 +11,7 @@
 
     <style name="CardViewStyle">
         <item name="cardCornerRadius">2dp</item>
-        <item name="contentPadding">2dp</item>
-        <item name="cardBackgroundColor">@color/lead</item>
+        <item name="cardBackgroundColor">@color/white_wash</item>
     </style>
 
     <style name="EditTextStyle">

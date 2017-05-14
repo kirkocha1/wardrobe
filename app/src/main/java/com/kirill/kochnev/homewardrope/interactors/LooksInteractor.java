@@ -37,6 +37,7 @@ public class LooksInteractor implements ILooksInteractor {
 
     @Override
     public Single<DeleteResult> deleteLook(Look model) {
+        ImageHelper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
         return looks.deletItem(model);
     }
 

@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.utils.interfaces.ILoader;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,6 +21,9 @@ import butterknife.ButterKnife;
  */
 
 public class WardropeItemView extends FrameLayout {
+
+    @Inject
+    ILoader imageLoader;
 
     @BindView(R.id.wardrope_icon)
     ImageView pic;
@@ -42,6 +48,7 @@ public class WardropeItemView extends FrameLayout {
     }
 
     private void initUi(Context context) {
+        WardropeApplication.getComponent().inject(this);
         LayoutInflater.from(context).inflate(R.layout.wardrope_item_view, this, true);
         ButterKnife.bind(this);
     }
@@ -51,7 +58,7 @@ public class WardropeItemView extends FrameLayout {
     }
 
     public void setImage(String filePath) {
-        WardropeApplication.loadImage(filePath, pic);
+        imageLoader.loadImage(filePath, pic);
     }
 
     public void setThingsCount(int thingsCount) {

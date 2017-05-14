@@ -99,4 +99,9 @@ public class ImageHelper {
         return inSampleSize;
     }
 
+    public static void deleteImage(String... paths) {
+        for (String path : paths) {
+            new File(path).delete();
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardropeSpecification;
+import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 
 import java.util.HashSet;
@@ -41,6 +42,7 @@ public class ThingsInteractor implements IThingInteractor {
 
     @Override
     public Single<DeleteResult> deleteThings(Thing model) {
+        ImageHelper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
         return things.deletItem(model);
     }
 

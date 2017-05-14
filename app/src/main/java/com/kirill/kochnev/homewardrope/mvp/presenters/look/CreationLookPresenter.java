@@ -80,4 +80,9 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        WardropeApplication.clearLookComponent();
+    }
 }
