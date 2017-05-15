@@ -11,7 +11,7 @@ import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 @StateStrategyType(SkipStrategy.class)
 public interface IAddUpdateWardropeView extends MvpView {
 
-    void setCount(int count);
+    void setCount(int thingsCount, int looksCount);
 
     void initView(Wardrope wardrope);
 

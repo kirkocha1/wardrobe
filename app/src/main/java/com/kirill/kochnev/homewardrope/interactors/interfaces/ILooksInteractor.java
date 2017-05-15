@@ -19,6 +19,8 @@ public interface ILooksInteractor {
 
     Single<List<Look>> getLooks(long id);
 
+    Single<List<Look>> getLooksByWardrope(long id, long filterId);
+
     Single<DeleteResult> deleteLook(Look model);
 
     Single<Look> getLook(long id);
@@ -32,6 +34,8 @@ public interface ILooksInteractor {
     Single<Look> getLook();
 
     void addThingId(long id);
+
+    void addWardropeId(long id);
 
     void clear();
 }

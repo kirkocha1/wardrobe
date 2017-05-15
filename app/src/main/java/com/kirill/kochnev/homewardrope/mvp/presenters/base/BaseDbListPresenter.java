@@ -3,6 +3,16 @@ package com.kirill.kochnev.homewardrope.mvp.presenters.base;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by Kirill Kochnev on 12.02.17.
  */
@@ -33,5 +43,9 @@ public abstract class BaseDbListPresenter<V extends IPaginationView> extends Bas
 
     }
 
-
+    public <T> Disposable getListDisposable(Single<List<T>> obsevable, @NotNull Consumer<List<T>> onSuccess, @NotNull Consumer<Throwable> onError) {
+        return obsevable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onSuccess, onError);
+    }
 }

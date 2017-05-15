@@ -3,6 +3,8 @@ package com.kirill.kochnev.homewardrope.interactors.interfaces;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 
 import io.reactivex.Single;
@@ -15,5 +17,5 @@ public interface IAddUpdateWardropeInteractor {
 
     Single<Wardrope> getWardrope(long id);
 
-    Single<PutResult> saveWardrope(String name, HashSet<Long> thingIds);
+    Single<PutResult> saveWardrope(String name, @NotNull HashSet<Long> thingIds, @NotNull HashSet<Long> lookIds);
 }

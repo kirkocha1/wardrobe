@@ -16,6 +16,8 @@ import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,6 +25,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**

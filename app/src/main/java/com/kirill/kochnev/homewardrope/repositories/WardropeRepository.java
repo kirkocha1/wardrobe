@@ -1,7 +1,9 @@
 package com.kirill.kochnev.homewardrope.repositories;
 
+import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.tables.LooksTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
@@ -11,6 +13,7 @@ import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio.sqlite.queries.RawQuery;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +32,7 @@ public class WardropeRepository extends AbstractWardropeRepository {
     }
 
     @Override
-    public Single<PutResult> putWardropeWithThings(Wardrope wardrope, HashSet<Long> thingIds) {
+    public Single<PutResult> putWardropeWithRelations(Wardrope wardrope, HashSet<Long> thingIds, HashSet<Long> lookIds) {
         return Single.create(sub -> {
             storIOSQLite.lowLevel().beginTransaction();
             try {
@@ -41,9 +44,21 @@ public class WardropeRepository extends AbstractWardropeRepository {
                             .build())
                             .prepare()
                             .executeAsBlocking();
+                    storIOSQLite.delete().byQuery(DeleteQuery.builder()
+                            .table(LooksTable.LOOKS_TABLE)
+                            .where(LooksTable.LOOK_WARDROPE_ID + "=?")
+                            .whereArgs(wardrope.getId())
+                            .build()).prepare().executeAsBlocking();
                 }
+
                 PutResult result = storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
                 Long wardropeId = result.wasInserted() ? result.insertedId() : wardrope.getId();
+
+                storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
+                        .query("UPDATE " + LooksTable.LOOKS_TABLE +
+                                " SET " + LooksTable.LOOK_WARDROPE_ID + " = " + wardropeId +
+                                " WHERE " + LooksTable._ID + " IN (" + wardrope.getLookIdsString() + ")").build());
+
                 List<ThingsWardropes> thingsWardropes = new ArrayList<>();
                 for (Long id : thingIds) {
                     thingsWardropes.add(new ThingsWardropes(wardropeId, id));
@@ -59,6 +74,7 @@ public class WardropeRepository extends AbstractWardropeRepository {
         });
     }
 
+    //Get wardrobe and fill it with isd of things and looks
     @Override
     public Single<Wardrope> getItem(long id) {
         return super.getItem(id).map(wardrope -> {
@@ -66,7 +82,19 @@ public class WardropeRepository extends AbstractWardropeRepository {
                     .withQuery(Query.builder().table(ThingsWardropesTable.THINGS_WARDROPES_TABLE).build())
                     .prepare()
                     .executeAsBlocking();
+            List<Look> looks = storIOSQLite.get().listOfObjects(Look.class)
+                    .withQuery(Query.builder().table(LooksTable.LOOKS_TABLE)
+                            .where(LooksTable.LOOK_WARDROPE_ID + "=?")
+                            .whereArgs(id + "").build())
+                    .prepare()
+                    .executeAsBlocking();
+
+            wardrope.setLookIds(new HashSet<>());
             wardrope.setThingIds(new HashSet<>());
+            for (Look look : looks) {
+                wardrope.getLookIds().add(look.getId());
+            }
+
             for (ThingsWardropes thingsWardrope : thingsWardropes) {
                 if (id == thingsWardrope.getWardropeId()) {
                     wardrope.getThingIds().add(thingsWardrope.getThingId());

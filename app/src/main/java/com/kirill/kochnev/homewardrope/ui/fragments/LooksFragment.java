@@ -9,14 +9,16 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
+
+import java.util.HashSet;
 
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
@@ -50,7 +52,6 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     }
 
 
-
     @Override
     public BaseDbAdapter<Look, LookHolder> initAdapter() {
         return new LooksAdapter();
@@ -66,5 +67,16 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
         setTitle(R.string.looks_title);
         addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), CreationLookActivity.class)));
         addBtn.setActivated(true);
+    }
+
+    @Override
+    public void setEditMode(boolean isEditMode) {
+        adapter.clear();
+        ((LooksAdapter) adapter).setEdit(isEditMode);
+    }
+
+    @Override
+    public void addIdsToAdapter(HashSet<Long> set) {
+        ((LooksAdapter) adapter).setIds(set);
     }
 }

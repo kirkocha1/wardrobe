@@ -4,8 +4,10 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.LooksThings;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
+import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 
@@ -25,6 +27,17 @@ public class LookRepository extends AbstractLookRepository {
     }
 
     @Override
+    public Single<List<Look>> query(ISpecification filterSpecification) {
+        return Single.create(sub -> {
+            List<Look> models;
+            PreparedGetListOfObjects.Builder<Look> builder = storIOSQLite.get().listOfObjects(getEntityClass());
+            models = builder.withQuery(filterSpecification.getQueryStatement()
+                    .build()).prepare().executeAsBlocking();
+            sub.onSuccess(new ArrayList<>(models));
+        });
+    }
+
+    @Override
     public Single<PutResult> putItem(Look model) {
         return Single.create(sub -> {
             PutResult result;
@@ -40,6 +53,7 @@ public class LookRepository extends AbstractLookRepository {
                             .executeAsBlocking();
                 }
                 result = storIOSQLite.put().object(model).prepare().executeAsBlocking();
+
                 if (model.getThingIds().size() != 0) {
                     List<LooksThings> looksThings = new ArrayList<>();
                     model.setId(model.getId() != null ? model.getId() : result.insertedId());

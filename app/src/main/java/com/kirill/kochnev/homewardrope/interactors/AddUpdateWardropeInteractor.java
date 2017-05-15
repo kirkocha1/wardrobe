@@ -29,9 +29,10 @@ public class AddUpdateWardropeInteractor implements IAddUpdateWardropeInteractor
     }
 
     @Override
-    public Single<PutResult> saveWardrope(String name, HashSet<Long> thingIds) {
+    public Single<PutResult> saveWardrope(String name, HashSet<Long> thingIds, HashSet<Long> lookIds) {
         wardrope.setName(name);
         wardrope.setThingsCount(thingIds.size());
-        return wardropes.putWardropeWithThings(wardrope, thingIds);
+        wardrope.setLooksCount(lookIds.size());
+        return wardropes.putWardropeWithRelations(wardrope, thingIds, lookIds);
     }
 }

@@ -18,7 +18,7 @@
         />
 
     <LinearLayout
-        android:id="@+id/photo_buttons"
+        android:id="@+id/things_by_wardrope"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/new_wardrope_name"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/wardropes_selected" />
+            android:text="@string/thing_by_wardrope_selected" />
 
         <TextView
             android:id="@+id/things_count"
@@ -41,12 +41,37 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/looks_by_wardrope_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/things_by_wardrope">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/looks_by_wardrope_selected" />
+
+        <TextView
+            android:id="@+id/looks_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0" />
+
+
+    </LinearLayout>
+
+
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/photo_buttons" >
+        android:layout_below="@+id/looks_by_wardrope_count" >
 
         <android.support.v4.view.PagerTitleStrip
             android:id="@+id/pager_title_strip"

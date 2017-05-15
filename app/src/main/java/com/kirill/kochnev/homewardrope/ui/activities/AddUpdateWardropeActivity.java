@@ -15,7 +15,6 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardrope
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardropePagerAdapter;
-import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -42,14 +41,15 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     EditText name;
 
     @BindView(R.id.things_count)
-    TextView countView;
+    TextView thingsCount;
+
+    @BindView(R.id.looks_count)
+    TextView looksCount;
 
     @InjectPresenter
     AddUpdateWardropePresenter presenter;
 
     private long wardropeId;
-
-    private ThingsFragment fragment;
 
     @ProvidePresenter
     AddUpdateWardropePresenter providePresenter() {
@@ -99,14 +99,15 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     }
 
     @Override
-    public void setCount(int count) {
-        countView.setText("" + count);
+    public void setCount(int thingsCount, int looksCount) {
+        this.thingsCount.setText(thingsCount + "");
+        this.looksCount.setText(looksCount + "");
     }
 
     @Override
     public void initView(Wardrope wardrope) {
         setTitleText(wardrope.getName() == null ? "нет названия" : wardrope.getName());
-        countView.setText(wardrope.getThingIds().size() + "");
+        setCount(wardrope.getThingsCount(), wardrope.getLooksCount());
         name.setText(wardrope.getName());
     }
 
