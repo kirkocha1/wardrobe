@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.thing;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
@@ -13,6 +14,7 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
+import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
 import java.util.List;
 
@@ -38,7 +40,10 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     private ViewMode viewMode;
 
     @Inject
-    protected IdBus bus;
+    protected IdBus idBus;
+
+    @Inject
+    protected StateBus stateBus;
 
     @Inject
     protected IThingInteractor interactor;
@@ -53,6 +58,9 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         viewMode = mode;
         this.filterId = wardropeId;
         getViewState().setEditMode(isEdit);
+        stateBus.register(statePair -> {
+            updateModeState(statePair.second);
+        });
     }
 
     public void refreshList() {
@@ -97,7 +105,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
 
     private void resolveClick(Thing thing) {
         if (viewMode != ViewMode.THING_MODE && isEdit) {
-            bus.passData(thing.getId());
+            idBus.passData(new Pair<>(ViewMode.THING_MODE, thing.getId()));
         } else {
             getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
         }

@@ -1,13 +1,16 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.wardrope;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
+import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
 import java.util.HashSet;
 
@@ -27,7 +30,10 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     private boolean isEditableMode = false;
 
     @Inject
-    IdBus bus;
+    IdBus idBus;
+
+    @Inject
+    StateBus stateBus;
 
     @Inject
     IAddUpdateWardropeInteractor interactor;
@@ -56,7 +62,8 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     }
 
     private void registerForThingIds() {
-        unsubscribeOnDestroy(bus.register(id -> {
+        unsubscribeOnDestroy(idBus.register(pairId -> {
+            long id = pairId.second;
             int length = thingsSet.size();
             thingsSet.add(id);
             if (length == thingsSet.size()) {
@@ -68,7 +75,8 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
 
     public void toggleMode() {
         isEditableMode = !isEditableMode;
-        getViewState().changeFragmentMode(isEditableMode);
+        stateBus.passData(new Pair<>(ViewMode.WARDROPE_MODE, isEditableMode));
+        getViewState().changeBtnsMode(isEditableMode);
     }
 
     public void save(String name) {

@@ -5,8 +5,8 @@ import android.util.Pair;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 
 /**
- * Created by kirill on 12.05.17.
+ * Created by Kirill Kochnev on 15.05.17.
  */
 
-public interface IdBus extends IBus<Pair<ViewMode, Long>> {
+public interface StateBus extends IBus<Pair<ViewMode, Boolean>> {
 }

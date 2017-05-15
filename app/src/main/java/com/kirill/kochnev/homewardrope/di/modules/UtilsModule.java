@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.utils.ImageLoader;
+import com.kirill.kochnev.homewardrope.utils.bus.EditStateBus;
+import com.kirill.kochnev.homewardrope.utils.bus.EntityIdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
-import com.kirill.kochnev.homewardrope.utils.bus.RxBus;
+import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 import com.kirill.kochnev.homewardrope.utils.interfaces.ILoader;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
@@ -24,8 +26,14 @@ public class UtilsModule {
 
     @Singleton
     @Provides
-    public IdBus provideRxBus() {
-        return new RxBus();
+    public IdBus provideIdBus() {
+        return new EntityIdBus();
+    }
+
+    @Singleton
+    @Provides
+    public StateBus provideRxBus() {
+        return new EditStateBus();
     }
 
     @Singleton

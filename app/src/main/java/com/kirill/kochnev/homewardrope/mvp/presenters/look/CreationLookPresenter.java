@@ -34,7 +34,7 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
 
     public CreationLookPresenter(long id) {
         WardropeApplication.getLookComponent().inject(this);
-        unsubscribeOnDestroy(bus.register(thingId -> interactor.addThingId(thingId)));
+        unsubscribeOnDestroy(bus.register(idPair -> interactor.addThingId(idPair.second)));
     }
 
     public void clearIds() {
