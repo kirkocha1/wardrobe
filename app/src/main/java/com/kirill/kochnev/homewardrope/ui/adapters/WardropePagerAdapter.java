@@ -15,9 +15,11 @@ import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 
 public class WardropePagerAdapter extends FragmentPagerAdapter {
 
-    Fragment fragment;
-    private long wardropeId;
+    public static final int LOOKS_FRAGMENT_ID = 1;
+    public static final int THINGS_FRAGMENT_ID = 0;
+    public static final int FRAGMENTS_COUNT = 2;
 
+    private long wardropeId;
 
     public WardropePagerAdapter(FragmentManager fm, long wardropeId) {
         super(fm);
@@ -28,10 +30,10 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         String name = null;
         switch (position) {
-            case 0:
+            case THINGS_FRAGMENT_ID:
                 name = "Вещи";
                 break;
-            case 1:
+            case LOOKS_FRAGMENT_ID:
                 name = "Образы";
                 break;
         }
@@ -40,19 +42,16 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Fragment result = null;
         switch (position) {
-            case 0:
-                if (fragment != null && fragment instanceof ThingsFragment ) {
-                    return fragment;
-                }
-                fragment = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardropeId == -1, wardropeId);
+            case THINGS_FRAGMENT_ID:
+                result = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, false, wardropeId);
                 break;
-            case 1:
-                fragment = new LooksFragment();
+            case LOOKS_FRAGMENT_ID:
+                result = LooksFragment.newInstance(ViewMode.WARDROPE_MODE, false, wardropeId);
                 break;
-
         }
-        return fragment;
+        return result;
     }
 
     @Override
@@ -62,6 +61,6 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return FRAGMENTS_COUNT;
     }
 }

@@ -2,19 +2,19 @@ package com.kirill.kochnev.homewardrope.ui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
-import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
+import com.kirill.kochnev.homewardrope.ui.adapters.WardropePagerAdapter;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
@@ -29,8 +29,8 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     public static final String WARDROPE_ID = "wardrope_id";
 
-    @BindView(R.id.frame_id)
-    FrameLayout frame;
+    @BindView(R.id.pager)
+    ViewPager pager;
 
     @BindView(R.id.wardrope_show_frame)
     FloatingActionButton select;
@@ -69,7 +69,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
         ButterKnife.bind(this, baseLayout);
         initBtns();
-        showFragment();
+        pager.setAdapter(new WardropePagerAdapter(getSupportFragmentManager(), wardropeId));
     }
 
     private void initBtns() {
@@ -91,19 +91,11 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         return false;
     }
 
-    private void showFragment() {
-        fragment = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardropeId == -1, wardropeId);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_id, fragment)
-                .commit();
-    }
-
     @Override
-    public void changeFragmentMode(boolean mode) {
+    public void changeBtnsMode(boolean mode) {
         save.setVisibility(mode ? View.VISIBLE : View.GONE);
         AnimationHelper.hideShowAnimation(save, !mode);
         name.setEnabled(mode);
-        fragment.setEditableMode(mode);
     }
 
     @Override
@@ -116,7 +108,6 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         setTitleText(wardrope.getName() == null ? "нет названия" : wardrope.getName());
         countView.setText(wardrope.getThingIds().size() + "");
         name.setText(wardrope.getName());
-
     }
 
     @Override
