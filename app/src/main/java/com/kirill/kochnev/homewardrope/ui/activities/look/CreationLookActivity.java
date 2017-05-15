@@ -38,6 +38,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     public static final String LOOK_ID = "look_id";
     public static final String WARDROPE_ID = "wardrope_id";
+
     @BindView(R.id.creation_look_main_container)
     LinearLayout root;
 

@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.utils.interfaces.ILoader;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +22,9 @@ import butterknife.ButterKnife;
  */
 
 public class ListItemView extends FrameLayout {
+
+    @Inject
+    ILoader imageLoader;
 
     @BindView(R.id.item_check_box)
     CheckBox box;
@@ -40,6 +46,7 @@ public class ListItemView extends FrameLayout {
     }
 
     private void initUi(Context context) {
+        WardropeApplication.getComponent().inject(this);
         LayoutInflater.from(context).inflate(R.layout.view_list_item, this, true);
         ButterKnife.bind(this);
     }
@@ -49,7 +56,7 @@ public class ListItemView extends FrameLayout {
     }
 
     public void setImage(String filePath) {
-        WardropeApplication.loadImage(filePath, pic);
+        imageLoader.loadImage(filePath, pic);
     }
 
     public void setBoxVisibility(boolean isVisible) {

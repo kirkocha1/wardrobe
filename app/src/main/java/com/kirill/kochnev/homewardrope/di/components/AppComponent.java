@@ -8,6 +8,8 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresen
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
+import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
+import com.kirill.kochnev.homewardrope.ui.views.WardropeItemView;
 
 import javax.inject.Singleton;
 
@@ -31,4 +33,7 @@ public interface AppComponent {
 
     void inject(AddUpdateThingPresenter presenter);
 
+    void inject(WardropeItemView view);
+
+    void inject(ListItemView view);
 }

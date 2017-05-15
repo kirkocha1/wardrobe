@@ -2,7 +2,6 @@ package com.kirill.kochnev.homewardrope.di.modules;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Pair;
 
 import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
 import com.kirill.kochnev.homewardrope.db.models.Look;
@@ -45,6 +44,11 @@ public class DbModule {
 
     public DbModule(Context context) {
         this.context = context;
+    }
+
+    @Provides
+    public Context provideContext() {
+        return context;
     }
 
     @Singleton

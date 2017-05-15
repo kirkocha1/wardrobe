@@ -37,7 +37,6 @@ public class Wardrope implements IDbModel {
     @StorIOSQLiteColumn(name = WARDROPE_LOOKS_COUNT)
     int looksCount;
 
-
     private HashSet<Long> thingIds;
 
     public Wardrope() {

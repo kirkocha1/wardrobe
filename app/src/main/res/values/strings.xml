@@ -5,6 +5,7 @@
     <string name="empty_list_text">Empty list</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
+    <string name="name_hint">name</string>
 
 
 </resources>
