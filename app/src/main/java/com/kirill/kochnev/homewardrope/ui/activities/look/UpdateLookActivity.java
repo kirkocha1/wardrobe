@@ -30,6 +30,7 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
 
     public static final String LOOK_ID = "look_id";
     public static final int UPDATE_LOOK_CODE = 2;
+
     @BindView(R.id.looks_show_frame)
     FloatingActionButton select;
 
@@ -103,6 +104,7 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
 
     @Override
     public void setLookData(Look look) {
+        setTitleText(look.getName());
         name.setText(look.getName());
         tag.setText(look.getTag());
         pic.setImageBitmap(makeImage(look.getFullImagePath()));

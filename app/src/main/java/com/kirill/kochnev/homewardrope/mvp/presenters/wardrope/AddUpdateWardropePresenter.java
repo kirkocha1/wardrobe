@@ -47,11 +47,6 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
         initWardrope(id);
     }
 
-    @Override
-    public void attachView(IAddUpdateWardropeView view) {
-        super.attachView(view);
-    }
-
     private void initWardrope(long id) {
         registerForThingIds();
         unsubscribeOnDestroy(interactor.getWardrope(id).subscribeOn(Schedulers.io())
@@ -100,7 +95,5 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
                     Log.d(TAG, "put wardrope");
                     getViewState().onSave();
                 }, e -> Log.e(TAG, e.getMessage())));
-
     }
-
 }

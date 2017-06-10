@@ -36,6 +36,7 @@ import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
 public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolder<M>> extends BaseActionBarFragment implements IPaginationView<M>, OnClick<M> {
 
     public static final String TAG = "BaseDbListFragment";
+    public int itemPosition;
 
     @BindView(R.id.list_items)
     protected RecyclerView list;
@@ -56,6 +57,18 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
         onCreationStart();
         super.onCreate(savedInstanceState);
     }
+//
+//    @Override
+//    public void onStop() {
+//        itemPosition = layoutManager.findFirstVisibleItemPosition();
+//        super.onStop();
+//    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (itemPosition < 0 && )
+//    }
 
     @Nullable
     @Override

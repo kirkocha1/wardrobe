@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
@@ -34,6 +35,9 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
 
     public CreationLookPresenter(long id) {
         WardropeApplication.getLookComponent().inject(this);
+        if (id == AppConstants.DEFAULT_ID) {
+            interactor.initializeLook();
+        }
         unsubscribeOnDestroy(bus.register(idPair -> {
             switch (idPair.first) {
                 case THING_MODE:
@@ -52,27 +56,28 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     }
 
     public void processLook(String name, String tag, Bitmap bitmap) {
-        interactor.saveLookWithBitmap(name, tag, bitmap)
+        unsubscribeOnDestroy(interactor.saveLookWithBitmap(name, tag, bitmap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(o -> getViewState().onSuccess(),
-                        e -> Log.e(TAG, e.getMessage()));
+                        e -> Log.e(TAG, e.getMessage())));
     }
 
     public void save() {
-        interactor.getLook().subscribe(look -> getViewState().showSaveDialog(look.getName(), look.getTag()),
-                e -> Log.e(TAG, e.getMessage()));
+        unsubscribeOnDestroy(interactor.getLook()
+                .subscribe(look -> getViewState().showSaveDialog(look.getName(), look.getTag()),
+                        e -> Log.e(TAG, e.getMessage())));
     }
 
     public void startCreationProcess() {
-        interactor.startCreation().subscribe(ids -> getViewState().openCollageFragment(ids),
+        unsubscribeOnDestroy(interactor.startCreation().subscribe(ids -> getViewState().openCollageFragment(ids),
                 e -> {
                     if (e instanceof LookExeception) {
                         getViewState().showError(((LookExeception) e).isNotEnough());
                     } else {
                         Log.e(TAG, e.getMessage());
                     }
-                });
+                }));
     }
 
     public void resolveBtnsState(CreationLookState state) {
@@ -88,11 +93,5 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
                 getViewState().setBtnsState(false, true, false);
                 break;
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        WardropeApplication.clearLookComponent();
     }
 }

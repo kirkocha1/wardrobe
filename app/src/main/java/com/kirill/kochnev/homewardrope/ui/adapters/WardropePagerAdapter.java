@@ -3,8 +3,10 @@ package com.kirill.kochnev.homewardrope.ui.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
+import com.kirill.kochnev.homewardrope.AppConstants;
+import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.ui.fragments.LooksFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
@@ -31,10 +33,10 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
         String name = null;
         switch (position) {
             case THINGS_FRAGMENT_ID:
-                name = "Вещи";
+                name = WardropeApplication.getContext().getString(R.string.things_title);
                 break;
             case LOOKS_FRAGMENT_ID:
-                name = "Образы";
+                name = WardropeApplication.getContext().getString(R.string.looks_title);
                 break;
         }
         return name;
@@ -45,18 +47,13 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
         Fragment result = null;
         switch (position) {
             case THINGS_FRAGMENT_ID:
-                result = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, false, wardropeId);
+                result = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardropeId == AppConstants.DEFAULT_ID, wardropeId);
                 break;
             case LOOKS_FRAGMENT_ID:
-                result = LooksFragment.newInstance(ViewMode.WARDROPE_MODE, false, wardropeId);
+                result = LooksFragment.newInstance(ViewMode.WARDROPE_MODE, wardropeId == AppConstants.DEFAULT_ID, wardropeId);
                 break;
         }
         return result;
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        return super.instantiateItem(container, position);
     }
 
     @Override

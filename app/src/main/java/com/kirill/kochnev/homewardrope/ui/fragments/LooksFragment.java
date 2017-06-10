@@ -1,7 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -40,17 +40,17 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
         return fragment;
     }
 
+    private ViewMode mode;
+
     @InjectPresenter
     LooksPresenter presenter;
 
     @ProvidePresenter
     LooksPresenter providePresenter() {
-        ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
         long wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
         boolean isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
         return new LooksPresenter(mode, isEdit, wardropeId);
     }
-
 
     @Override
     public BaseDbAdapter<Look, LookHolder> initAdapter() {
@@ -63,10 +63,19 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     }
 
     @Override
+    public void onCreationStart() {
+        super.onCreationStart();
+        mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
+    }
+
+    @Override
     public void onInitUi() {
-        setTitle(R.string.looks_title);
-        addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), CreationLookActivity.class)));
-        addBtn.setActivated(true);
+        if (mode == ViewMode.LOOK_MODE) {
+            setTitle(R.string.looks_title);
+        }
+        addBtn.setOnClickListener(v -> startActivity(CreationLookActivity.createIntent(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
+        addBtn.setActivated(mode == ViewMode.LOOK_MODE);
+        addBtn.setVisibility(mode == ViewMode.LOOK_MODE ? View.VISIBLE : View.GONE);
     }
 
     @Override

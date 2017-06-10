@@ -25,7 +25,6 @@ public class LookInteractorModule {
         return new LooksInteractor(repository);
     }
 
-    @LookScope
     @Provides
     ICollageInteractor provideCollageInteractor(AbstractThingRepository repository) {
         return new CollageInteractor(repository);

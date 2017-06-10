@@ -67,8 +67,8 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
             if (isEdit) {
                 unsubscribeOnDestroy(getListDisposable(interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
                         list -> {
-                            setIds(list);
                             getViewState().onLoadFinished(list);
+                            setIds(list);
                         },
                         e -> Log.e(TAG, e.getMessage())));
             } else {
@@ -80,7 +80,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     private void setIds(List<Look> list) {
         HashSet<Long> ids = new HashSet<>();
         for (Look look : list) {
-            if (look.getWardropeId() == filterId) {
+            if (look.getWardropeId() != null && look.getWardropeId() == filterId) {
                 ids.add(look.getId());
             }
         }

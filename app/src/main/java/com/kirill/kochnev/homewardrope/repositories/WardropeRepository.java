@@ -44,20 +44,19 @@ public class WardropeRepository extends AbstractWardropeRepository {
                             .build())
                             .prepare()
                             .executeAsBlocking();
-                    storIOSQLite.delete().byQuery(DeleteQuery.builder()
-                            .table(LooksTable.LOOKS_TABLE)
-                            .where(LooksTable.LOOK_WARDROPE_ID + "=?")
-                            .whereArgs(wardrope.getId())
-                            .build()).prepare().executeAsBlocking();
+
+                    storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
+                            .query(LooksTable.dropWardropeId(wardrope.getId()))
+                            .build());
+
                 }
 
                 PutResult result = storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
                 Long wardropeId = result.wasInserted() ? result.insertedId() : wardrope.getId();
-
+                wardrope.setLookIds(lookIds);
                 storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
-                        .query("UPDATE " + LooksTable.LOOKS_TABLE +
-                                " SET " + LooksTable.LOOK_WARDROPE_ID + " = " + wardropeId +
-                                " WHERE " + LooksTable._ID + " IN (" + wardrope.getLookIdsString() + ")").build());
+                        .query(LooksTable.updateWardropeId(wardrope.getLookIdsString(), wardropeId))
+                        .build());
 
                 List<ThingsWardropes> thingsWardropes = new ArrayList<>();
                 for (Long id : thingIds) {
@@ -100,6 +99,8 @@ public class WardropeRepository extends AbstractWardropeRepository {
                     wardrope.getThingIds().add(thingsWardrope.getThingId());
                 }
             }
+            wardrope.setLooksCount(looks.size());
+            wardrope.setThingsCount(wardrope.getThingIds().size());
             return wardrope;
         });
     }
@@ -113,6 +114,10 @@ public class WardropeRepository extends AbstractWardropeRepository {
                         .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
                         .where(ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + "=?")
                         .whereArgs(model.getId()).build()).prepare().executeAsBlocking();
+
+                storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
+                        .query(LooksTable.dropWardropeId(model.getId()))
+                        .build());
 
                 DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
                 storIOSQLite.lowLevel().setTransactionSuccessful();

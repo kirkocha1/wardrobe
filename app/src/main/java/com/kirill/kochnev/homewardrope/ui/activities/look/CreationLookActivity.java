@@ -78,7 +78,6 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         setTitleText(getString(R.string.looks_creation_title));
         ButterKnife.bind(this);
         container.setDrawingCacheEnabled(true);
-
         create.setOnClickListener(v -> presenter.startCreationProcess());
         save.setOnClickListener(v -> presenter.save());
         allThings.setOnClickListener(v -> {

@@ -67,7 +67,7 @@ dependencies {
 
     compile 'com.pushtorefresh.storio:sqlite-annotations:1.12.3'
     annotationProcessor 'com.pushtorefresh.storio:sqlite-annotations-processor:1.12.3'
-    compile 'com.pushtorefresh.storio:sqlite:1.12.3'
+    compile 'com.pushtorefresh.storio:sqlite:1.13.0'
 
 
 }

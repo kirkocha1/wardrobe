@@ -37,5 +37,7 @@ public interface ILooksInteractor {
 
     void addWardropeId(long id);
 
+    void initializeLook();
+
     void clear();
 }

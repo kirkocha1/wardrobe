@@ -5,6 +5,8 @@ import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardrope
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 
 import io.reactivex.Single;
@@ -29,7 +31,7 @@ public class AddUpdateWardropeInteractor implements IAddUpdateWardropeInteractor
     }
 
     @Override
-    public Single<PutResult> saveWardrope(String name, HashSet<Long> thingIds, HashSet<Long> lookIds) {
+    public Single<PutResult> saveWardrope(String name, @NotNull HashSet<Long> thingIds, @NotNull HashSet<Long> lookIds) {
         wardrope.setName(name);
         wardrope.setThingsCount(thingIds.size());
         wardrope.setLooksCount(lookIds.size());

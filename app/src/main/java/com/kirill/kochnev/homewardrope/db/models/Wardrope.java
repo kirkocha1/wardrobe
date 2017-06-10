@@ -83,6 +83,8 @@ public class Wardrope implements IDbModel {
         this.thingIds = thingIds;
     }
 
+
+    //Use this method in repository for updating looks with this id set
     public String getLookIdsString() {
         StringBuilder result = new StringBuilder();
         if (lookIds != null) {

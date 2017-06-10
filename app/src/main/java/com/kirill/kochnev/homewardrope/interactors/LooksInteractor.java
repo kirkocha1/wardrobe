@@ -118,6 +118,10 @@ public class LooksInteractor implements ILooksInteractor {
         look.setWardropeId(id);
     }
 
+    public void initializeLook() {
+        look = new Look();
+    }
+
     @Override
     public void clear() {
         if (look != null) {
