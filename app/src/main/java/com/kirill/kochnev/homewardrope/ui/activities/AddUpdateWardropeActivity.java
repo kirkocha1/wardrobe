@@ -93,7 +93,6 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void changeBtnsMode(boolean mode) {
-        save.setVisibility(mode ? View.VISIBLE : View.GONE);
         AnimationHelper.hideShowAnimation(save, !mode);
         name.setEnabled(mode);
     }
@@ -107,7 +106,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     @Override
     public void initView(Wardrope wardrope) {
         setTitleText(wardrope.getName() == null ? "нет названия" : wardrope.getName());
-        setCount(wardrope.getThingsCount(), wardrope.getLooksCount());
+        setCount(wardrope.getThingsCount(), wardrope.getLookIds().size());
         name.setText(wardrope.getName());
     }
 

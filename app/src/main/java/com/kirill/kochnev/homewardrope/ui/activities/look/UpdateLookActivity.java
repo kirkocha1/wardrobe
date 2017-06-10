@@ -15,6 +15,7 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
+import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,9 +67,8 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
         setBackButtonEnabled(true);
         setContentView(View.inflate(this, R.layout.activity_update_look, null));
         ButterKnife.bind(this, baseLayout);
-        changeBtnStatus(true);
         select.setOnClickListener(v -> {
-            boolean isVisible = save.getVisibility() != View.GONE;
+            boolean isVisible = save.getVisibility() != View.INVISIBLE;
             changeBtnStatus(isVisible);
         });
         save.setOnClickListener(v -> {
@@ -80,8 +80,8 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     }
 
     private void changeBtnStatus(boolean isVisible) {
-        save.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
-        captureBtn.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
+        AnimationHelper.hideShowAnimation(captureBtn, isVisible);
+        AnimationHelper.hideShowAnimation(save, isVisible);
         name.setEnabled(!isVisible);
         tag.setEnabled(!isVisible);
     }
