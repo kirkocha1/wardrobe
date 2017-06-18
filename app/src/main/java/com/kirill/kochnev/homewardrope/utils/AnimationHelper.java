@@ -23,6 +23,6 @@ public class AnimationHelper {
     public static void hideShowAnimation(View view, boolean isHide) {
         view.startAnimation(AnimationUtils.loadAnimation(WardropeApplication.getContext(),
                 isHide ? R.anim.add_btn_hide : R.anim.add_btn_show));
-        view.setVisibility(isHide ? View.GONE : View.VISIBLE);
+        view.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
     }
 }

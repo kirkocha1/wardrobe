@@ -31,7 +31,7 @@ public class CollageFragment extends BaseActionBarFragment implements ICollageVi
     public static final String THINGS_SET = "things_set";
 
     @BindView(R.id.collage_container)
-    CollageView conatiner;
+    CollageView container;
 
     @InjectPresenter
     CollagePresenter presenter;
@@ -60,6 +60,6 @@ public class CollageFragment extends BaseActionBarFragment implements ICollageVi
 
     @Override
     public void constructView(SparseArray<Bitmap> cache, CollageMode mode) {
-        conatiner.inflateItems(mode, cache);
+        container.inflateItems(mode, cache);
     }
 }

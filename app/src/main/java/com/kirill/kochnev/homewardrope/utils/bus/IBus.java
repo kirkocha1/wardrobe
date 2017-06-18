@@ -12,7 +12,7 @@ public interface IBus<T> {
 
     Observable<T> getBus();
 
-    void passData(T id);
+    void passData(T data);
 
     Disposable register(Consumer<T> listener);
 }

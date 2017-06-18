@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.mvp.presenters.wardrope;
 
 import android.content.Intent;
 import android.util.Log;
+import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
@@ -13,6 +14,7 @@ import com.kirill.kochnev.homewardrope.interactors.interfaces.IWardropesInteract
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
+import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
 
@@ -27,6 +29,9 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
 @InjectViewState
 public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     private static final String TAG = "WardropesPresenter";
+
+    @Inject
+    IdBus bus;
 
     @Inject
     IWardropesInteractor interactor;
@@ -71,6 +76,7 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
                 getViewState().openUpdateActivity(intent);
                 break;
             case LOOK_MODE:
+                bus.passData(new Pair<>(ViewMode.WARDROPE_MODE, model.getId()));
                 getViewState().setThingsByWardrope(model.getId());
                 break;
         }

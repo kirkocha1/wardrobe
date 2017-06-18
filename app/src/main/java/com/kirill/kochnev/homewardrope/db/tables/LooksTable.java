@@ -27,4 +27,17 @@ public class LooksTable implements BaseColumns {
             LOOK_WARDROPE_ID + " TEXT, " +
             "FOREIGN KEY (" + LOOK_WARDROPE_ID + ") REFERENCES " + WardropeTable.WARDROPE_TABLE + "(" + WardropeTable._ID + ")" +
             ")";
+
+    public static final String updateWardropeId(String range, Long wardropeId) {
+        return "UPDATE " + LooksTable.LOOKS_TABLE +
+                " SET " + LooksTable.LOOK_WARDROPE_ID + " = " + wardropeId +
+                " WHERE " + LooksTable._ID + " IN (" + range + ")";
+    }
+
+    public static final String dropWardropeId(Long wardropeId) {
+        return "UPDATE " + LooksTable.LOOKS_TABLE +
+                " SET " + LooksTable.LOOK_WARDROPE_ID + " = " + null +
+                " WHERE " + LooksTable.LOOK_WARDROPE_ID + " = " + wardropeId;
+    }
+
 }

@@ -18,7 +18,7 @@
         />
 
     <LinearLayout
-        android:id="@+id/photo_buttons"
+        android:id="@+id/things_by_wardrope"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/new_wardrope_name"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/wardropes_selected" />
+            android:text="@string/thing_by_wardrope_selected" />
 
         <TextView
             android:id="@+id/things_count"
@@ -41,13 +41,53 @@
 
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/frame_id"
+    <LinearLayout
+        android:id="@+id/looks_by_wardrope_count"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/photo_buttons" />
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/things_by_wardrope">
 
-    <RelativeLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/looks_by_wardrope_selected" />
+
+        <TextView
+            android:id="@+id/looks_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0" />
+
+
+    </LinearLayout>
+
+
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/looks_by_wardrope_count" >
+
+        <android.support.v4.view.PagerTitleStrip
+            android:id="@+id/pager_title_strip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:paddingTop="6dp"
+            android:textSize="18sp"
+            android:paddingBottom="6dp" />
+
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -59,21 +99,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:adjustViewBounds="true"
             android:src="@drawable/content_save"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/wardrope_show_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/save_wardrope"
-            android:adjustViewBounds="true"
             android:src="@drawable/pencil"
             app:fabSize="normal" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
 

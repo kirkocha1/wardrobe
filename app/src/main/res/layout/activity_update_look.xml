@@ -26,7 +26,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/photo_buttons"
+        android:id="@+id/things_by_wardrope"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -41,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/camera"
+            android:visibility="invisible"
             app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
@@ -49,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/content_save"
+            android:visibility="invisible"
             app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
@@ -58,7 +60,6 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:src="@drawable/pencil"
-
             app:fabSize="normal" />
 
     </LinearLayout>

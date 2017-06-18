@@ -6,6 +6,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
+import com.kirill.kochnev.homewardrope.repositories.utils.LooksByWardropeSpecification;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -93,6 +94,16 @@ public class LooksInteractor implements ILooksInteractor {
     }
 
     @Override
+    public Single<List<Look>> getLooksByWardrope(long lastId, long wardropeId) {
+        Single<List<Look>> single;
+        single = looks.query(lastId);
+        if (wardropeId != AppConstants.DEFAULT_ID) {
+            single = looks.query(new LooksByWardropeSpecification(lastId, wardropeId));
+        }
+        return single;
+    }
+
+    @Override
     public void addThingId(long id) {
         Set<Long> thingsSet = look.getThingIds();
         int length = thingsSet.size();
@@ -103,9 +114,19 @@ public class LooksInteractor implements ILooksInteractor {
     }
 
     @Override
+    public void addWardropeId(long id) {
+        look.setWardropeId(id);
+    }
+
+    public void initializeLook() {
+        look = new Look();
+    }
+
+    @Override
     public void clear() {
         if (look != null) {
             look.getThingIds().clear();
+            look.setWardropeId(null);
         }
     }
 }

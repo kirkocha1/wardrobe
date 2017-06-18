@@ -1,7 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -9,14 +9,16 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
+
+import java.util.HashSet;
 
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
@@ -38,18 +40,17 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
         return fragment;
     }
 
+    private ViewMode mode;
+
     @InjectPresenter
     LooksPresenter presenter;
 
     @ProvidePresenter
     LooksPresenter providePresenter() {
-        ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
         long wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
         boolean isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
         return new LooksPresenter(mode, isEdit, wardropeId);
     }
-
-
 
     @Override
     public BaseDbAdapter<Look, LookHolder> initAdapter() {
@@ -62,9 +63,29 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     }
 
     @Override
+    public void onCreationStart() {
+        super.onCreationStart();
+        mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
+    }
+
+    @Override
     public void onInitUi() {
-        setTitle(R.string.looks_title);
-        addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), CreationLookActivity.class)));
-        addBtn.setActivated(true);
+        if (mode == ViewMode.LOOK_MODE) {
+            setTitle(R.string.looks_title);
+        }
+        addBtn.setOnClickListener(v -> startActivity(CreationLookActivity.createIntent(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
+        addBtn.setActivated(mode == ViewMode.LOOK_MODE);
+        addBtn.setVisibility(mode == ViewMode.LOOK_MODE ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void setEditMode(boolean isEditMode) {
+        adapter.clear();
+        ((LooksAdapter) adapter).setEdit(isEditMode);
+    }
+
+    @Override
+    public void addIdsToAdapter(HashSet<Long> set) {
+        ((LooksAdapter) adapter).setIds(set);
     }
 }

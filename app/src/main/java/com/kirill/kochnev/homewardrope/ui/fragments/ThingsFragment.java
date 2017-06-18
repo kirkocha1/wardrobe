@@ -80,13 +80,9 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
         return new ThingsAdapter();
     }
 
-    public void setEditableMode(boolean mode) {
-        adapter.clear();
-        presenter.updateModeState(mode);
-    }
-
     @Override
     public void setEditMode(boolean isEditMode) {
+        adapter.clear();
         ((ThingsAdapter) adapter).setEdit(isEditMode);
     }
 

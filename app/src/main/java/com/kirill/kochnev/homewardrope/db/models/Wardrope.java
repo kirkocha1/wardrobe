@@ -39,6 +39,9 @@ public class Wardrope implements IDbModel {
 
     private HashSet<Long> thingIds;
 
+    private HashSet<Long> lookIds;
+
+
     public Wardrope() {
         creationDate = new Date().toString();
     }
@@ -78,6 +81,26 @@ public class Wardrope implements IDbModel {
 
     public void setThingIds(HashSet<Long> thingIds) {
         this.thingIds = thingIds;
+    }
+
+
+    //Use this method in repository for updating looks with this id set
+    public String getLookIdsString() {
+        StringBuilder result = new StringBuilder();
+        if (lookIds != null) {
+            for (Long id : lookIds) {
+                result.append(result.length() == 0 ? id + "" : "," + id);
+            }
+        }
+        return result.toString();
+    }
+
+    public HashSet<Long> getLookIds() {
+        return lookIds;
+    }
+
+    public void setLookIds(HashSet<Long> lookIds) {
+        this.lookIds = lookIds;
     }
 
     public String getCreationDate() {
