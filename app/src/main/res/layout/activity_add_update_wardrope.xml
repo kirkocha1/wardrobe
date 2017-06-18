@@ -14,8 +14,7 @@
         android:layout_margin="5dp"
         android:background="@null"
         android:enabled="false"
-        android:hint="@string/wardropes_name_hint"
-        />
+        android:hint="@string/wardropes_name_hint" />
 
     <LinearLayout
         android:id="@+id/things_by_wardrope"
@@ -45,9 +44,9 @@
         android:id="@+id/looks_by_wardrope_count"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/things_by_wardrope"
         android:layout_margin="10dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/things_by_wardrope">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,33 +65,28 @@
     </LinearLayout>
 
 
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/looks_by_wardrope_count" >
+        android:layout_below="@+id/looks_by_wardrope_count">
 
         <android.support.v4.view.PagerTitleStrip
             android:id="@+id/pager_title_strip"
+            style="@style/PagerTitleStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="@color/colorAccent"
-            android:textColor="@color/white"
-            android:paddingTop="6dp"
-            android:textSize="18sp"
-            android:paddingBottom="6dp" />
+            android:layout_gravity="top" />
 
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/fab_btn_margin">
+        android:layout_margin="@dimen/fab_btn_margin"
+        android:orientation="horizontal">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/save_wardrope"
