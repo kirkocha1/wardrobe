@@ -121,7 +121,8 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     }
 
     @Override
-    public void onSave() {
+    public void onSave(Intent intent) {
+        setResult(RESULT_OK, intent);
         finish();
     }
 

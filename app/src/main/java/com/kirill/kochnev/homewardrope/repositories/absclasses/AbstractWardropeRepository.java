@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.repositories.absclasses;
 
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
@@ -18,6 +19,6 @@ public abstract class AbstractWardropeRepository extends AbstractRepository<Ward
         super(storIOSQLite);
     }
 
-    public abstract Single<PutResult> putWardropeWithRelations(Wardrope wardrope, HashSet<Long> thingIds, HashSet<Long> lookIds);
+    public abstract Single<RepoResult> putWardropeWithRelations(Wardrope wardrope, HashSet<Long> thingIds, HashSet<Long> lookIds);
 
 }

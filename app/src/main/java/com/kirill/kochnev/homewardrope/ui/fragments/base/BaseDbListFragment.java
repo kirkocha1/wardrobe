@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
@@ -27,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.app.Activity.RESULT_OK;
 import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
 
 /**
@@ -36,8 +38,7 @@ import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
 public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolder<M>> extends BaseActionBarFragment implements IPaginationView<M>, OnClick<M> {
 
     public static final String TAG = "BaseDbListFragment";
-    public int itemPosition;
-
+    public static final int REQUEST_CODE = 1;
     @BindView(R.id.list_items)
     protected RecyclerView list;
 
@@ -52,23 +53,12 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     protected boolean isAllLoaded = false;
     protected BaseDbAdapter<M, H> adapter;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         onCreationStart();
         super.onCreate(savedInstanceState);
     }
-//
-//    @Override
-//    public void onStop() {
-//        itemPosition = layoutManager.findFirstVisibleItemPosition();
-//        super.onStop();
-//    }
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        if (itemPosition < 0 && )
-//    }
 
     @Nullable
     @Override
@@ -159,15 +149,8 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
         });
     }
 
-    @Override
-    public void dropData() {
-        if (adapter != null) {
-            adapter.clear();
-        }
-    }
-
     public void openUpdateActivity(Intent intent) {
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     public abstract BaseDbAdapter<M, H> initAdapter();
@@ -178,5 +161,17 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
 
     public void onCreationStart() {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
+            getPresenter().addOrUpdateListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
+        }
+    }
+
+    @Override
+    public void notifyItemChanged(M model) {
+        adapter.addData(model);
     }
 }

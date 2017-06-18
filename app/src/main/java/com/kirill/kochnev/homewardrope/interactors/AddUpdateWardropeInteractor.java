@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.interactors;
 
 import android.util.Pair;
 
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
@@ -33,7 +34,7 @@ public class AddUpdateWardropeInteractor implements IAddUpdateWardropeInteractor
     }
 
     @Override
-    public Single<PutResult> saveWardrope(String name, @NotNull HashSet<Long> thingIds, @NotNull HashSet<Long> lookIds) {
+    public Single<RepoResult> saveWardrope(String name, @NotNull HashSet<Long> thingIds, @NotNull HashSet<Long> lookIds) {
         wardrope.setName(name);
         wardrope.setThingsCount(thingIds.size());
         wardrope.setLooksCount(lookIds.size());

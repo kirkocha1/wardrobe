@@ -3,6 +3,8 @@ package com.kirill.kochnev.homewardrope.repositories.absclasses;
 import android.provider.BaseColumns;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
+import com.kirill.kochnev.homewardrope.db.RepoResult;
+import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.repositories.interfaces.IRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -21,7 +23,7 @@ import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
  */
 
 //Abstract repository for common CRUD operation
-public abstract class AbstractRepository<M> implements IRepository<M> {
+public abstract class AbstractRepository<M extends IDbModel> implements IRepository<M> {
 
     public StorIOSQLite storIOSQLite;
 
@@ -57,8 +59,8 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
     public abstract String getTableName();
 
     @Override
-    public Single<PutResult> putItem(M model) {
-        return Single.create(sub -> {
+    public Single<RepoResult> putItem(M model) {
+        Single<PutResult> single = Single.create(sub -> {
             PutResult res = storIOSQLite.put().object(model).prepare().executeAsBlocking();
             if (res.wasInserted() || res.wasUpdated()) {
                 sub.onSuccess(res);
@@ -66,6 +68,7 @@ public abstract class AbstractRepository<M> implements IRepository<M> {
                 sub.onError(new Exception("model wasn't inserted"));
             }
         });
+        return single.map(res -> new RepoResult(res.wasInserted() ? res.insertedId() : model.getId(), res.wasInserted()));
     }
 
     @Override

@@ -65,7 +65,7 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
         if (mode == ViewMode.THING_MODE) {
             setTitle(R.string.things_title);
         }
-        addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
+        addBtn.setOnClickListener(v -> openUpdateActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
         addBtn.setActivated(mode == ViewMode.THING_MODE);
         addBtn.setVisibility(mode == ViewMode.THING_MODE ? View.VISIBLE : View.GONE);
     }
@@ -90,4 +90,5 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
     public void addThingIdsToAdapter(HashSet<Long> set) {
         ((ThingsAdapter) adapter).setIds(set);
     }
+
 }

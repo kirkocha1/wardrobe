@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.repositories;
 
 import android.provider.BaseColumns;
 
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.LooksThings;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
@@ -43,7 +44,7 @@ public class LookRepository extends AbstractLookRepository {
     }
 
     @Override
-    public Single<PutResult> putItem(Look model) {
+    public Single<RepoResult> putItem(Look model) {
         return Single.create(sub -> {
             PutResult result;
             storIOSQLite.lowLevel().beginTransaction();
@@ -79,7 +80,11 @@ public class LookRepository extends AbstractLookRepository {
             } finally {
                 storIOSQLite.lowLevel().endTransaction();
             }
-        });
+        }).flatMap(res -> Single.create(subscriber -> {
+                    PutResult result = (PutResult) res;
+                    subscriber.onSuccess(new RepoResult(result.wasInserted() ? result.insertedId() : model.getId(), result.wasInserted()));
+                })
+        );
     }
 
     private Wardrope getLookWardrope(long id) {

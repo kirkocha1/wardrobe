@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
 
 import com.kirill.kochnev.homewardrope.di.components.AppComponent;
 import com.kirill.kochnev.homewardrope.di.components.DaggerAppComponent;
@@ -19,6 +20,14 @@ public class WardropeApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (BuildConfig.DEBUG) {
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .build());
+        }
+
         component = buildComponent();
         context = getApplicationContext();
     }

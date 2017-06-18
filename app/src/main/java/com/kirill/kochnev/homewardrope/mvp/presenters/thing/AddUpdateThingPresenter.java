@@ -1,8 +1,10 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.thing;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
@@ -41,7 +43,11 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
         unsubscribeOnDestroy(interactor.saveThing(name, tag)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isPut -> getViewState().onSave()));
+                .subscribe(result -> {
+                    Intent intent = new Intent();
+                    intent.putExtra(AppConstants.ADD_UPDATED_ID, result.getId());
+                    getViewState().onSave(intent);
+                }, e -> Log.e(TAG, e.getMessage())));
     }
 
     public void createUri() {

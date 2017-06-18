@@ -20,4 +20,5 @@ public interface IThingInteractor {
 
     Single<HashSet<Long>> getWardropeThingIds(long filterId);
 
+    Single<Thing> getThing(long id);
 }

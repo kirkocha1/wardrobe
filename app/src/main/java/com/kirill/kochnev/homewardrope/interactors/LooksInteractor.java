@@ -3,6 +3,7 @@ package com.kirill.kochnev.homewardrope.interactors;
 import android.graphics.Bitmap;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
@@ -59,14 +60,14 @@ public class LooksInteractor implements ILooksInteractor {
     }
 
     @Override
-    public Single<PutResult> saveLook(String name, String tag) {
+    public Single<RepoResult> saveLook(String name, String tag) {
         look.setName(name);
         look.setTag(tag);
         return looks.putItem(look);
     }
 
     @Override
-    public Single<PutResult> saveLookWithBitmap(String name, String tag, Bitmap bitmap) {
+    public Single<RepoResult> saveLookWithBitmap(String name, String tag, Bitmap bitmap) {
         return Single.create(sub -> {
             try {
                 look.setName(name);

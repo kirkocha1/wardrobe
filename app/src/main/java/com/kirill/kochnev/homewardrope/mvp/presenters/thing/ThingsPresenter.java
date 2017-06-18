@@ -16,16 +16,9 @@ import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
 import javax.inject.Inject;
 
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -66,10 +59,6 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         });
     }
 
-    public void refreshList() {
-        unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, filterId)));
-    }
-
     public void updateModeState(boolean mode) {
         isEdit = mode;
         getViewState().setEditMode(isEdit);
@@ -78,7 +67,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
                 interactor.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
                 unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
             } else {
-                refreshList();
+                loadMoreData(AppConstants.DEFAULT_ID);
             }
         }
     }
@@ -86,8 +75,10 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
-                AppConstants.DEFAULT_ID : filterId)));
+        unsubscribeOnDestroy(getDisposable(interactor.getThingsByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+                        AppConstants.DEFAULT_ID : filterId),
+                list -> getViewState().onLoadFinished(list),
+                e -> Log.e(TAG, "refreshList: " + e.getMessage())));
     }
 
     @Override
@@ -114,10 +105,10 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         }
     }
 
-    private Disposable getListDisposable(Single<List<Thing>> obsevable) {
-        return obsevable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, "refreshList: " + e.getMessage()));
+    @Override
+    public void addOrUpdateListItem(long id) {
+        unsubscribeOnDestroy(getDisposable(interactor.getThing(id),
+                item -> getViewState().notifyItemChanged(item),
+                e -> Log.e(TAG, e.getMessage())));
     }
-
 }

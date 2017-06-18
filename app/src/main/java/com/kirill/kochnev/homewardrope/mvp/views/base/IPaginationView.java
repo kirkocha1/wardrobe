@@ -14,11 +14,11 @@ import java.util.List;
 @StateStrategyType(SkipStrategy.class)
 public interface IPaginationView<M> extends MvpView {
 
-    void dropData();
-
     void onLoadFinished(List<M> data);
 
     void notifyListChanges(M model);
 
     void openUpdateActivity(Intent bundle);
+
+    void notifyItemChanged(M model);
 }

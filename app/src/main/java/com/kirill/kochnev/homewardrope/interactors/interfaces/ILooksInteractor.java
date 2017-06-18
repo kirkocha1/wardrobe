@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.interactors.interfaces;
 
 import android.graphics.Bitmap;
 
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
@@ -25,9 +26,9 @@ public interface ILooksInteractor {
 
     Single<Look> getLook(long id);
 
-    Single<PutResult> saveLook(String name, String tag);
+    Single<RepoResult> saveLook(String name, String tag);
 
-    Single<PutResult> saveLookWithBitmap(String name, String tag, Bitmap bitmap);
+    Single<RepoResult> saveLookWithBitmap(String name, String tag, Bitmap bitmap);
 
     Single<HashSet<Long>> startCreation();
 

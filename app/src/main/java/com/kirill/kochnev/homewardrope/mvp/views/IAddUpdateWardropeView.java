@@ -1,5 +1,7 @@
 package com.kirill.kochnev.homewardrope.mvp.views;
 
+import android.content.Intent;
+
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
@@ -15,7 +17,7 @@ public interface IAddUpdateWardropeView extends MvpView {
 
     void initView(Wardrope wardrope);
 
-    void onSave();
+    void onSave(Intent intent);
 
     void changeBtnsMode(boolean mode);
 

@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.repositories;
 
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
@@ -32,8 +33,8 @@ public class WardropeRepository extends AbstractWardropeRepository {
     }
 
     @Override
-    public Single<PutResult> putWardropeWithRelations(Wardrope wardrope, HashSet<Long> thingIds, HashSet<Long> lookIds) {
-        return Single.create(sub -> {
+    public Single<RepoResult> putWardropeWithRelations(Wardrope wardrope, HashSet<Long> thingIds, HashSet<Long> lookIds) {
+        Single<PutResult> resultSingle = Single.create(sub -> {
             storIOSQLite.lowLevel().beginTransaction();
             try {
                 if (wardrope.getId() != null) {
@@ -48,29 +49,34 @@ public class WardropeRepository extends AbstractWardropeRepository {
                     storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
                             .query(LooksTable.dropWardropeId(wardrope.getId()))
                             .build());
-
                 }
 
                 PutResult result = storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
                 Long wardropeId = result.wasInserted() ? result.insertedId() : wardrope.getId();
-                wardrope.setLookIds(lookIds);
-                storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
-                        .query(LooksTable.updateWardropeId(wardrope.getLookIdsString(), wardropeId))
-                        .build());
+                if (wardropeId == null) {
+                    sub.onError(new Exception("wardropeId is null"));
+                } else {
+                    wardrope.setLookIds(lookIds);
+                    storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
+                            .query(LooksTable.updateWardropeId(wardrope.getLookIdsString(), wardropeId))
+                            .build());
 
-                List<ThingsWardropes> thingsWardropes = new ArrayList<>();
-                for (Long id : thingIds) {
-                    thingsWardropes.add(new ThingsWardropes(wardropeId, id));
+                    List<ThingsWardropes> thingsWardropes = new ArrayList<>();
+                    for (Long id : thingIds) {
+                        thingsWardropes.add(new ThingsWardropes(wardropeId, id));
+                    }
+                    storIOSQLite.put().objects(thingsWardropes).prepare().executeAsBlocking();
+                    storIOSQLite.lowLevel().setTransactionSuccessful();
+                    sub.onSuccess(result);
+
                 }
-                storIOSQLite.put().objects(thingsWardropes).prepare().executeAsBlocking();
-                storIOSQLite.lowLevel().setTransactionSuccessful();
-                sub.onSuccess(result);
             } catch (Exception e) {
-                sub.onError(new Exception("wardrope wasn't inserted"));
+                sub.onError(new Exception("wardrope wasn't inserted or updated"));
             } finally {
                 storIOSQLite.lowLevel().endTransaction();
             }
         });
+        return resultSingle.map(result -> new RepoResult(result.wasInserted() ? result.insertedId() : wardrope.getId(), result.wasInserted()));
     }
 
     //Get wardrobe and fill it with isd of things and looks

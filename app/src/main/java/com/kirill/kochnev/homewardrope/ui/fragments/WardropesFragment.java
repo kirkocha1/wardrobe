@@ -13,8 +13,8 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardropesAdapter;
@@ -63,7 +63,7 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
         if (mode == ViewMode.WARDROPE_MODE) {
             setTitle(R.string.wardropes_title);
         }
-        addBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AddUpdateWardropeActivity.class)));
+        addBtn.setOnClickListener(v -> openUpdateActivity(new Intent(getContext(), AddUpdateWardropeActivity.class)));
         addBtn.setActivated(mode == ViewMode.WARDROPE_MODE);
         addBtn.setVisibility(mode == ViewMode.WARDROPE_MODE ? View.VISIBLE : View.GONE);
     }
@@ -78,4 +78,5 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
     public LinearLayoutManager getLayoutManager() {
         return new LinearLayoutManager(getContext());
     }
+
 }

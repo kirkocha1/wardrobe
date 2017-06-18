@@ -1,9 +1,11 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.wardrope;
 
+import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
@@ -107,9 +109,11 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
         unsubscribeOnDestroy(interactor.saveWardrope(name, thingsSet, looksSet)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
+                .subscribe(result -> {
                     Log.d(TAG, "put wardrope");
-                    getViewState().onSave();
+                    Intent intent = new Intent();
+                    intent.putExtra(AppConstants.ADD_UPDATED_ID, result.getId());
+                    getViewState().onSave(intent);
                 }, e -> Log.e(TAG, e.getMessage())));
     }
 }

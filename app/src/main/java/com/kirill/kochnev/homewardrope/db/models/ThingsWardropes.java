@@ -12,7 +12,7 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
  */
 
 @StorIOSQLiteType(table = ThingsWardropesTable.THINGS_WARDROPES_TABLE)
-public class ThingsWardropes implements IDbModel {
+public class ThingsWardropes {
 
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
     Long _id;
@@ -55,8 +55,5 @@ public class ThingsWardropes implements IDbModel {
         this._id = _id;
     }
 
-    @Override
-    public void inflateHolder(BaseHolder holder) {
 
-    }
 }
