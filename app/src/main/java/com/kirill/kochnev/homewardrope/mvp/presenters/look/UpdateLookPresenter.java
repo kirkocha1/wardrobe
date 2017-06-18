@@ -1,8 +1,10 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
@@ -42,6 +44,10 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
         unsubscribeOnDestroy(interactor.saveLook(name, tag)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isPut -> getViewState().onSave()));
+                .subscribe(isPut -> {
+                    Intent intent = new Intent();
+                    intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
+                    getViewState().onSave(intent);
+                }));
     }
 }

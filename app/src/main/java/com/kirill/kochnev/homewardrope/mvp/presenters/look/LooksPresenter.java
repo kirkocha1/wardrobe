@@ -120,7 +120,9 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
 
     @Override
     public void addOrUpdateListItem(long id) {
-
+        unsubscribeOnDestroy(getDisposable(interactor.getLook(id),
+                item -> getViewState().notifyItemChanged(item),
+                e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override

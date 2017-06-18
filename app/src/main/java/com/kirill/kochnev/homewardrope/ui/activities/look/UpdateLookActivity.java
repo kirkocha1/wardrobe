@@ -88,7 +88,8 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     }
 
     @Override
-    public void onSave() {
+    public void onSave(Intent intent) {
+        setResult(RESULT_OK, intent);
         finish();
     }
 

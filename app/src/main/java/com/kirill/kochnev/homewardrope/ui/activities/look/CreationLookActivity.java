@@ -141,7 +141,8 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     }
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(Intent intent) {
+        setResult(RESULT_OK, intent);
         finish();
     }
 

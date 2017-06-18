@@ -33,7 +33,7 @@
             style="@style/CommonButtnoStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/thing"
+            android:src="@drawable/tshort_empty"
             android:text="@string/looks_all_things_btn" />
 
 

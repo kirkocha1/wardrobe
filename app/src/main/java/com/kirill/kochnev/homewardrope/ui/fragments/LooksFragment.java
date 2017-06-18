@@ -73,7 +73,7 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
         if (mode == ViewMode.LOOK_MODE) {
             setTitle(R.string.looks_title);
         }
-        addBtn.setOnClickListener(v -> startActivity(CreationLookActivity.createIntent(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
+        addBtn.setOnClickListener(v -> openUpdateActivity(CreationLookActivity.createIntent(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
         addBtn.setActivated(mode == ViewMode.LOOK_MODE);
         addBtn.setVisibility(mode == ViewMode.LOOK_MODE ? View.VISIBLE : View.GONE);
     }
