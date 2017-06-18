@@ -28,7 +28,10 @@ public abstract class BaseActionBarActivity extends MvpAppCompatActivity impleme
         binding = DataBindingUtil.bind(view);
         binding.menuBtn.setVisibility(isMenuActive() ? View.VISIBLE : View.GONE);
         binding.backAction.setVisibility(isMenuActive() ? View.GONE : View.VISIBLE);
-        binding.backAction.setOnClickListener(v -> onBackPressed());
+        binding.backAction.setOnClickListener(v -> {
+            setResult(RESULT_CANCELED);
+            onBackPressed();
+        });
         binding.search.setVisibility(isSearchActive() ? View.VISIBLE : View.GONE);
         binding.menuBtn.setOnClickListener(v -> {
             if (menuClick != null) {

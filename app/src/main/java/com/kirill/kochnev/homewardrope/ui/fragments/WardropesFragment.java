@@ -68,6 +68,7 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
         addBtn.setVisibility(mode == ViewMode.WARDROPE_MODE ? View.VISIBLE : View.GONE);
     }
 
+
     @Override
     public void setThingsByWardrope(long id) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction().addToBackStack(CreationLookState.WARDROPES.toString());

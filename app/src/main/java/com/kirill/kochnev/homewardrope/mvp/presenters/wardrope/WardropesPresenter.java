@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
@@ -40,6 +41,13 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     }
 
     @Override
+    protected void onFirstViewAttach() {
+        if (mode != ViewMode.LOOK_MODE) {
+            super.onFirstViewAttach();
+        }
+    }
+
+    @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
         unsubscribeOnDestroy(getDisposable(interactor.getWardropes(lastId),
@@ -49,9 +57,18 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     @Override
     public void onLongItemClick(IDbModel model) {
         if (mode == ViewMode.WARDROPE_MODE) {
-            unsubscribeOnDestroy(getDisposable(interactor.deleteWardropes((Wardrope) model)
-                    , isDel -> getViewState().notifyListChanges((Wardrope) model), e -> Log.e(TAG, e.getMessage())));
+            unsubscribeOnDestroy(getDisposable(interactor.deleteWardropes((Wardrope) model),
+                    isDel -> getViewState().notifyListChanges((Wardrope) model), e -> Log.e(TAG, e.getMessage())));
         }
+    }
+
+    @Override
+    public void attachView(IWardropeView view) {
+        super.attachView(view);
+        if (mode == ViewMode.LOOK_MODE) {
+            loadMoreData(AppConstants.DEFAULT_ID);
+        }
+        Log.e(TAG, "ATTACH FRAGMENT");
     }
 
     private void resolveClick(IDbModel model) {

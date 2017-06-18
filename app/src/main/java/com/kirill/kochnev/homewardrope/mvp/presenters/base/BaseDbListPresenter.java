@@ -47,6 +47,4 @@ public abstract class BaseDbListPresenter<V extends IPaginationView> extends Bas
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, "refreshList: " + e.getMessage()));
     }
-
-
 }
