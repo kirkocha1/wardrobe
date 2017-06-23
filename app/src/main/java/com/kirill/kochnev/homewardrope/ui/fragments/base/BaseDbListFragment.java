@@ -71,13 +71,15 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
 
     @Override
     public void onLongClick(M model) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Вы уверенны, что хотите удалить?")
-                .setPositiveButton("Да", (dialog, which) -> {
-                    getPresenter().onLongItemClick(model);
-                    dialog.dismiss();
-                });
-        builder.create().show();
+        if (isFullPart()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage(getString(R.string.delete_message))
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                        getPresenter().onLongItemClick(model);
+                        dialog.dismiss();
+                    });
+            builder.create().show();
+        }
     }
 
     @Override
@@ -157,6 +159,8 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
 
     public abstract BaseDbListPresenter getPresenter();
 
+    public abstract boolean isFullPart();
+
     public abstract void onInitUi();
 
     public void onCreationStart() {
@@ -173,5 +177,6 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     @Override
     public void notifyItemChanged(M model) {
         adapter.addData(model);
+        blankImg.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 }

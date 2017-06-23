@@ -115,7 +115,7 @@ public class LooksInteractor implements ILooksInteractor {
     }
 
     @Override
-    public void addWardropeId(long id) {
+    public void addWardropeId(Long id) {
         look.setWardropeId(id);
     }
 
@@ -127,7 +127,6 @@ public class LooksInteractor implements ILooksInteractor {
     public void clear() {
         if (look != null) {
             look.getThingIds().clear();
-            look.setWardropeId(null);
         }
     }
 }

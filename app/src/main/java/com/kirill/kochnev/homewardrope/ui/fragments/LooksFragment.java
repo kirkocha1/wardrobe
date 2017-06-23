@@ -85,6 +85,11 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     }
 
     @Override
+    public boolean isFullPart() {
+        return mode == ViewMode.LOOK_MODE;
+    }
+
+    @Override
     public void addIdsToAdapter(HashSet<Long> set) {
         ((LooksAdapter) adapter).setIds(set);
     }

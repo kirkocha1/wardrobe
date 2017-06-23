@@ -33,8 +33,7 @@ public class CollageInteractor implements ICollageInteractor {
                     int i = 0;
                     for (Thing thing : list) {
                         Bitmap bitmap = ImageHelper.makeImage(thing.getFullImagePath());
-                        imageCache.put(i, bitmap);
-                        i++;
+                        imageCache.put(i++, bitmap);
                     }
                     return imageCache;
                 });

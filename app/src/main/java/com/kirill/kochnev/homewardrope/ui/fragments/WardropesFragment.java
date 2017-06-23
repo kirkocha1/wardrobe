@@ -68,6 +68,10 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
         addBtn.setVisibility(mode == ViewMode.WARDROPE_MODE ? View.VISIBLE : View.GONE);
     }
 
+    @Override
+    public boolean isFullPart() {
+        return ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE)) == ViewMode.WARDROPE_MODE;
+    }
 
     @Override
     public void setThingsByWardrope(long id) {

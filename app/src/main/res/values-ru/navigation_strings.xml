@@ -3,4 +3,5 @@
     <string name="nav_wardropes">Гардеробы</string>
     <string name="nav_looks">Луки</string>
     <string name="nav_things">Вещи</string>
+    <string name="delete_message">Вы уверенны, что хотите удалить?</string>
 </resources>

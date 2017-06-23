@@ -53,7 +53,14 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     }
 
     public void clearIds() {
+        clearIds(false);
+    }
+
+    public void clearIds(boolean isThings) {
         interactor.clear();
+        if (isThings) {
+            interactor.addWardropeId(null);
+        }
     }
 
     public void processLook(String name, String tag, Bitmap bitmap) {

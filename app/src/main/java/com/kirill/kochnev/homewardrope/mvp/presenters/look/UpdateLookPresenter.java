@@ -23,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
 
     public static final String TAG = "UpdateLookPresenter";
+    public boolean isNeedToAttach = false;
 
     @Inject
     protected ILooksInteractor interactor;
@@ -30,6 +31,21 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     public UpdateLookPresenter(long lookId) {
         WardropeApplication.getLookComponent().inject(this);
         init(lookId);
+    }
+
+
+    @Override
+    public void attachView(IUpdateLook view) {
+        super.attachView(view);
+        if (isNeedToAttach) {
+            interactor.getLook().subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage()));
+        }
+    }
+
+    @Override
+    public void detachView(IUpdateLook view) {
+        isNeedToAttach = true;
+        super.detachView(view);
     }
 
     private void init(long lookId) {
@@ -49,5 +65,9 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
                     intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
                     getViewState().onSave(intent);
                 }));
+    }
+
+    public void updateClick() {
+        unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().initUpdateProcess(look), e -> Log.e(TAG, e.getMessage())));
     }
 }

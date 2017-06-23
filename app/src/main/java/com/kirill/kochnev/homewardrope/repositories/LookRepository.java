@@ -6,6 +6,7 @@ import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.LooksThings;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.tables.LooksTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
@@ -50,6 +51,7 @@ public class LookRepository extends AbstractLookRepository {
             storIOSQLite.lowLevel().beginTransaction();
             try {
                 if (model.getId() != null) {
+                    decreaseWardropeLookCount(model.getId());
                     storIOSQLite.delete().byQuery(DeleteQuery.builder()
                             .table(LooksThingsTable.LOOKS_THINGS_TABLE)
                             .where(LooksThingsTable.LOOKS_THINGS_LOOK_ID + "=?")
@@ -59,10 +61,8 @@ public class LookRepository extends AbstractLookRepository {
                             .executeAsBlocking();
                 }
                 result = storIOSQLite.put().object(model).prepare().executeAsBlocking();
-                Wardrope wardrope = getLookWardrope(model.getWardropeId());
-                if (wardrope != null) {
-                    wardrope.setLooksCount(wardrope.getLooksCount() + 1);
-                    storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+                if (model.getWardropeId() != null) {
+                    increaseWardropeLookCount(model.getWardropeId());
                 }
                 if (model.getThingIds().size() != 0) {
                     List<LooksThings> looksThings = new ArrayList<>();
@@ -85,6 +85,28 @@ public class LookRepository extends AbstractLookRepository {
                     subscriber.onSuccess(new RepoResult(result.wasInserted() ? result.insertedId() : model.getId(), result.wasInserted()));
                 })
         );
+    }
+
+    private void decreaseWardropeLookCount(long lookId) {
+        Look oldLook = storIOSQLite.get().object(Look.class).withQuery(Query.builder()
+                .table(LooksTable.LOOKS_TABLE)
+                .where(LooksTable._ID + "=?")
+                .whereArgs(lookId).build()).prepare().executeAsBlocking();
+        if (oldLook != null && oldLook.getWardropeId() != null) {
+            Wardrope wardrope = getLookWardrope(oldLook.getWardropeId());
+            if (wardrope != null) {
+                wardrope.setLooksCount(wardrope.getLooksCount() - 1);
+                storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+            }
+        }
+    }
+
+    private void increaseWardropeLookCount(long wardrobeId) {
+        Wardrope wardrope = getLookWardrope(wardrobeId);
+        if (wardrope != null) {
+            wardrope.setLooksCount(wardrope.getLooksCount() + 1);
+            storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+        }
     }
 
     private Wardrope getLookWardrope(long id) {

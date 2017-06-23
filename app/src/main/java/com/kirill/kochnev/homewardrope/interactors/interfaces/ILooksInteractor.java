@@ -36,7 +36,7 @@ public interface ILooksInteractor {
 
     void addThingId(long id);
 
-    void addWardropeId(long id);
+    void addWardropeId(Long id);
 
     void initializeLook();
 

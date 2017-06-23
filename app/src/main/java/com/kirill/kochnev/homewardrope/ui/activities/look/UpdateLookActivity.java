@@ -68,6 +68,8 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
         setBackButtonEnabled(true);
         setContentView(View.inflate(this, R.layout.activity_update_look, null));
         ButterKnife.bind(this, baseLayout);
+        name.setEnabled(false);
+        tag.setEnabled(false);
         select.setOnClickListener(v -> {
             boolean isVisible = save.getVisibility() != View.INVISIBLE;
             changeBtnStatus(isVisible);
@@ -76,8 +78,14 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
             presenter.saveLook(name.getText().toString(), tag.getText().toString());
         });
         captureBtn.setOnClickListener(v -> {
-            startActivityForResult(CreationLookActivity.createIntent(getIntent().getLongExtra(LOOK_ID, -1), -1), UPDATE_LOOK_CODE);
+            presenter.updateClick();
         });
+    }
+
+    @Override
+    public void initUpdateProcess(Look look) {
+        startActivityForResult(CreationLookActivity.createIntent(look.getId(), look.getWardropeId() == null ?
+                AppConstants.DEFAULT_ID : look.getWardropeId()), UPDATE_LOOK_CODE);
     }
 
     private void changeBtnStatus(boolean isVisible) {

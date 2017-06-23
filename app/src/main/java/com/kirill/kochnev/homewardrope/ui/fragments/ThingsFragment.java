@@ -81,6 +81,11 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
     }
 
     @Override
+    public boolean isFullPart() {
+        return mode == ViewMode.THING_MODE;
+    }
+
+    @Override
     public void setEditMode(boolean isEditMode) {
         adapter.clear();
         ((ThingsAdapter) adapter).setEdit(isEditMode);

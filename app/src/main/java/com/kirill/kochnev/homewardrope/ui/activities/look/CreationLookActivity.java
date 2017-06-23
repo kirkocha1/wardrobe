@@ -79,7 +79,7 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         create.setOnClickListener(v -> presenter.startCreationProcess());
         save.setOnClickListener(v -> presenter.save());
         allThings.setOnClickListener(v -> {
-            presenter.clearIds();
+            presenter.clearIds(true);
             initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), CreationLookState.ALL_THINGS);
         });
 

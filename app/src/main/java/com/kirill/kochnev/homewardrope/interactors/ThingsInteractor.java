@@ -50,5 +50,4 @@ public class ThingsInteractor implements IThingInteractor {
         ImageHelper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
         return things.deletItem(model);
     }
-
 }
