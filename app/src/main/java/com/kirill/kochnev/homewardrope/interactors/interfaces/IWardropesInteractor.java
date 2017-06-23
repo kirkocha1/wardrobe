@@ -2,7 +2,6 @@ package com.kirill.kochnev.homewardrope.interactors.interfaces;
 
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
 import java.util.List;
 
@@ -17,5 +16,7 @@ public interface IWardropesInteractor {
     Single<DeleteResult> deleteWardropes(Wardrope model);
 
     Single<List<Wardrope>> getWardropes(long id);
+
+    Single<Wardrope> getWardrope(long id);
 
 }

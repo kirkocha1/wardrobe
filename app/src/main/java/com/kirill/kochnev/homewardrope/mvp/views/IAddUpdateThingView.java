@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.mvp.views;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -18,7 +19,7 @@ public interface IAddUpdateThingView extends MvpView {
     void sendMakePhotoIntent(Uri uri);
 
     @StateStrategyType(SkipStrategy.class)
-    void onSave();
+    void onSave(Intent intent);
 
     void showError(String error);
 

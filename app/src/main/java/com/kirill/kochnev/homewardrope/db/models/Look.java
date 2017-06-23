@@ -127,4 +127,5 @@ public class Look implements IDbModel {
     public void setWardropeId(Long wardropeId) {
         this.wardropeId = wardropeId;
     }
+
 }

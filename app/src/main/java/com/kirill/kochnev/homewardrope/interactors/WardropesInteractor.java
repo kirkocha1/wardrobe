@@ -30,4 +30,9 @@ public class WardropesInteractor implements IWardropesInteractor {
     public Single<List<Wardrope>> getWardropes(long id) {
         return wardropes.query(id);
     }
+
+    @Override
+    public Single<Wardrope> getWardrope(long id) {
+        return wardropes.getItem(id);
+    }
 }

@@ -23,28 +23,9 @@
         android:src="@drawable/ic_add_black_24px"
         app:fabSize="normal" />
 
-    <RelativeLayout
+    <include
         android:id="@+id/blank_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/empty_list_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/blank_list" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/empty_list_icon"
-            android:layout_centerHorizontal="true"
-            android:text="@string/empty_list_text"
-            android:textSize="@dimen/text_size" />
-
-    </RelativeLayout>
+        layout="@layout/blank_layout"
+        android:visibility="gone" />
 
 </RelativeLayout>

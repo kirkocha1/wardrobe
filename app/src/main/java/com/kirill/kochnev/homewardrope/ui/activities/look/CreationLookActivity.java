@@ -54,8 +54,6 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     @BindView(R.id.save_collage)
     FloatingActionButton save;
 
-    Fragment fragment;
-
     @InjectPresenter
     CreationLookPresenter presenter;
 
@@ -81,10 +79,9 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         create.setOnClickListener(v -> presenter.startCreationProcess());
         save.setOnClickListener(v -> presenter.save());
         allThings.setOnClickListener(v -> {
-            presenter.clearIds();
+            presenter.clearIds(true);
             initFragment(ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, AppConstants.DEFAULT_ID), CreationLookState.ALL_THINGS);
         });
-
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             int count = getSupportFragmentManager().getBackStackEntryCount() - 1;
@@ -116,7 +113,6 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     }
 
     private void initFragment(Fragment fragment, CreationLookState state) {
-        this.fragment = fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (state != CreationLookState.START) {
             transaction.addToBackStack(state.toString());
@@ -141,7 +137,8 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     }
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(Intent intent) {
+        setResult(RESULT_OK, intent);
         finish();
     }
 

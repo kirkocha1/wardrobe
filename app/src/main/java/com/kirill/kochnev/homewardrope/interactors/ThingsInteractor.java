@@ -41,9 +41,13 @@ public class ThingsInteractor implements IThingInteractor {
     }
 
     @Override
+    public Single<Thing> getThing(long id) {
+        return things.getItem(id);
+    }
+
+    @Override
     public Single<DeleteResult> deleteThings(Thing model) {
         ImageHelper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
         return things.deletItem(model);
     }
-
 }

@@ -85,8 +85,9 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     }
 
     private void initBtns() {
-        changeMode(isEditMode || thingsId == AppConstants.DEFAULT_ID);
-        edit.setVisibility(thingsId == AppConstants.DEFAULT_ID ? View.GONE : View.VISIBLE);
+        boolean isNew = thingsId == AppConstants.DEFAULT_ID;
+        edit.setVisibility(isNew ? View.GONE : View.VISIBLE);
+        changeMode(isNew, false);
         edit.setOnClickListener(v -> {
             isEditMode = !isEditMode;
             changeMode(isEditMode);
@@ -95,13 +96,19 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
         save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
     }
 
-    private void changeMode(boolean isEditMode) {
+    private void changeMode(boolean isEditMode, boolean isAnimate) {
         name.setEnabled(isEditMode);
         tag.setEnabled(isEditMode);
-        captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
-        save.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
-        AnimationHelper.hideShowAnimation(save, !isEditMode);
-        AnimationHelper.hideShowAnimation(captureBtn, !isEditMode);
+        captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.INVISIBLE);
+        save.setVisibility(isEditMode ? View.VISIBLE : View.INVISIBLE);
+        if (isAnimate) {
+            AnimationHelper.hideShowAnimation(save, !isEditMode);
+            AnimationHelper.hideShowAnimation(captureBtn, !isEditMode);
+        }
+    }
+
+    private void changeMode(boolean isEditMode) {
+        changeMode(isEditMode, true);
     }
 
 
@@ -121,7 +128,8 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     }
 
     @Override
-    public void onSave() {
+    public void onSave(Intent intent) {
+        setResult(RESULT_OK, intent);
         finish();
     }
 

@@ -6,6 +6,7 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
@@ -36,7 +37,7 @@ public class AddUpdateThingsInteractor implements IAddUpdateThingsInteractor {
     }
 
     @Override
-    public Single<PutResult> saveThing(String name, String tag) {
+    public Single<RepoResult> saveThing(String name, String tag) {
         thing.setName(name);
         thing.setTag(tag);
         return things.putItem(thing);

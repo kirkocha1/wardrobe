@@ -1,5 +1,7 @@
 package com.kirill.kochnev.homewardrope.mvp.views;
 
+import android.content.Intent;
+
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
@@ -17,7 +19,7 @@ public interface IFirstStepCreationLookView extends MvpView {
 
     void openCollageFragment(HashSet<Long> thingIds);
 
-    void onSuccess();
+    void onSuccess(Intent intent);
 
     void showError(boolean isMin);
 

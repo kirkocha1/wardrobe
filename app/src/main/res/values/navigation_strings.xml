@@ -3,4 +3,5 @@
     <string name="nav_wardropes">Wardropes</string>
     <string name="nav_looks">Looks</string>
     <string name="nav_things">Things</string>
+    <string name="delete_message">Are you sure?</string>
 </resources>

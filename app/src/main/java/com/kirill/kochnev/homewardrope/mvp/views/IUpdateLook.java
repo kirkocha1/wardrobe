@@ -1,5 +1,7 @@
 package com.kirill.kochnev.homewardrope.mvp.views;
 
+import android.content.Intent;
+
 import com.arellomobile.mvp.MvpView;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 
@@ -10,5 +12,7 @@ public interface IUpdateLook extends MvpView {
 
     void setLookData(Look look);
 
-    void onSave();
+    void onSave(Intent intent);
+
+    void initUpdateProcess(Look look);
 }

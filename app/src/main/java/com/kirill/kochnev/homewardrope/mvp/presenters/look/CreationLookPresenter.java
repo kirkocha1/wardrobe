@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -52,14 +53,25 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     }
 
     public void clearIds() {
+        clearIds(false);
+    }
+
+    public void clearIds(boolean isThings) {
         interactor.clear();
+        if (isThings) {
+            interactor.addWardropeId(null);
+        }
     }
 
     public void processLook(String name, String tag, Bitmap bitmap) {
         unsubscribeOnDestroy(interactor.saveLookWithBitmap(name, tag, bitmap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> getViewState().onSuccess(),
+                .subscribe(result -> {
+                            Intent intent = new Intent();
+                            intent.putExtra(AppConstants.ADD_UPDATED_ID, result.getId());
+                            getViewState().onSuccess(intent);
+                        },
                         e -> Log.e(TAG, e.getMessage())));
     }
 

@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.repositories.interfaces;
 
+import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
@@ -14,7 +15,7 @@ import io.reactivex.Single;
 
 public interface IRepository<M> {
 
-    Single<PutResult> putItem(M model);
+    Single<RepoResult> putItem(M model);
 
     Single<M> getItem(long id);
 

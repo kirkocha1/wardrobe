@@ -1,9 +1,11 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.wardrope;
 
+import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
@@ -39,6 +41,7 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
 
     private HashSet<Long> thingsSet = new HashSet<>();
     private HashSet<Long> looksSet = new HashSet<>();
+
     private boolean isEditableMode = false;
 
 
@@ -52,8 +55,7 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
         unsubscribeOnDestroy(interactor.getWardrope(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(ward -> {
-                    thingsSet = ward.getThingIds();
-                    looksSet = ward.getLookIds();
+                    setHashSets(ward.getLookIds(), ward.getThingIds());
                     getViewState().initView(ward);
 
                 }, e -> Log.e(TAG, e.getMessage())));
@@ -83,17 +85,35 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
 
     public void toggleMode() {
         isEditableMode = !isEditableMode;
+        if (!isEditableMode) {
+            returnInitialState();
+        }
         stateBus.passData(new Pair<>(ViewMode.WARDROPE_MODE, isEditableMode));
         getViewState().changeBtnsMode(isEditableMode);
+    }
+
+    private void returnInitialState() {
+        Pair<HashSet<Long>, HashSet<Long>> startSets = interactor.getStartIds();
+        if (startSets != null) {
+            setHashSets(startSets.first, startSets.second);
+            getViewState().setCount(thingsSet.size(), looksSet.size());
+        }
+    }
+
+    private void setHashSets(HashSet<Long> looksSet, HashSet<Long> thingsSet) {
+        this.thingsSet = new HashSet<>(thingsSet);
+        this.looksSet = new HashSet<>(looksSet);
     }
 
     public void save(String name) {
         unsubscribeOnDestroy(interactor.saveWardrope(name, thingsSet, looksSet)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
+                .subscribe(result -> {
                     Log.d(TAG, "put wardrope");
-                    getViewState().onSave();
+                    Intent intent = new Intent();
+                    intent.putExtra(AppConstants.ADD_UPDATED_ID, result.getId());
+                    getViewState().onSave(intent);
                 }, e -> Log.e(TAG, e.getMessage())));
     }
 }

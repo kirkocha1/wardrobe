@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
@@ -111,7 +112,8 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     }
 
     @Override
-    public void onSave() {
+    public void onSave(Intent intent) {
+        setResult(RESULT_OK, intent);
         finish();
     }
 }

@@ -18,9 +18,6 @@ import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
 /**
@@ -43,29 +40,35 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
         this.mode = mode;
     }
 
-
-    protected void refreshList() {
-        unsubscribeOnDestroy(interactor.getWardropes(AppConstants.DEFAULT_ID).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, e.getMessage())));
+    @Override
+    protected void onFirstViewAttach() {
+        if (mode != ViewMode.LOOK_MODE) {
+            super.onFirstViewAttach();
+        }
     }
 
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(interactor.getWardropes(lastId).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, e.getMessage())));
+        unsubscribeOnDestroy(getDisposable(interactor.getWardropes(lastId),
+                list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override
     public void onLongItemClick(IDbModel model) {
         if (mode == ViewMode.WARDROPE_MODE) {
-            unsubscribeOnDestroy(interactor.deleteWardropes((Wardrope) model)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(isDel -> getViewState().notifyListChanges((Wardrope) model)));
+            unsubscribeOnDestroy(getDisposable(interactor.deleteWardropes((Wardrope) model),
+                    isDel -> getViewState().notifyListChanges((Wardrope) model), e -> Log.e(TAG, e.getMessage())));
         }
+    }
+
+    @Override
+    public void attachView(IWardropeView view) {
+        super.attachView(view);
+        if (mode == ViewMode.LOOK_MODE) {
+            loadMoreData(AppConstants.DEFAULT_ID);
+        }
+        Log.e(TAG, "ATTACH FRAGMENT");
     }
 
     private void resolveClick(IDbModel model) {
@@ -80,6 +83,13 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
                 getViewState().setThingsByWardrope(model.getId());
                 break;
         }
+    }
+
+    @Override
+    public void addOrUpdateListItem(long id) {
+        unsubscribeOnDestroy(getDisposable(interactor.getWardrope(id),
+                item -> getViewState().notifyItemChanged(item),
+                e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override

@@ -65,14 +65,14 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
         getViewState().setEditMode(isEdit);
         if (viewMode != ViewMode.LOOK_MODE) {
             if (isEdit) {
-                unsubscribeOnDestroy(getListDisposable(interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
+                unsubscribeOnDestroy(getDisposable(interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
                         list -> {
                             getViewState().onLoadFinished(list);
                             setIds(list);
                         },
                         e -> Log.e(TAG, e.getMessage())));
             } else {
-                refreshList();
+                loadMoreData(AppConstants.DEFAULT_ID);
             }
         }
     }
@@ -90,15 +90,8 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(getListDisposable(interactor.getLooksByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+        unsubscribeOnDestroy(getDisposable(interactor.getLooksByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
                         AppConstants.DEFAULT_ID : filterId),
-                list -> getViewState().onLoadFinished(list),
-                e -> Log.e(TAG, e.getMessage())));
-    }
-
-    @Override
-    protected void refreshList() {
-        unsubscribeOnDestroy(getListDisposable(interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, filterId),
                 list -> getViewState().onLoadFinished(list),
                 e -> Log.e(TAG, e.getMessage())));
     }
@@ -123,6 +116,13 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
             getViewState().openUpdateActivity(UpdateLookActivity.createIntent(model.getId()));
         }
 
+    }
+
+    @Override
+    public void addOrUpdateListItem(long id) {
+        unsubscribeOnDestroy(getDisposable(interactor.getLook(id),
+                item -> getViewState().notifyItemChanged(item),
+                e -> Log.e(TAG, e.getMessage())));
     }
 
     @Override
