@@ -1,63 +1,131 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
+import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
+import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
+import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import java.util.Date;
+import java.util.HashSet;
+
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOKS_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_FULL_IMAGE_PATH;
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_ICON_IMAGE_PATH;
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_NAME;
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_TAG;
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_WARDROPE_ID;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
  */
 
-@Entity
-public class Look {
+@StorIOSQLiteType(table = LOOKS_TABLE)
+public class Look implements IDbModel {
 
-    @Id
-    private long id;
+    @StorIOSQLiteColumn(key = true, name = _ID)
+    Long _id;
 
-    private Date creationDate;
+    @StorIOSQLiteColumn(name = WardropeSqlHelper.CREATION_DATE)
+    String creationDate;
 
-    private String name;
+    @StorIOSQLiteColumn(name = LOOK_NAME)
+    String name;
 
-    public Look(long id, String name) {
-        this.id = id;
-        this.name = name;
-        this.creationDate = new Date();
-    }
+    @StorIOSQLiteColumn(name = LOOK_TAG)
+    String tag;
+
+    @StorIOSQLiteColumn(name = LOOK_FULL_IMAGE_PATH)
+    String fullImagePath;
+
+    @StorIOSQLiteColumn(name = LOOK_ICON_IMAGE_PATH)
+    String iconImagePath;
+
+    @StorIOSQLiteColumn(name = LOOK_WARDROPE_ID)
+    Long wardropeId;
+
+
+    private HashSet<Long> thingIds;
 
     public Look() {
-        this.creationDate = new Date();
+        thingIds = new HashSet<>();
+        this.creationDate = new Date().toString();
     }
 
-    @Generated(hash = 1816035851)
-    public Look(long id, Date creationDate, String name) {
-        this.id = id;
-        this.creationDate = creationDate;
-        this.name = name;
+    public Look(long id) {
+        this._id = id;
+        this.creationDate = new Date().toString();
     }
 
-    public long getId() {
-        return this.id;
+    public String getCreationDate() {
+        return creationDate;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Date getCreationDate() {
-        return this.creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getFullImagePath() {
+        return fullImagePath;
+    }
+
+    public void setFullImagePath(String fullImagePath) {
+        this.fullImagePath = fullImagePath;
+    }
+
+    public String getIconImagePath() {
+        return iconImagePath;
+    }
+
+    public void setIconImagePath(String iconImagePath) {
+        this.iconImagePath = iconImagePath;
+    }
+
+    @Override
+    public Long getId() {
+        return _id;
+    }
+
+    public void setId(Long _id) {
+        this._id = _id;
+    }
+
+    public HashSet<Long> getThingIds() {
+        return thingIds;
+    }
+
+    public void setThingIds(HashSet<Long> thingIds) {
+        this.thingIds = thingIds;
+    }
+
+    @Override
+    public void inflateHolder(BaseHolder holder) {
+        ((LookHolder) holder).item.setName(name);
+        ((LookHolder) holder).item.setImage(iconImagePath);
+    }
+
+    public Long getWardropeId() {
+        return wardropeId;
+    }
+
+    public void setWardropeId(Long wardropeId) {
+        this.wardropeId = wardropeId;
+    }
+
 }

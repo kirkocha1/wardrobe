@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wardropes_title">Wardropes</string>
+    <string name="thing_by_wardrope_selected">Things AMOUNT: </string>
+    <string name="looks_by_wardrope_selected">Looks AMOUNT: </string>
+
+    <string name="wardropes_name_hint">Wardrope name</string>
+
+</resources>

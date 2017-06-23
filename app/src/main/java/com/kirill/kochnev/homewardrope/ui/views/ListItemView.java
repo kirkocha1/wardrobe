@@ -1,14 +1,18 @@
 package com.kirill.kochnev.homewardrope.ui.views;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.utils.interfaces.ILoader;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,6 +22,12 @@ import butterknife.ButterKnife;
  */
 
 public class ListItemView extends FrameLayout {
+
+    @Inject
+    ILoader imageLoader;
+
+    @BindView(R.id.item_check_box)
+    CheckBox box;
 
     @BindView(R.id.small_pic)
     ImageView pic;
@@ -36,6 +46,7 @@ public class ListItemView extends FrameLayout {
     }
 
     private void initUi(Context context) {
+        WardropeApplication.getComponent().inject(this);
         LayoutInflater.from(context).inflate(R.layout.view_list_item, this, true);
         ButterKnife.bind(this);
     }
@@ -44,7 +55,22 @@ public class ListItemView extends FrameLayout {
         this.name.setText(name);
     }
 
-    public void setImage(@DrawableRes int resourceId) {
-        pic.setImageResource(resourceId);
+    public void setImage(String filePath) {
+        imageLoader.loadImage(filePath, pic);
     }
+
+    public void setBoxVisibility(boolean isVisible) {
+        box.setVisibility(isVisible ? VISIBLE : GONE);
+    }
+
+    public void toogleCheck() {
+        box.setChecked(!box.isChecked());
+    }
+
+    public void setCheck(boolean isChecked) {
+        box.setChecked(isChecked);
+    }
+
+
 }
+

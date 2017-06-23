@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="looks_title">Образы</string>
+    <string name="looks_all_things_btn">Все вещи</string>
+    <string name="looks_create_btn">Создать</string>
+    <string name="looks_collage_save_btn">Сохранить</string>
+    <string name="looks_creation_title">Создание образа</string>
+    <string name="looks_error_message_max">максимальное количество вещей 4</string>
+    <string name="looks_error_message_min">необходимо выбрать минимум 2 вещи</string>
+    <string name="looks_save_message">Are you sure, you want to save?</string>
+</resources>

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-   <group
-       android:checkableBehavior="single">
-       <item
-           android:id="@+id/nav_wardropes"
-           android:icon="@drawable/wardropes"
-           android:title="@string/nav_wardropes"/>
-       <item
-           android:id="@+id/nav_looks"
-           android:icon="@drawable/look"
-           android:title="@string/nav_looks"/>
-       <item
-           android:id="@+id/nav_things"
-           android:icon="@drawable/thing"
-           android:title="@string/nav_things"/>
-   </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_wardropes"
+            android:icon="@drawable/treasure_chest"
+            android:title="@string/nav_wardropes" />
+        <item
+            android:id="@+id/nav_looks"
+            android:icon="@drawable/look"
+            android:title="@string/nav_looks" />
+        <item
+            android:id="@+id/nav_things"
+            android:icon="@drawable/tshort"
+            android:title="@string/nav_things" />
+    </group>
 </menu>
