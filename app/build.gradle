@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
+    signingConfigs {
+        app_sign {
+            keyAlias 'WardrobeKey'
+            keyPassword 'Mechanic$1'
+            storeFile file('/home/kirill/store/apps_key_store.jks')
+            storePassword 'Mechanic$1'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -16,16 +24,15 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.app_sign
         }
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-
     retrolambda {
         jvmArgs '-noverify'
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -36,12 +43,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -54,20 +59,15 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     compile 'com.google.dagger:dagger:2.4'
     annotationProcessor "com.google.dagger:dagger-compiler:2.4"
-
     compile 'com.arello-mobile:moxy:1.4.5'
     provided 'com.arello-mobile:moxy-compiler:1.4.5'
     compile 'com.arello-mobile:moxy-android:1.4.5'
     compile 'com.arello-mobile:moxy-app-compat:1.4.5'
     compile 'com.android.support:appcompat-v7:25.3.1'
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
-
     compile 'com.pushtorefresh.storio:sqlite-annotations:1.12.3'
     annotationProcessor 'com.pushtorefresh.storio:sqlite-annotations-processor:1.12.3'
     compile 'com.pushtorefresh.storio:sqlite:1.13.0'
-
-
 }
