@@ -28,9 +28,9 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
         initValues(id);
     }
 
-
     private void initValues(long id) {
-        unsubscribeOnDestroy(interactor.getThing(id).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(interactor.getThing(id)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(model -> getViewState().showThing(model),
                         e -> Log.e(TAG, e.getMessage())));
@@ -48,10 +48,10 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
     }
 
     public void createUri() {
-        interactor.getPhotoUri()
+        unsubscribeOnDestroy(interactor.getPhotoUri()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(uri -> getViewState().sendMakePhotoIntent(uri));
+                .subscribe(uri -> getViewState().sendMakePhotoIntent(uri)));
     }
 
     public void processImage() {

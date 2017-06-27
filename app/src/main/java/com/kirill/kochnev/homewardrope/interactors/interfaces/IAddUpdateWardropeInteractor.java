@@ -1,7 +1,5 @@
 package com.kirill.kochnev.homewardrope.interactors.interfaces;
 
-import android.util.Pair;
-
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 
@@ -19,7 +17,7 @@ public interface IAddUpdateWardropeInteractor {
 
     Single<Wardrope> getWardrope(long id);
 
-    Single<RepoResult> saveWardrope(String name, @NotNull HashSet<Long> thingIds, @NotNull HashSet<Long> lookIds);
+    Single<Wardrope> getWardrope();
 
-    Pair<HashSet<Long>, HashSet<Long>> getStartIds();
+    Single<RepoResult> saveWardrope(Wardrope wardrope);
 }

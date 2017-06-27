@@ -33,7 +33,7 @@ public class WardropeRepository extends AbstractWardropeRepository {
     }
 
     @Override
-    public Single<RepoResult> putWardropeWithRelations(Wardrope wardrope, HashSet<Long> thingIds, HashSet<Long> lookIds) {
+    public Single<RepoResult> putItem(Wardrope wardrope) {
         Single<PutResult> resultSingle = Single.create(sub -> {
             storIOSQLite.lowLevel().beginTransaction();
             try {
@@ -56,13 +56,12 @@ public class WardropeRepository extends AbstractWardropeRepository {
                 if (wardropeId == null) {
                     sub.onError(new Exception("wardropeId is null"));
                 } else {
-                    wardrope.setLookIds(lookIds);
                     storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
                             .query(LooksTable.updateWardropeId(wardrope.getLookIdsString(), wardropeId))
                             .build());
 
                     List<ThingsWardropes> thingsWardropes = new ArrayList<>();
-                    for (Long id : thingIds) {
+                    for (Long id : wardrope.getThingIds()) {
                         thingsWardropes.add(new ThingsWardropes(wardropeId, id));
                     }
                     storIOSQLite.put().objects(thingsWardropes).prepare().executeAsBlocking();

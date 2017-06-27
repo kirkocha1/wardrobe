@@ -1,16 +1,10 @@
 package com.kirill.kochnev.homewardrope.interactors;
 
-import android.util.Pair;
-
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashSet;
 
 import io.reactivex.Single;
 
@@ -20,9 +14,9 @@ import io.reactivex.Single;
 
 public class AddUpdateWardropeInteractor implements IAddUpdateWardropeInteractor {
 
-    private Wardrope wardrope = new Wardrope();
-
+    private long id = AppConstants.DEFAULT_ID;
     private AbstractWardropeRepository wardropes;
+    private Single<Wardrope> getWardropeSingle;
 
     public AddUpdateWardropeInteractor(AbstractWardropeRepository wardropes) {
         this.wardropes = wardropes;
@@ -30,19 +24,21 @@ public class AddUpdateWardropeInteractor implements IAddUpdateWardropeInteractor
 
     @Override
     public Single<Wardrope> getWardrope(long id) {
-        return wardropes.getItem(id).map(wardrope -> this.wardrope = wardrope);
+        this.id = id;
+        getWardropeSingle = wardropes.getItem(id).cache();
+        return getWardropeSingle;
     }
 
     @Override
-    public Single<RepoResult> saveWardrope(String name, @NotNull HashSet<Long> thingIds, @NotNull HashSet<Long> lookIds) {
-        wardrope.setName(name);
-        wardrope.setThingsCount(thingIds.size());
-        wardrope.setLooksCount(lookIds.size());
-        return wardropes.putWardropeWithRelations(wardrope, thingIds, lookIds);
+    public Single<Wardrope> getWardrope() {
+        return getWardropeSingle;
     }
 
     @Override
-    public Pair<HashSet<Long>, HashSet<Long>> getStartIds() {
-        return wardrope != null ? new Pair<>(wardrope.getLookIds(), wardrope.getThingIds()) : null;
+    public Single<RepoResult> saveWardrope(Wardrope wardrope) {
+        if (id != AppConstants.DEFAULT_ID) {
+            wardrope.setId(id);
+        }
+        return wardropes.putItem(wardrope);
     }
 }

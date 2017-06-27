@@ -42,7 +42,6 @@ public class Thing extends BitmapModel implements IDbModel {
     @StorIOSQLiteColumn(name = THING_ICON_IMAGE_PATH)
     String iconImagePath;
 
-
     public Thing() {
         this.creationDate = new Date().toString();
     }

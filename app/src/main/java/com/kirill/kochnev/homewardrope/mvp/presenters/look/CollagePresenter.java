@@ -30,7 +30,8 @@ public class CollagePresenter extends BaseMvpPresenter<ICollageView> {
 
     public CollagePresenter(HashSet<Long> thingIds) {
         WardropeApplication.getLookComponent().inject(this);
-        unsubscribeOnDestroy(interactor.getImages(thingIds).subscribeOn(Schedulers.io())
+        unsubscribeOnDestroy(interactor.getImages(thingIds)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cache -> getViewState().constructView(cache, CollageMode.getByNum(cache.size())),
                         e -> Log.e(TAG, e.getMessage())));

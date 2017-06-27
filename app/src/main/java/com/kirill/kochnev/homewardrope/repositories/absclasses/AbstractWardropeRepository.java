@@ -19,6 +19,4 @@ public abstract class AbstractWardropeRepository extends AbstractRepository<Ward
         super(storIOSQLite);
     }
 
-    public abstract Single<RepoResult> putWardropeWithRelations(Wardrope wardrope, HashSet<Long> thingIds, HashSet<Long> lookIds);
-
 }
