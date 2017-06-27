@@ -16,9 +16,9 @@ public interface IPaginationView<M> extends MvpView {
 
     void onLoadFinished(List<M> data);
 
-    void notifyListChanges(M model);
+    void invalidateListViews(M model);
 
     void openUpdateActivity(Intent bundle);
 
-    void notifyItemChanged(M model);
+    void invalidateItemView(M model);
 }

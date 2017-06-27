@@ -58,7 +58,7 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     public void onLongItemClick(IDbModel model) {
         if (mode == ViewMode.WARDROPE_MODE) {
             unsubscribeOnDestroy(getDisposable(interactor.deleteWardropes((Wardrope) model),
-                    isDel -> getViewState().notifyListChanges((Wardrope) model), e -> Log.e(TAG, e.getMessage())));
+                    isDel -> getViewState().invalidateListViews((Wardrope) model), e -> Log.e(TAG, e.getMessage())));
         }
     }
 
@@ -88,7 +88,7 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     @Override
     public void addOrUpdateListItem(long id) {
         unsubscribeOnDestroy(getDisposable(interactor.getWardrope(id),
-                item -> getViewState().notifyItemChanged(item),
+                item -> getViewState().invalidateItemView(item),
                 e -> Log.e(TAG, e.getMessage())));
     }
 

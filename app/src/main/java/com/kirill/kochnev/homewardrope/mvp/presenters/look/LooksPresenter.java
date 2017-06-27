@@ -103,7 +103,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(isDel -> {
-                        getViewState().notifyListChanges((Look) model);
+                        getViewState().invalidateListViews((Look) model);
                     }));
         }
     }
@@ -121,7 +121,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     @Override
     public void addOrUpdateListItem(long id) {
         unsubscribeOnDestroy(getDisposable(interactor.getLook(id),
-                item -> getViewState().notifyItemChanged(item),
+                item -> getViewState().invalidateItemView(item),
                 e -> Log.e(TAG, e.getMessage())));
     }
 
