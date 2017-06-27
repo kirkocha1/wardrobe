@@ -1,5 +1,6 @@
 # wardrobe
 Simple application for presentation purposes
+App is avaliable on Google Play: https://play.google.com/store/apps/details?id=com.kirill.kochnev.homewardrope
 
 This project consists of base android components.
 
