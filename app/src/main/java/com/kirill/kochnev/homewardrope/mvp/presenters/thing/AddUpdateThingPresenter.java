@@ -15,9 +15,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.kirill.kochnev.homewardrope.utils.ImageHelper.makeImage;
-
-
 @InjectViewState
 public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingView> {
 
@@ -35,7 +32,7 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
     private void initValues(long id) {
         unsubscribeOnDestroy(interactor.getThing(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(model -> getViewState().updateView(model.getName(), model.getTag(), makeImage(model.getFullImagePath())),
+                .subscribe(model -> getViewState().showThing(model),
                         e -> Log.e(TAG, e.getMessage())));
     }
 

@@ -19,10 +19,13 @@ import io.reactivex.Single;
 
 public class CollageInteractor implements ICollageInteractor {
 
-    protected AbstractThingRepository things;
+    private AbstractThingRepository things;
+    private ImageHelper helper;
 
-    public CollageInteractor(AbstractThingRepository things) {
+
+    public CollageInteractor(AbstractThingRepository things, ImageHelper helper) {
         this.things = things;
+        this.helper = helper;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class CollageInteractor implements ICollageInteractor {
                     SparseArray<Bitmap> imageCache = new SparseArray<>();
                     int i = 0;
                     for (Thing thing : list) {
-                        Bitmap bitmap = ImageHelper.makeImage(thing.getFullImagePath());
+                        Bitmap bitmap = helper.makeImage(thing.getFullImagePath());
                         imageCache.put(i++, bitmap);
                     }
                     return imageCache;

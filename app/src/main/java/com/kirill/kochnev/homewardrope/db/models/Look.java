@@ -21,7 +21,7 @@ import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_WARDROPE
  */
 
 @StorIOSQLiteType(table = LOOKS_TABLE)
-public class Look implements IDbModel {
+public class Look extends BitmapModel implements IDbModel {
 
     @StorIOSQLiteColumn(key = true, name = _ID)
     Long _id;

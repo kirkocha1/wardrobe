@@ -38,7 +38,7 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     public void attachView(IUpdateLook view) {
         super.attachView(view);
         if (isNeedToAttach) {
-            interactor.getLook().subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage()));
+           unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage())));
         }
     }
 
@@ -49,11 +49,11 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     }
 
     private void init(long lookId) {
-        interactor.getLook(lookId)
+        unsubscribeOnDestroy(interactor.getLook(lookId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(look -> getViewState().setLookData(look),
-                        e -> Log.e(TAG, e.getMessage()));
+                        e -> Log.e(TAG, e.getMessage())));
     }
 
     public void saveLook(String name, String tag) {
@@ -68,6 +68,6 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     }
 
     public void updateClick() {
-        unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().initUpdateProcess(look), e -> Log.e(TAG, e.getMessage())));
+        unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().goToUpdateLookScreen(look), e -> Log.e(TAG, e.getMessage())));
     }
 }

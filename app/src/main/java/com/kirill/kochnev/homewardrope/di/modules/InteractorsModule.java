@@ -2,16 +2,15 @@ package com.kirill.kochnev.homewardrope.di.modules;
 
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardropeInteractor;
-import com.kirill.kochnev.homewardrope.interactors.CollageInteractor;
 import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.WardropesInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.ICollageInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IWardropesInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
+import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
 import dagger.Module;
 import dagger.Provides;
@@ -24,13 +23,13 @@ import dagger.Provides;
 public class InteractorsModule {
 
     @Provides
-    IThingInteractor provideThingInteractor(AbstractThingRepository repository) {
-        return new ThingsInteractor(repository);
+    IThingInteractor provideThingInteractor(ImageHelper helper, AbstractThingRepository repository) {
+        return new ThingsInteractor(repository, helper);
     }
 
     @Provides
-    IAddUpdateThingsInteractor provideAddUpdateThingInteractor(AbstractThingRepository repository) {
-        return new AddUpdateThingsInteractor(repository);
+    IAddUpdateThingsInteractor provideAddUpdateThingInteractor(ImageHelper helper, AbstractThingRepository repository) {
+        return new AddUpdateThingsInteractor(helper, repository);
     }
 
     @Provides

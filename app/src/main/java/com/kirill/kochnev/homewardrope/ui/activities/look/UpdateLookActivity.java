@@ -1,6 +1,8 @@
 package com.kirill.kochnev.homewardrope.ui.activities.look;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
@@ -10,7 +12,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
@@ -19,8 +20,6 @@ import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.kirill.kochnev.homewardrope.utils.ImageHelper.makeImage;
 
 /**
  * Created by kirill on 03.05.17.
@@ -57,8 +56,8 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
         return new UpdateLookPresenter(getIntent().getLongExtra(LOOK_ID, AppConstants.DEFAULT_ID));
     }
 
-    public static Intent createIntent(long lookId) {
-        Intent intent = new Intent(WardropeApplication.getContext(), UpdateLookActivity.class);
+    public static Intent createIntent(Context context, long lookId) {
+        Intent intent = new Intent(context, UpdateLookActivity.class);
         intent.putExtra(LOOK_ID, lookId);
         return intent;
     }
@@ -83,14 +82,14 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     }
 
     @Override
-    public void initUpdateProcess(Look look) {
-        startActivityForResult(CreationLookActivity.createIntent(look.getId(), look.getWardropeId() == null ?
+    public void goToUpdateLookScreen(Look look) {
+        startActivityForResult(CreationLookActivity.createIntent(this, look.getId(), look.getWardropeId() == null ?
                 AppConstants.DEFAULT_ID : look.getWardropeId()), UPDATE_LOOK_CODE);
     }
 
     private void changeBtnStatus(boolean isVisible) {
-        AnimationHelper.hideShowAnimation(captureBtn, isVisible);
-        AnimationHelper.hideShowAnimation(save, isVisible);
+        AnimationHelper.hideShowAnimation(this, captureBtn, isVisible);
+        AnimationHelper.hideShowAnimation(this, save, isVisible);
         name.setEnabled(!isVisible);
         tag.setEnabled(!isVisible);
     }
@@ -116,6 +115,6 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
         setTitleText(look.getName());
         name.setText(look.getName());
         tag.setText(look.getTag());
-        pic.setImageBitmap(makeImage(look.getFullImagePath()));
+        pic.setImageBitmap(look.getBitmap());
     }
 }

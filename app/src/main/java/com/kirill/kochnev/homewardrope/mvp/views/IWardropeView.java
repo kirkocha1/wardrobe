@@ -17,5 +17,6 @@ public interface IWardropeView extends IPaginationView<Wardrope> {
 
     void setThingsByWardrope(long id);
 
+    void navigateToAddUpdateWardropeView(Long id);
 }
 

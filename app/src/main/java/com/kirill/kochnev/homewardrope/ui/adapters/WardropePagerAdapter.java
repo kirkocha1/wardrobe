@@ -1,12 +1,12 @@
 package com.kirill.kochnev.homewardrope.ui.adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.ui.fragments.LooksFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
@@ -22,9 +22,12 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
     public static final int FRAGMENTS_COUNT = 2;
 
     private long wardropeId;
+    private Context context;
 
-    public WardropePagerAdapter(FragmentManager fm, long wardropeId) {
+
+    public WardropePagerAdapter(Context context, FragmentManager fm, long wardropeId) {
         super(fm);
+        this.context = context;
         this.wardropeId = wardropeId;
     }
 
@@ -33,10 +36,10 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
         String name = null;
         switch (position) {
             case THINGS_FRAGMENT_ID:
-                name = WardropeApplication.getContext().getString(R.string.things_title);
+                name = context.getString(R.string.things_title);
                 break;
             case LOOKS_FRAGMENT_ID:
-                name = WardropeApplication.getContext().getString(R.string.looks_title);
+                name = context.getString(R.string.looks_title);
                 break;
         }
         return name;

@@ -10,6 +10,7 @@ import android.view.View;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
@@ -24,6 +25,7 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseDbListFragment;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
+import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
 /**
  * Created by kirill on 30.03.17.
@@ -69,9 +71,17 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
     }
 
     @Override
+    public void navigateToAddUpdateWardropeView(Long id) {
+        Intent intent = new Intent(getContext(), AddUpdateWardropeActivity.class);
+        intent.putExtra(WARDROPE_ID, id);
+        openUpdateActivity(intent);
+    }
+
+    @Override
     public boolean isFullPart() {
         return ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE)) == ViewMode.WARDROPE_MODE;
     }
+
 
     @Override
     public void setThingsByWardrope(long id) {

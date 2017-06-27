@@ -7,6 +7,7 @@ import com.kirill.kochnev.homewardrope.interactors.interfaces.ICollageInteractor
 import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,12 +22,12 @@ public class LookInteractorModule {
 
     @LookScope
     @Provides
-    ILooksInteractor provideLookssInteractor(AbstractLookRepository repository) {
-        return new LooksInteractor(repository);
+    ILooksInteractor provideLookssInteractor(AbstractLookRepository repository, ImageHelper helper) {
+        return new LooksInteractor(repository, helper);
     }
 
     @Provides
-    ICollageInteractor provideCollageInteractor(AbstractThingRepository repository) {
-        return new CollageInteractor(repository);
+    ICollageInteractor provideCollageInteractor(AbstractThingRepository repository, ImageHelper helper) {
+        return new CollageInteractor(repository, helper);
     }
 }

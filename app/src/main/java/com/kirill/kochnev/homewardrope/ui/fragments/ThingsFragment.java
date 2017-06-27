@@ -23,6 +23,8 @@ import java.util.HashSet;
 
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
+import static com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter.THINGS_ID;
+import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity.IS_EDIT;
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
 /**
@@ -96,4 +98,11 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
         ((ThingsAdapter) adapter).setIds(set);
     }
 
+    @Override
+    public void navigateToAddUpdateThingView(boolean isEdit, Long id) {
+        Intent intent = new Intent(getContext(), AddUpdateThingActivity.class);
+        intent.putExtra(THINGS_ID, id);
+        intent.putExtra(IS_EDIT, isEdit);
+        openUpdateActivity(intent);
+    }
 }

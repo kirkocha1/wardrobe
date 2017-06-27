@@ -15,12 +15,13 @@ import java.util.HashSet;
 import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
 import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_LOOKS_COUNT;
 import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_NAME;
+import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_THINGS_COUNT;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
  */
-@StorIOSQLiteType(table = "wardropes")
+@StorIOSQLiteType(table = WARDROPE_TABLE)
 public class Wardrope implements IDbModel {
 
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)

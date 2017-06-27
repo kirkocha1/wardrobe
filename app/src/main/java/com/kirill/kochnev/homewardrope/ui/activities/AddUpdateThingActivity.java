@@ -14,7 +14,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
@@ -51,14 +51,6 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     @InjectPresenter
     AddUpdateThingPresenter presenter;
-
-    public static Intent createIntent(long thingsId, boolean isEditMode) {
-        Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateThingActivity.class);
-        intent.putExtra(THINGS_ID, thingsId);
-        intent.putExtra(IS_EDIT, isEditMode);
-        return intent;
-    }
-
 
     @ProvidePresenter
     AddUpdateThingPresenter providePresenter() {
@@ -102,8 +94,8 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
         captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.INVISIBLE);
         save.setVisibility(isEditMode ? View.VISIBLE : View.INVISIBLE);
         if (isAnimate) {
-            AnimationHelper.hideShowAnimation(save, !isEditMode);
-            AnimationHelper.hideShowAnimation(captureBtn, !isEditMode);
+            AnimationHelper.hideShowAnimation(this, save, !isEditMode);
+            AnimationHelper.hideShowAnimation(this, captureBtn, !isEditMode);
         }
     }
 
@@ -160,10 +152,10 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     }
 
     @Override
-    public void updateView(String name, String tag, Bitmap image) {
-        setTitleText(name == null ? "без имени" : name);
-        pic.setImageBitmap(image);
-        this.tag.setText(tag);
-        this.name.setText(name);
+    public void showThing(Thing thing) {
+        setTitleText(thing.getName() == null ? "без имени" : thing.getName());
+        pic.setImageBitmap(thing.getBitmap());
+        this.tag.setText(thing.getTag());
+        this.name.setText(thing.getName());
     }
 }

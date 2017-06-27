@@ -114,10 +114,10 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 if (addBtn.isActivated()) {
                     switch (newState) {
                         case RecyclerView.SCROLL_STATE_DRAGGING:
-                            AnimationHelper.hideShowAnimation(addBtn, true);
+                            AnimationHelper.hideShowAnimation(getContext(), addBtn, true);
                             break;
                         case RecyclerView.SCROLL_STATE_IDLE:
-                            AnimationHelper.hideShowAnimation(addBtn, false);
+                            AnimationHelper.hideShowAnimation(getContext(), addBtn, false);
                             break;
                     }
                 }
@@ -131,7 +131,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     }
 
     @Override
-    public void notifyListChanges(M model) {
+    public void invalidateListViews(M model) {
         if (adapter != null) {
             adapter.onRemoveItem(model);
             if (adapter.getItemCount() == 0) {
@@ -175,7 +175,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     }
 
     @Override
-    public void notifyItemChanged(M model) {
+    public void invalidateItemView(M model) {
         adapter.addData(model);
         blankImg.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }

@@ -22,7 +22,7 @@ import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.THING_TAG;
 
 
 @StorIOSQLiteType(table = THINGS_TABLE)
-public class Thing implements IDbModel {
+public class Thing extends BitmapModel implements IDbModel {
 
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
     Long _id;

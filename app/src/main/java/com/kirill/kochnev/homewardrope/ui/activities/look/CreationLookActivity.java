@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.ui.activities.look;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -62,8 +63,8 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         return new CreationLookPresenter(getIntent().getLongExtra(LOOK_ID, -1));
     }
 
-    public static Intent createIntent(long lookId, long wardropeId) {
-        Intent intent = new Intent(WardropeApplication.getContext(), CreationLookActivity.class);
+    public static Intent createIntent(Context context, long lookId, long wardropeId) {
+        Intent intent = new Intent(context, CreationLookActivity.class);
         intent.putExtra(LOOK_ID, lookId);
         intent.putExtra(WARDROPE_ID, wardropeId);
         return intent;

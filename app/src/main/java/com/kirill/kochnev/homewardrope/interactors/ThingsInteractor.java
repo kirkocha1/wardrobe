@@ -19,10 +19,12 @@ import io.reactivex.Single;
 
 public class ThingsInteractor implements IThingInteractor {
 
-    protected AbstractThingRepository things;
+    private AbstractThingRepository things;
+    private ImageHelper helper;
 
-    public ThingsInteractor(AbstractThingRepository things) {
+    public ThingsInteractor(AbstractThingRepository things, ImageHelper helper) {
         this.things = things;
+        this.helper = helper;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ThingsInteractor implements IThingInteractor {
 
     @Override
     public Single<DeleteResult> deleteThings(Thing model) {
-        ImageHelper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
+        helper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
         return things.deletItem(model);
     }
 }

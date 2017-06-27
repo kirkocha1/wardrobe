@@ -1,7 +1,6 @@
 package com.kirill.kochnev.homewardrope;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.StrictMode;
 
 import com.kirill.kochnev.homewardrope.di.components.AppComponent;
@@ -15,8 +14,6 @@ public class WardropeApplication extends Application {
     private static AppComponent component;
     private static LookComponent lookComponent;
 
-    private static Context context;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,9 +24,7 @@ public class WardropeApplication extends Application {
                     .penaltyLog()
                     .build());
         }
-
         component = buildComponent();
-        context = getApplicationContext();
     }
 
     private AppComponent buildComponent() {
@@ -45,10 +40,6 @@ public class WardropeApplication extends Application {
 
     public static void clearLookComponent() {
         lookComponent = null;
-    }
-
-    public static Context getContext() {
-        return context;
     }
 
     public static AppComponent getComponent() {

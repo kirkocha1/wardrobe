@@ -87,7 +87,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
             unsubscribeOnDestroy(interactor.deleteThings((Thing) model)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> getViewState().notifyListChanges((Thing) model)));
+                    .subscribe(result -> getViewState().invalidateListViews((Thing) model)));
         }
     }
 
@@ -101,14 +101,14 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         if (viewMode != ViewMode.THING_MODE && isEdit) {
             idBus.passData(new Pair<>(ViewMode.THING_MODE, thing.getId()));
         } else {
-            getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
+            getViewState().navigateToAddUpdateThingView(false, thing.getId());
         }
     }
 
     @Override
     public void addOrUpdateListItem(long id) {
         unsubscribeOnDestroy(getDisposable(interactor.getThing(id),
-                item -> getViewState().notifyItemChanged(item),
+                item -> getViewState().invalidateItemView(item),
                 e -> Log.e(TAG, e.getMessage())));
     }
 }

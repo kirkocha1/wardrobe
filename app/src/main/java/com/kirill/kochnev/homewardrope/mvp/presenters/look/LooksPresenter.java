@@ -84,7 +84,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
                 ids.add(look.getId());
             }
         }
-        getViewState().addIdsToAdapter(ids);
+        getViewState().markAdapterViews(ids);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(isDel -> {
-                        getViewState().notifyListChanges((Look) model);
+                        getViewState().invalidateListViews((Look) model);
                     }));
         }
     }
@@ -113,7 +113,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
         if (viewMode != ViewMode.LOOK_MODE && isEdit) {
             idBus.passData(new Pair<>(ViewMode.LOOK_MODE, model.getId()));
         } else {
-            getViewState().openUpdateActivity(UpdateLookActivity.createIntent(model.getId()));
+            getViewState().navigateToUpdateLookView(model.getId());
         }
 
     }
@@ -121,7 +121,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     @Override
     public void addOrUpdateListItem(long id) {
         unsubscribeOnDestroy(getDisposable(interactor.getLook(id),
-                item -> getViewState().notifyItemChanged(item),
+                item -> getViewState().invalidateItemView(item),
                 e -> Log.e(TAG, e.getMessage())));
     }
 

@@ -1,11 +1,11 @@
 package com.kirill.kochnev.homewardrope.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,14 +28,20 @@ import static com.kirill.kochnev.homewardrope.AppConstants.REQ_WIDTH;
 
 public class ImageHelper {
 
-    private static void saveIcon(String iconPath, Bitmap cropImage, boolean withCompession) throws IOException {
+    private Context context;
+
+    public ImageHelper(Context context) {
+        this.context = context;
+    }
+
+    private void saveIcon(String iconPath, Bitmap cropImage, boolean withCompession) throws IOException {
         FileOutputStream out = new FileOutputStream(iconPath);
         cropImage.compress(Bitmap.CompressFormat.JPEG, withCompession ? COMPRESSION_PERCENT : AppConstants.ALL_PERCENTS, out);
         out.flush();
         out.close();
     }
 
-    public static Bitmap makeImage(String imagePath) {
+    public Bitmap makeImage(String imagePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imagePath, options);
@@ -44,7 +50,7 @@ public class ImageHelper {
         return BitmapFactory.decodeFile(imagePath, options);
     }
 
-    public static Single<Bitmap> getAndSaveCropImageObservable(String fullImagePath, String iconPath) {
+    public Single<Bitmap> getAndSaveCropImageObservable(String fullImagePath, String iconPath) {
         return Single.create(sub -> {
             Bitmap cropImage = makeImage(fullImagePath);
             saveIcon(iconPath, cropImage, true);
@@ -56,7 +62,7 @@ public class ImageHelper {
         });
     }
 
-    public static Single<Bitmap> saveImageAndIconObservable(String imagePath, String iconPath, @NotNull Bitmap bitmap) {
+    public Single<Bitmap> saveImageAndIconObservable(String imagePath, String iconPath, @NotNull Bitmap bitmap) {
         return Single.create(sub -> {
             try {
                 saveIcon(imagePath, bitmap, false);
@@ -68,25 +74,25 @@ public class ImageHelper {
         });
     }
 
-    public static File createImageFile(String name) throws IOException {
+    public File createImageFile(String name) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_" + name;
-        File storageDir = WardropeApplication.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 
-    public static File createIconImageFile(String name) throws IOException {
+    public File createIconImageFile(String name) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_" + name;
-        File storageDir = WardropeApplication.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName + "min_icon", ".jpg", storageDir);
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options) {
+    public int calculateInSampleSize(BitmapFactory.Options options) {
         return calculateInSampleSize(options, REQ_HEIGHT, REQ_WIDTH);
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int height, int width) {
+    public int calculateInSampleSize(BitmapFactory.Options options, int height, int width) {
         int inSampleSize = 1;
         if (options.outHeight > height || options.outWidth > width) {
             int halfHeight = options.outHeight / 2;
@@ -99,7 +105,7 @@ public class ImageHelper {
         return inSampleSize;
     }
 
-    public static void deleteImage(String... paths) {
+    public void deleteImage(String... paths) {
         for (String path : paths) {
             new File(path).delete();
         }

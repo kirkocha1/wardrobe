@@ -23,5 +23,5 @@ public interface IAddUpdateThingView extends MvpView {
 
     void showError(String error);
 
-    void updateView(String name, String tag, Bitmap image);
+    void showThing(Thing thing);
 }

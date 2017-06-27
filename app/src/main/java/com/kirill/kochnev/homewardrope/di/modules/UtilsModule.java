@@ -3,6 +3,7 @@ package com.kirill.kochnev.homewardrope.di.modules;
 import android.content.Context;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
+import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.kirill.kochnev.homewardrope.utils.ImageLoader;
 import com.kirill.kochnev.homewardrope.utils.bus.EditStateBus;
 import com.kirill.kochnev.homewardrope.utils.bus.EntityIdBus;
@@ -42,6 +43,12 @@ public class UtilsModule {
         return new Picasso.Builder(context)
                 .memoryCache(new LruCache(15 * AppConstants.BYTES_MB_COEFF))
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    public ImageHelper provideImageHelper(Context context) {
+        return new ImageHelper(context);
     }
 
     @Singleton

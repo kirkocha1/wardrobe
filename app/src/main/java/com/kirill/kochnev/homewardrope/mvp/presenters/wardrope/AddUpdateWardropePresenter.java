@@ -41,7 +41,6 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
 
     private HashSet<Long> thingsSet = new HashSet<>();
     private HashSet<Long> looksSet = new HashSet<>();
-
     private boolean isEditableMode = false;
 
 
