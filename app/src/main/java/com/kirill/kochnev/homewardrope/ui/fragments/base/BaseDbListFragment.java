@@ -114,10 +114,10 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 if (addBtn.isActivated()) {
                     switch (newState) {
                         case RecyclerView.SCROLL_STATE_DRAGGING:
-                            AnimationHelper.hideShowAnimation(addBtn, true);
+                            AnimationHelper.hideShowAnimation(getContext(), addBtn, true);
                             break;
                         case RecyclerView.SCROLL_STATE_IDLE:
-                            AnimationHelper.hideShowAnimation(addBtn, false);
+                            AnimationHelper.hideShowAnimation(getContext(), addBtn, false);
                             break;
                     }
                 }

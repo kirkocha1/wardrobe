@@ -84,7 +84,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
                 ids.add(look.getId());
             }
         }
-        getViewState().addIdsToAdapter(ids);
+        getViewState().markAdapterViews(ids);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
         if (viewMode != ViewMode.LOOK_MODE && isEdit) {
             idBus.passData(new Pair<>(ViewMode.LOOK_MODE, model.getId()));
         } else {
-            getViewState().openUpdateActivity(UpdateLookActivity.createIntent(model.getId()));
+            getViewState().navigateToUpdateLookView(model.getId());
         }
 
     }

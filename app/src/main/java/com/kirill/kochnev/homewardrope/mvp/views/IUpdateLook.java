@@ -14,5 +14,5 @@ public interface IUpdateLook extends MvpView {
 
     void onSave(Intent intent);
 
-    void initUpdateProcess(Look look);
+    void goToUpdateLookScreen(Look look);
 }

@@ -17,4 +17,6 @@ public interface IThingsView extends IPaginationView<Thing> {
     void addThingIdsToAdapter(HashSet<Long> set);
 
     void setEditMode(boolean isEditMode);
+
+    void navigateToAddUpdateThingView(boolean isEdit, Long id);
 }

@@ -70,7 +70,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
         setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
         ButterKnife.bind(this, baseLayout);
         initBtns();
-        pager.setAdapter(new WardropePagerAdapter(getSupportFragmentManager(), wardropeId));
+        pager.setAdapter(new WardropePagerAdapter(this, getSupportFragmentManager(), wardropeId));
     }
 
     private void initBtns() {
@@ -94,7 +94,7 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void changeBtnsMode(boolean mode) {
-        AnimationHelper.hideShowAnimation(save, !mode);
+        AnimationHelper.hideShowAnimation(this, save, !mode);
         name.setEnabled(mode);
     }
 

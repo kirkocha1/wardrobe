@@ -13,6 +13,7 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
@@ -73,7 +74,7 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
         if (mode == ViewMode.LOOK_MODE) {
             setTitle(R.string.looks_title);
         }
-        addBtn.setOnClickListener(v -> openUpdateActivity(CreationLookActivity.createIntent(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
+        addBtn.setOnClickListener(v -> openUpdateActivity(CreationLookActivity.createIntent(getContext(), AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
         addBtn.setActivated(mode == ViewMode.LOOK_MODE);
         addBtn.setVisibility(mode == ViewMode.LOOK_MODE ? View.VISIBLE : View.GONE);
     }
@@ -90,7 +91,12 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     }
 
     @Override
-    public void addIdsToAdapter(HashSet<Long> set) {
+    public void markAdapterViews(HashSet<Long> set) {
         ((LooksAdapter) adapter).setIds(set);
+    }
+
+    @Override
+    public void navigateToUpdateLookView(Long id) {
+        openUpdateActivity(UpdateLookActivity.createIntent(getContext(), id));
     }
 }

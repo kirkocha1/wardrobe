@@ -101,7 +101,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         if (viewMode != ViewMode.THING_MODE && isEdit) {
             idBus.passData(new Pair<>(ViewMode.THING_MODE, thing.getId()));
         } else {
-            getViewState().openUpdateActivity(AddUpdateThingActivity.createIntent(thing.getId(), false));
+            getViewState().navigateToAddUpdateThingView(false, thing.getId());
         }
     }
 

@@ -16,6 +16,7 @@ public interface ILooksView extends IPaginationView<Look> {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void setEditMode(boolean isEditMode);
 
-    void addIdsToAdapter(HashSet<Long> set);
+    void markAdapterViews(HashSet<Long> set);
 
+    void navigateToUpdateLookView(Long id);
 }

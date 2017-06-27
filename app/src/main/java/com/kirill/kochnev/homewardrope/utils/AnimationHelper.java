@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.utils;
 
 
+import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 
 /**
  * Created by kirill on 28.04.17.
@@ -20,8 +20,8 @@ public class AnimationHelper {
         transaction.replace(containerId, fragment).commit();
     }
 
-    public static void hideShowAnimation(View view, boolean isHide) {
-        view.startAnimation(AnimationUtils.loadAnimation(WardropeApplication.getContext(),
+    public static void hideShowAnimation(Context context, View view, boolean isHide) {
+        view.startAnimation(AnimationUtils.loadAnimation(context,
                 isHide ? R.anim.add_btn_hide : R.anim.add_btn_show));
         view.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
     }

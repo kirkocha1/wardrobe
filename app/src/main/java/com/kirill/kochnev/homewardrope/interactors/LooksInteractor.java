@@ -11,7 +11,6 @@ import com.kirill.kochnev.homewardrope.repositories.utils.LooksByWardropeSpecifi
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,11 +25,13 @@ import io.reactivex.Single;
 public class LooksInteractor implements ILooksInteractor {
 
     private AbstractLookRepository looks;
+    private ImageHelper helper;
 
     private Look look = new Look();
 
-    public LooksInteractor(AbstractLookRepository looks) {
+    public LooksInteractor(AbstractLookRepository looks, ImageHelper helper) {
         this.looks = looks;
+        this.helper = helper;
     }
 
     public Single<List<Look>> getLooks(long id) {
@@ -39,13 +40,17 @@ public class LooksInteractor implements ILooksInteractor {
 
     @Override
     public Single<DeleteResult> deleteLook(Look model) {
-        ImageHelper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
+        helper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
         return looks.deletItem(model);
     }
 
     @Override
     public Single<Look> getLook(long id) {
-        return looks.getItem(id).map(look -> this.look = look);
+        return looks.getItem(id).map(look -> {
+            this.look = look;
+            look.setBitmap(helper.makeImage(look.getFullImagePath()));
+            return look;
+        });
     }
 
     @Override
@@ -72,13 +77,13 @@ public class LooksInteractor implements ILooksInteractor {
             try {
                 look.setName(name);
                 look.setTag(tag);
-                look.setFullImagePath(ImageHelper.createImageFile("look").getAbsolutePath());
-                look.setIconImagePath(ImageHelper.createIconImageFile("look").getAbsolutePath());
+                look.setFullImagePath(helper.createImageFile("look").getAbsolutePath());
+                look.setIconImagePath(helper.createIconImageFile("look").getAbsolutePath());
                 sub.onSuccess(look);
             } catch (Exception e) {
                 sub.onError(e);
             }
-        }).flatMap(o -> ImageHelper.saveImageAndIconObservable(look.getFullImagePath(), look.getIconImagePath(), bitmap))
+        }).flatMap(o -> helper.saveImageAndIconObservable(look.getFullImagePath(), look.getIconImagePath(), bitmap))
                 .flatMap(cropImg -> looks.putItem(look));
     }
 

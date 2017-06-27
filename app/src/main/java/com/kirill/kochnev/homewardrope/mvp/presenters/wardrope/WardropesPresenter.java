@@ -1,6 +1,5 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.wardrope;
 
-import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
@@ -13,12 +12,9 @@ import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IWardropesInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
-import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
-
-import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
 
 /**
  * Created by kirill on 30.03.17.
@@ -74,9 +70,7 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     private void resolveClick(IDbModel model) {
         switch (mode) {
             case WARDROPE_MODE:
-                Intent intent = new Intent(WardropeApplication.getContext(), AddUpdateWardropeActivity.class);
-                intent.putExtra(WARDROPE_ID, model.getId());
-                getViewState().openUpdateActivity(intent);
+                getViewState().navigateToAddUpdateWardropeView(model.getId());
                 break;
             case LOOK_MODE:
                 bus.passData(new Pair<>(ViewMode.WARDROPE_MODE, model.getId()));
