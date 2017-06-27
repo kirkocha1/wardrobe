@@ -7,6 +7,7 @@ import android.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
@@ -92,11 +93,10 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     }
 
     private void returnInitialState() {
-        Pair<HashSet<Long>, HashSet<Long>> startSets = interactor.getStartIds();
-        if (startSets != null) {
-            setHashSets(startSets.first, startSets.second);
+        interactor.getWardrope().subscribe(wardrope -> {
+            setHashSets(wardrope.getLookIds(), wardrope.getThingIds());
             getViewState().setCount(thingsSet.size(), looksSet.size());
-        }
+        });
     }
 
     private void setHashSets(HashSet<Long> looksSet, HashSet<Long> thingsSet) {
@@ -105,7 +105,7 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     }
 
     public void save(String name) {
-        unsubscribeOnDestroy(interactor.saveWardrope(name, thingsSet, looksSet)
+        unsubscribeOnDestroy(interactor.saveWardrope(new Wardrope(name, thingsSet, looksSet))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {

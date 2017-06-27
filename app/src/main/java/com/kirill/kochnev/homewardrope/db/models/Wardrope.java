@@ -1,7 +1,6 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
-import android.support.annotation.NonNull;
 
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardropeHolder;
@@ -46,6 +45,14 @@ public class Wardrope implements IDbModel {
 
     public Wardrope() {
         creationDate = new Date().toString();
+    }
+
+    public Wardrope(String name, HashSet<Long> thingIds, HashSet<Long> lookIds) {
+        this.name = name;
+        this.thingIds = thingIds;
+        this.lookIds = lookIds;
+        thingsCount = thingIds.size();
+        looksCount = lookIds.size();
     }
 
     @Override
