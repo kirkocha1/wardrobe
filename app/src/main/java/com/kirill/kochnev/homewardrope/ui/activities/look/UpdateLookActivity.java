@@ -2,7 +2,6 @@ package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;

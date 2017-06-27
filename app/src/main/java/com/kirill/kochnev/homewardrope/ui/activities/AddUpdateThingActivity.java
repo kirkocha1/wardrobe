@@ -30,7 +30,6 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     private static final int REQUEST_TAKE_PHOTO = 2;
     public static final String IS_EDIT = "is_edit";
 
-
     @BindView(R.id.new_name)
     EditText name;
 
@@ -54,15 +53,13 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     @ProvidePresenter
     AddUpdateThingPresenter providePresenter() {
-        return new AddUpdateThingPresenter(thingsId);
+        return new AddUpdateThingPresenter(getIntent().getLongExtra(THINGS_ID, -1));
     }
 
-    private long thingsId;
     private boolean isEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        thingsId = getIntent().getLongExtra(THINGS_ID, -1);
         isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
         super.onCreate(savedInstanceState);
     }
@@ -70,14 +67,15 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     @Override
     public void onInitUi(View baseLayout) {
         setBackButtonEnabled(true);
-        setTitleText(thingsId == -1 ? "новая вещь" : "");
+        long thingId = getIntent().getLongExtra(THINGS_ID, -1);
+        boolean isNew = thingId == AppConstants.DEFAULT_ID;
+        setTitleText(thingId == -1 ? "новая вещь" : "");
         setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
         ButterKnife.bind(this, baseLayout);
-        initBtns();
+        initBtns(isNew);
     }
 
-    private void initBtns() {
-        boolean isNew = thingsId == AppConstants.DEFAULT_ID;
+    private void initBtns(boolean isNew) {
         edit.setVisibility(isNew ? View.GONE : View.VISIBLE);
         changeMode(isNew, false);
         edit.setOnClickListener(v -> {

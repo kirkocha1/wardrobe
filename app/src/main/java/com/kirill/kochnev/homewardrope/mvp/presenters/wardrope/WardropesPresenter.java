@@ -64,7 +64,6 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
         if (mode == ViewMode.LOOK_MODE) {
             loadMoreData(AppConstants.DEFAULT_ID);
         }
-        Log.e(TAG, "ATTACH FRAGMENT");
     }
 
     private void resolveClick(IDbModel model) {
