@@ -4,12 +4,8 @@ import com.kirill.kochnev.homewardrope.interactors.AddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
 import com.kirill.kochnev.homewardrope.interactors.WardropesInteractor;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IWardropesInteractor;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
+import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.WardropeRepository;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
 import dagger.Module;
@@ -23,22 +19,22 @@ import dagger.Provides;
 public class InteractorsModule {
 
     @Provides
-    IThingInteractor provideThingInteractor(ImageHelper helper, AbstractThingRepository repository) {
+    ThingsInteractor provideThingInteractor(ImageHelper helper, ThingRepository repository) {
         return new ThingsInteractor(repository, helper);
     }
 
     @Provides
-    IAddUpdateThingsInteractor provideAddUpdateThingInteractor(ImageHelper helper, AbstractThingRepository repository) {
+    AddUpdateThingsInteractor provideAddUpdateThingInteractor(ImageHelper helper, ThingRepository repository) {
         return new AddUpdateThingsInteractor(helper, repository);
     }
 
     @Provides
-    IAddUpdateWardropeInteractor provideAddUpdateWardropesInteractor(AbstractWardropeRepository repository) {
+    AddUpdateWardropeInteractor provideAddUpdateWardropesInteractor(WardropeRepository repository) {
         return new AddUpdateWardropeInteractor(repository);
     }
 
     @Provides
-    IWardropesInteractor provideWardropesInteractor(AbstractWardropeRepository repository) {
+    WardropesInteractor provideWardropesInteractor(WardropeRepository repository) {
         return new WardropesInteractor(repository);
     }
 

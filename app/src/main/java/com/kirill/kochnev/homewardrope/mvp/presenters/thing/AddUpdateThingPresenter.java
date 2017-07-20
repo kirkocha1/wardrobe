@@ -6,7 +6,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
+import com.kirill.kochnev.homewardrope.interactors.AddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 
@@ -21,7 +21,7 @@ public class AddUpdateThingPresenter extends BaseMvpPresenter<IAddUpdateThingVie
     public static final String TAG = "AddUpdateThingPresenter";
 
     @Inject
-    IAddUpdateThingsInteractor interactor;
+    AddUpdateThingsInteractor interactor;
 
     public AddUpdateThingPresenter(long id) {
         WardropeApplication.getComponent().inject(this);

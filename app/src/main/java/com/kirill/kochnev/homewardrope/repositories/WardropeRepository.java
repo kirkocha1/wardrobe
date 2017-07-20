@@ -7,7 +7,7 @@ import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.db.tables.LooksTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractWardropeRepository;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -26,7 +26,7 @@ import io.reactivex.Single;
  * Created by kirill on 30.03.17.
  */
 
-public class WardropeRepository extends AbstractWardropeRepository {
+public class WardropeRepository extends AbstractRepository<Wardrope> {
 
     public WardropeRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);

@@ -4,8 +4,7 @@ import android.graphics.Bitmap;
 import android.util.SparseArray;
 
 import com.kirill.kochnev.homewardrope.db.models.Thing;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.ICollageInteractor;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByIdsSpecofication;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
@@ -17,18 +16,17 @@ import io.reactivex.Single;
  * Created by kirill on 11.05.17.
  */
 
-public class CollageInteractor implements ICollageInteractor {
+public class CollageInteractor {
 
-    private AbstractThingRepository things;
+    private ThingRepository things;
     private ImageHelper helper;
 
 
-    public CollageInteractor(AbstractThingRepository things, ImageHelper helper) {
+    public CollageInteractor(ThingRepository things, ImageHelper helper) {
         this.things = things;
         this.helper = helper;
     }
 
-    @Override
     public Single<SparseArray<Bitmap>> getImages(HashSet<Long> thingIds) {
         return things.query(new ThingsByIdsSpecofication(thingIds))
                 .map(list -> {

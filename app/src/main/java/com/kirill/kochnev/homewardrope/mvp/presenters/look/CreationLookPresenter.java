@@ -8,7 +8,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
+import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
@@ -32,7 +32,7 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     IdBus bus;
 
     @Inject
-    ILooksInteractor interactor;
+    LooksInteractor interactor;
 
     public CreationLookPresenter(long id) {
         WardropeApplication.getLookComponent().inject(this);

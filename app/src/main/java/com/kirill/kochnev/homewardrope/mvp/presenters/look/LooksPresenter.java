@@ -9,10 +9,9 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
+import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
-import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
@@ -43,7 +42,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     protected StateBus stateBus;
 
     @Inject
-    ILooksInteractor interactor;
+    LooksInteractor interactor;
 
     public LooksPresenter(ViewMode mode, boolean isEdit, long filterId) {
         WardropeApplication.getLookComponent().inject(this);

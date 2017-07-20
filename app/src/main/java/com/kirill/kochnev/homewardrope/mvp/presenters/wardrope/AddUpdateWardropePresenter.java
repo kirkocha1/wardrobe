@@ -9,7 +9,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateWardropeInteractor;
+import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardropeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
@@ -38,7 +38,7 @@ public class AddUpdateWardropePresenter extends BaseMvpPresenter<IAddUpdateWardr
     StateBus stateBus;
 
     @Inject
-    IAddUpdateWardropeInteractor interactor;
+    AddUpdateWardropeInteractor interactor;
 
     private HashSet<Long> thingsSet = new HashSet<>();
     private HashSet<Long> looksSet = new HashSet<>();

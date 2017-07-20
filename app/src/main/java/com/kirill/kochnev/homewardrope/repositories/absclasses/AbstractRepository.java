@@ -8,7 +8,6 @@ import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.repositories.interfaces.IRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.ArrayList;
@@ -60,15 +59,8 @@ public abstract class AbstractRepository<M extends IDbModel> implements IReposit
 
     @Override
     public Single<RepoResult> putItem(M model) {
-        Single<PutResult> single = Single.create(sub -> {
-            PutResult res = storIOSQLite.put().object(model).prepare().executeAsBlocking();
-            if (res.wasInserted() || res.wasUpdated()) {
-                sub.onSuccess(res);
-            } else {
-                sub.onError(new Exception("model wasn't inserted"));
-            }
-        });
-        return single.map(res -> new RepoResult(res.wasInserted() ? res.insertedId() : model.getId(), res.wasInserted()));
+        return Single.fromCallable(() -> storIOSQLite.put().object(model).prepare().executeAsBlocking())
+                .map(res -> new RepoResult(res.wasInserted() ? res.insertedId() : model.getId(), res.wasInserted()));
     }
 
     @Override
@@ -89,15 +81,7 @@ public abstract class AbstractRepository<M extends IDbModel> implements IReposit
 
 
     public Single<DeleteResult> deletItem(M model) {
-        return Single.create(sub -> {
-            DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
-            if (result.numberOfRowsDeleted() != 0) {
-                sub.onSuccess(result);
-            } else {
-                sub.onError(new Exception("no row was deleted"));
-            }
-        });
+        return Single.fromCallable(() -> storIOSQLite.delete().object(model).prepare().executeAsBlocking());
     }
-
 
 }

@@ -2,14 +2,11 @@ package com.kirill.kochnev.homewardrope.interactors;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IAddUpdateThingsInteractor;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
 import java.io.File;
@@ -21,15 +18,15 @@ import io.reactivex.Single;
  * Created by kirill on 11.05.17.
  */
 
-public class AddUpdateThingsInteractor implements IAddUpdateThingsInteractor {
+public class AddUpdateThingsInteractor {
     public static final String TAG = "UpdateThingsInteractor";
     private Thing thing = new Thing();
 
-    private AbstractThingRepository things;
+    private ThingRepository things;
     private ImageHelper helper;
 
 
-    public AddUpdateThingsInteractor(ImageHelper helper, AbstractThingRepository things) {
+    public AddUpdateThingsInteractor(ImageHelper helper, ThingRepository things) {
         this.things = things;
         this.helper = helper;
     }
@@ -42,14 +39,12 @@ public class AddUpdateThingsInteractor implements IAddUpdateThingsInteractor {
         });
     }
 
-    @Override
     public Single<RepoResult> saveThing(String name, String tag) {
         thing.setName(name);
         thing.setTag(tag);
         return things.putItem(thing);
     }
 
-    @Override
     public Single<Uri> getPhotoUri() {
         return Single.create(sub -> {
             File photoFile = null;
