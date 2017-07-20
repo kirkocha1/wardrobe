@@ -97,11 +97,10 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                boolean isScrollDown = dy > 0;
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                if (!isAllLoaded && !isLoading && isScrollDown) {
+                if (!isAllLoaded && !isLoading) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                         isLoading = true;
                         getPresenter().loadMoreData(adapter.getLastId());
@@ -146,7 +145,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
         blankImg.setVisibility(isBlank ? View.VISIBLE : View.GONE);
         list.post(() -> {
             isLoading = false;
-            isAllLoaded = data != null && data.size() < LIMIT;
+            isAllLoaded = data == null || data.size() < LIMIT;
             adapter.addData(data);
         });
     }
