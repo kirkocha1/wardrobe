@@ -51,26 +51,18 @@ public class ImageHelper {
     }
 
     public Single<Bitmap> getAndSaveCropImageObservable(String fullImagePath, String iconPath) {
-        return Single.create(sub -> {
+        return Single.fromCallable(() -> {
             Bitmap cropImage = makeImage(fullImagePath);
             saveIcon(iconPath, cropImage, true);
-            if (cropImage != null) {
-                sub.onSuccess(cropImage);
-            } else {
-                sub.onError(new Exception("can't get image"));
-            }
+            return cropImage;
         });
     }
 
     public Single<Bitmap> saveImageAndIconObservable(String imagePath, String iconPath, @NotNull Bitmap bitmap) {
-        return Single.create(sub -> {
-            try {
-                saveIcon(imagePath, bitmap, false);
-                saveIcon(iconPath, bitmap, true);
-                sub.onSuccess(bitmap);
-            } catch (Exception e) {
-                sub.onError(new Exception("can't get image"));
-            }
+        return Single.fromCallable(() -> {
+            saveIcon(imagePath, bitmap, false);
+            saveIcon(iconPath, bitmap, true);
+            return bitmap;
         });
     }
 
