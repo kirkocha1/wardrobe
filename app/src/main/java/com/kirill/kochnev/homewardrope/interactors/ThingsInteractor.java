@@ -2,8 +2,7 @@ package com.kirill.kochnev.homewardrope.interactors;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardropeSpecification;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -17,22 +16,20 @@ import io.reactivex.Single;
  * Created by kirill on 11.05.17.
  */
 
-public class ThingsInteractor implements IThingInteractor {
+public class ThingsInteractor {
 
-    private AbstractThingRepository things;
+    private ThingRepository things;
     private ImageHelper helper;
 
-    public ThingsInteractor(AbstractThingRepository things, ImageHelper helper) {
+    public ThingsInteractor(ThingRepository things, ImageHelper helper) {
         this.things = things;
         this.helper = helper;
     }
 
-    @Override
     public Single<HashSet<Long>> getWardropeThingIds(long filterId) {
         return things.getWardropeThingIds(filterId);
     }
 
-    @Override
     public Single<List<Thing>> getThingsByWardrope(long lastId, long wardropeId) {
         Single<List<Thing>> single;
         single = things.query(lastId);
@@ -42,12 +39,10 @@ public class ThingsInteractor implements IThingInteractor {
         return single;
     }
 
-    @Override
     public Single<Thing> getThing(long id) {
         return things.getItem(id);
     }
 
-    @Override
     public Single<DeleteResult> deleteThings(Thing model) {
         helper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
         return things.deletItem(model);

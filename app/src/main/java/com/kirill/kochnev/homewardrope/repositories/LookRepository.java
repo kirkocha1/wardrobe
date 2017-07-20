@@ -9,7 +9,7 @@ import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.db.tables.LooksTable;
 import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractLookRepository;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -27,10 +27,20 @@ import io.reactivex.Single;
  * Created by kirill on 21.04.17.
  */
 
-public class LookRepository extends AbstractLookRepository {
+public class LookRepository extends AbstractRepository<Look> {
 
     public LookRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
+    }
+
+    @Override
+    public Class<Look> getEntityClass() {
+        return Look.class;
+    }
+
+    @Override
+    public String getTableName() {
+        return LooksTable.LOOKS_TABLE;
     }
 
     @Override

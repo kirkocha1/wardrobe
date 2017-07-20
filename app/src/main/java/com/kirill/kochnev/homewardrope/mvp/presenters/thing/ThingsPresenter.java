@@ -9,10 +9,9 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IThingInteractor;
+import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
-import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
@@ -36,13 +35,13 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     private ViewMode viewMode;
 
     @Inject
-    protected IdBus idBus;
+    IdBus idBus;
 
     @Inject
-    protected StateBus stateBus;
+    StateBus stateBus;
 
     @Inject
-    protected IThingInteractor interactor;
+    ThingsInteractor interactor;
 
     public ThingsPresenter(ViewMode mode, boolean isEdit, long filterId) {
         WardropeApplication.getComponent().inject(this);

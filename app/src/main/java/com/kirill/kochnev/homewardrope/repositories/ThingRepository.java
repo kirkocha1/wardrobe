@@ -4,7 +4,7 @@ import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
 import com.kirill.kochnev.homewardrope.db.tables.ThingsTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
-import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractThingRepository;
+import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -24,14 +24,12 @@ import io.reactivex.schedulers.Schedulers;
  * Created by kirill on 30.03.17.
  */
 
-public class ThingRepository extends AbstractThingRepository {
+public class ThingRepository extends AbstractRepository<Thing> {
 
     public ThingRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
     }
 
-
-    @Override
     public Single<HashSet<Long>> getWardropeThingIds(long wardropeId) {
         return Single.create(sub -> {
             try {

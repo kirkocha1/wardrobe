@@ -5,7 +5,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.ICollageInteractor;
+import com.kirill.kochnev.homewardrope.interactors.CollageInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
 
@@ -26,7 +26,7 @@ public class CollagePresenter extends BaseMvpPresenter<ICollageView> {
     public static final String TAG = "CollagePresenter";
 
     @Inject
-    protected ICollageInteractor interactor;
+    protected CollageInteractor interactor;
 
     public CollagePresenter(HashSet<Long> thingIds) {
         WardropeApplication.getLookComponent().inject(this);

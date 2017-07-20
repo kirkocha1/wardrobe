@@ -6,7 +6,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.ILooksInteractor;
+import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
 
@@ -26,7 +26,7 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     public boolean isNeedToAttach = false;
 
     @Inject
-    protected ILooksInteractor interactor;
+    protected LooksInteractor interactor;
 
     public UpdateLookPresenter(long lookId) {
         WardropeApplication.getLookComponent().inject(this);
@@ -38,7 +38,7 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     public void attachView(IUpdateLook view) {
         super.attachView(view);
         if (isNeedToAttach) {
-           unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage())));
+            unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage())));
         }
     }
 

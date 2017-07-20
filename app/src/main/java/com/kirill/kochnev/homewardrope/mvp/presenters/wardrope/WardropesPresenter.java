@@ -9,7 +9,7 @@ import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.interactors.interfaces.IWardropesInteractor;
+import com.kirill.kochnev.homewardrope.interactors.WardropesInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
@@ -27,7 +27,7 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     IdBus bus;
 
     @Inject
-    IWardropesInteractor interactor;
+    WardropesInteractor interactor;
 
     private ViewMode mode;
 

@@ -178,4 +178,5 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
         adapter.addData(model);
         blankImg.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
+
 }
