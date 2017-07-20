@@ -80,11 +80,11 @@ public class ImageHelper {
         return File.createTempFile(imageFileName + "min_icon", ".jpg", storageDir);
     }
 
-    public int calculateInSampleSize(BitmapFactory.Options options) {
+    private int calculateInSampleSize(BitmapFactory.Options options) {
         return calculateInSampleSize(options, REQ_HEIGHT, REQ_WIDTH);
     }
 
-    public int calculateInSampleSize(BitmapFactory.Options options, int height, int width) {
+    private int calculateInSampleSize(BitmapFactory.Options options, int height, int width) {
         int inSampleSize = 1;
         if (options.outHeight > height || options.outWidth > width) {
             int halfHeight = options.outHeight / 2;

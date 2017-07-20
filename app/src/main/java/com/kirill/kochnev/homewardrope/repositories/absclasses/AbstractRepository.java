@@ -37,19 +37,11 @@ public abstract class AbstractRepository<M extends IDbModel> implements IReposit
 
     @Override
     public Single<List<M>> query(long id) {
-        return Single.create(sub -> {
-            try {
-                Query.CompleteBuilder builder = Query.builder().table(getTableName()).limit(LIMIT);
-                if (id != -1) {
-                    builder.where(BaseColumns._ID + " > ? ").whereArgs(id + "");
-                }
-                List<M> models = storIOSQLite.get().listOfObjects(getEntityClass()).withQuery(builder.build())
-                        .prepare().executeAsBlocking();
-                sub.onSuccess(new ArrayList<>(models));
-
-            } catch (Exception ex) {
-                sub.onError(new Exception("nothing to load"));
-            }
+        return Single.fromCallable(() -> {
+            Query.CompleteBuilder builder = Query.builder().table(getTableName()).limit(LIMIT);
+            builder.where(BaseColumns._ID + " > ? ").whereArgs(id + "");
+            return new ArrayList<>(storIOSQLite.get().listOfObjects(getEntityClass()).withQuery(builder.build())
+                    .prepare().executeAsBlocking());
         });
     }
 
@@ -65,18 +57,12 @@ public abstract class AbstractRepository<M extends IDbModel> implements IReposit
 
     @Override
     public Single<M> getItem(long id) {
-        return Single.create(sub -> {
-            M item = storIOSQLite.get().object(getEntityClass()).withQuery(Query.builder().table(getTableName())
-                    .where(BaseColumns._ID + " = ?").whereArgs(id + "")
-                    .build())
-                    .prepare()
-                    .executeAsBlocking();
-            if (item != null) {
-                sub.onSuccess(item);
-            } else {
-                sub.onError(new Exception("no item with this id"));
-            }
-        });
+        return Single.fromCallable(() ->
+                storIOSQLite.get().object(getEntityClass()).withQuery(Query.builder().table(getTableName())
+                        .where(BaseColumns._ID + " = ?").whereArgs(id + "")
+                        .build())
+                        .prepare()
+                        .executeAsBlocking());
     }
 
 

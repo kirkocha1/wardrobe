@@ -51,13 +51,7 @@ public class LooksInteractor {
     }
 
     public Single<Look> getLook() {
-        return Single.create(sub -> {
-            if (look != null) {
-                sub.onSuccess(look);
-            } else {
-                sub.onError(new Exception("No look was created"));
-            }
-        });
+        return Single.just(look);
     }
 
     public Single<RepoResult> saveLook(String name, String tag) {
@@ -80,7 +74,8 @@ public class LooksInteractor {
     public Single<HashSet<Long>> startCreation() {
         return Single.fromCallable(() -> {
             int size = look.getThingIds().size();
-            if (size >= AppConstants.MIN_COLLAGE_COUNT && size <= AppConstants.MAX_COLLAGE_COUNT) {
+            boolean isSizeIsValid = size >= AppConstants.MIN_COLLAGE_COUNT && size <= AppConstants.MAX_COLLAGE_COUNT;
+            if (!isSizeIsValid) {
                 throw new LookExeception("validation error, incompatable count of views", size <= AppConstants.MIN_COLLAGE_COUNT);
             }
             return look.getThingIds();
