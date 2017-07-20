@@ -109,7 +109,7 @@ public class LookRepository extends AbstractLookRepository {
         }
     }
 
-    private Wardrope getLookWardrope(long id) {
+    private Wardrope getLookWardrope(Long id) {
         return storIOSQLite.get().object(Wardrope.class).withQuery(Query.builder().table(WardropeTable.WARDROPE_TABLE)
                 .where(BaseColumns._ID + " = ?").whereArgs(id + "")
                 .build())
