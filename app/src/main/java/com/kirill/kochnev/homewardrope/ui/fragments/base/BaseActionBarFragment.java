@@ -6,7 +6,7 @@ import android.support.annotation.StringRes;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.kirill.kochnev.homewardrope.ui.activities.base.interfaces.IActionBarController;
 
-public class BaseActionBarFragment extends MvpAppCompatFragment {
+public class BaseActionBarFragment extends MvpAppCompatFragment implements IActionBarController {
 
     private IActionBarController barController;
 

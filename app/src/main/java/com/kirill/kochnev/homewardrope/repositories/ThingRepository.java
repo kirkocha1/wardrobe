@@ -76,7 +76,7 @@ public class ThingRepository extends AbstractRepository<Thing> {
 
     @Override
     public Single<List<Thing>> query(ISpecification filterSpecification) {
-        return Single.create(sub -> {
+        return Single.fromCallable(() -> {
             List<Thing> models;
             PreparedGetListOfObjects.Builder<Thing> builder = storIOSQLite.get().listOfObjects(getEntityClass());
             if (filterSpecification.isRow()) {
@@ -86,7 +86,7 @@ public class ThingRepository extends AbstractRepository<Thing> {
                 models = builder.withQuery(filterSpecification.getQueryStatement()
                         .build()).prepare().executeAsBlocking();
             }
-            sub.onSuccess(new ArrayList<>(models));
+            return new ArrayList<>(models);
         });
     }
 
