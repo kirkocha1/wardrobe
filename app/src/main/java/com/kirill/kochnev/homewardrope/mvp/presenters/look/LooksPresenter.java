@@ -102,7 +102,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(isDel -> {
-                        getViewState().invalidateListViews((Look) model);
+                        getViewState().deleteListView((Look) model);
                     }));
         }
     }

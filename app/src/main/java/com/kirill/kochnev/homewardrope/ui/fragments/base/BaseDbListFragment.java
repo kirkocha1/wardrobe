@@ -130,7 +130,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     }
 
     @Override
-    public void invalidateListViews(M model) {
+    public void deleteListView(M model) {
         if (adapter != null) {
             adapter.onRemoveItem(model);
             if (adapter.getItemCount() == 0) {

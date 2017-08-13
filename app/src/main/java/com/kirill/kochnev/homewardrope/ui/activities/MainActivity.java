@@ -16,8 +16,10 @@ public class MainActivity extends DrawerActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));
         initUi();
+        if (savedInstanceState == null) {
+            setContentView(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));
+        }
     }
 
     private void initUi() {
