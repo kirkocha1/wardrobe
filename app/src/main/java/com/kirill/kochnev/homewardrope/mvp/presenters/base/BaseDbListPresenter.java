@@ -36,14 +36,14 @@ public abstract class BaseDbListPresenter<V extends IPaginationView> extends Bas
         loadMoreData(AppConstants.DEFAULT_ID);
     }
 
-    public <T> Disposable getDisposable(Single<T> obsevable, @NotNull Consumer<T> onSuccess, @NotNull Consumer<Throwable> onError) {
-        return obsevable.subscribeOn(Schedulers.io())
+    public <T> Disposable getDisposable(Single<T> observable, @NotNull Consumer<T> onSuccess, @NotNull Consumer<Throwable> onError) {
+        return observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onSuccess, onError);
     }
 
-    public <T> Disposable getListDisposable(Single<List<T>> obsevable) {
-        return obsevable.subscribeOn(Schedulers.io())
+    public <T> Disposable getListDisposable(Single<List<T>> observable) {
+        return observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, "refreshList: " + e.getMessage()));
     }
