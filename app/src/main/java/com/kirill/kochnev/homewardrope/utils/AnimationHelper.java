@@ -14,10 +14,20 @@ import com.kirill.kochnev.homewardrope.R;
  * Created by kirill on 28.04.17.
  */
 
+///TODO refactor this class
 public class AnimationHelper {
-    public static void animateFragmentReplace(FragmentTransaction transaction, Fragment fragment, @IdRes int containerId) {
+    public static void animateFragmentReplace(FragmentTransaction transaction, Fragment fragment, @IdRes int containerId, String tag) {
         transaction.setCustomAnimations(R.anim.slide_out_left, R.anim.slide_in_right);
-        transaction.replace(containerId, fragment).commit();
+        if (tag != null) {
+            transaction.replace(containerId, fragment, tag).commit();
+        } else {
+            transaction.replace(containerId, fragment).commit();
+        }
+
+    }
+
+    public static void animateFragmentReplace(FragmentTransaction transaction, Fragment fragment, @IdRes int containerId) {
+        animateFragmentReplace(transaction, fragment, containerId, null);
     }
 
     public static void hideShowAnimation(Context context, View view, boolean isHide) {

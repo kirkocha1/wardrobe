@@ -3,6 +3,8 @@ package com.kirill.kochnev.homewardrope.mvp.views;
 import android.content.Intent;
 
 import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 
 /**
@@ -14,5 +16,6 @@ public interface IUpdateLook extends MvpView {
 
     void onSave(Intent intent);
 
+    @StateStrategyType(SkipStrategy.class)
     void goToUpdateLookScreen(Look look);
 }

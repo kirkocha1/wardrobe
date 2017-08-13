@@ -86,7 +86,7 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
             unsubscribeOnDestroy(interactor.deleteThings((Thing) model)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> getViewState().invalidateListViews((Thing) model)));
+                    .subscribe(result -> getViewState().deleteListView((Thing) model)));
         }
     }
 
