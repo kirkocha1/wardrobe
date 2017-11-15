@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 import com.kirill.kochnev.homewardrope.ui.adapters.OnClick;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
@@ -130,7 +130,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     }
 
     @Override
-    public void deleteListView(M model) {
+    public void deleteListItem(M model) {
         if (adapter != null) {
             adapter.onRemoveItem(model);
             if (adapter.getItemCount() == 0) {
@@ -156,7 +156,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
 
     public abstract BaseDbAdapter<M, H> initAdapter();
 
-    public abstract BaseDbListPresenter getPresenter();
+    public abstract IPaginator getPresenter();
 
     public abstract boolean isFullPart();
 
@@ -174,7 +174,7 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     }
 
     @Override
-    public void invalidateItemView(M model) {
+    public void invalidateListItem(M model) {
         adapter.addData(model);
         blankImg.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }

@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Pair;
 
@@ -10,7 +11,9 @@ import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
@@ -28,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
+public class LooksPresenter extends BaseMvpPresenter<ILooksView> implements IPaginator {
 
     public static final String TAG = "LooksPresenter";
     private ViewMode viewMode;
@@ -44,10 +47,18 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     @Inject
     LooksInteractor interactor;
 
+    @NonNull
+    private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
+
     public LooksPresenter(ViewMode mode, boolean isEdit, long filterId) {
         WardropeApplication.getLookComponent().inject(this);
         this.isEdit = isEdit;
         initMode(mode, filterId);
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        loadMoreData(AppConstants.DEFAULT_ID);
     }
 
     private void initMode(ViewMode mode, long wardropeId) {
@@ -64,7 +75,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
         getViewState().setEditMode(isEdit);
         if (viewMode != ViewMode.LOOK_MODE) {
             if (isEdit) {
-                unsubscribeOnDestroy(getDisposable(interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
+                unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
                         list -> {
                             getViewState().onLoadFinished(list);
                             setIds(list);
@@ -89,7 +100,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(getDisposable(interactor.getLooksByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getLooksByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
                         AppConstants.DEFAULT_ID : filterId),
                 list -> getViewState().onLoadFinished(list),
                 e -> Log.e(TAG, e.getMessage())));
@@ -102,7 +113,7 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(isDel -> {
-                        getViewState().deleteListView((Look) model);
+                        getViewState().deleteListItem((Look) model);
                     }));
         }
     }
@@ -119,8 +130,8 @@ public class LooksPresenter extends BaseDbListPresenter<ILooksView> {
 
     @Override
     public void addOrUpdateListItem(long id) {
-        unsubscribeOnDestroy(getDisposable(interactor.getLook(id),
-                item -> getViewState().invalidateItemView(item),
+        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getLook(id),
+                item -> getViewState().invalidateListItem(item),
                 e -> Log.e(TAG, e.getMessage())));
     }
 

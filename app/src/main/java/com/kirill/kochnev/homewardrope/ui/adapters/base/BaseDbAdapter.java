@@ -24,10 +24,9 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
 
     public void addData(List<M> models) {
         if (this.models == null) {
-            this.models = models;
-        } else {
-            this.models.addAll(models);
+            this.models = new ArrayList<>();
         }
+        this.models.addAll(models);
         notifyDataSetChanged();
     }
 

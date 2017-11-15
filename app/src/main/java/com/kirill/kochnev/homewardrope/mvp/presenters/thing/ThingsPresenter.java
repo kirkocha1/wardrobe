@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.thing;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Pair;
 
@@ -10,7 +11,9 @@ import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
@@ -25,7 +28,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
+public class ThingsPresenter extends BaseMvpPresenter<IThingsView> implements IPaginator {
 
     public static final String TAG = "ThingsPresenter";
     public static final String THINGS_ID = "things_id";
@@ -43,13 +46,21 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     @Inject
     ThingsInteractor interactor;
 
+    @NonNull
+    private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
+
     public ThingsPresenter(ViewMode mode, boolean isEdit, long filterId) {
         WardropeApplication.getComponent().inject(this);
         this.isEdit = isEdit;
         initMode(mode, filterId);
     }
 
-    private void initMode(ViewMode mode, long wardropeId) {
+    @Override
+    protected void onFirstViewAttach() {
+        loadMoreData(AppConstants.DEFAULT_ID);
+    }
+
+    private void initMode(final ViewMode mode, final long wardropeId) {
         viewMode = mode;
         this.filterId = wardropeId;
         getViewState().setEditMode(isEdit);
@@ -58,13 +69,13 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
         });
     }
 
-    public void updateModeState(boolean mode) {
+    public void updateModeState(final boolean mode) {
         isEdit = mode;
         getViewState().setEditMode(isEdit);
         if (viewMode != ViewMode.THING_MODE) {
             if (isEdit) {
                 interactor.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
-                unsubscribeOnDestroy(getListDisposable(interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
+                unsubscribeOnDestroy(listDelegate.getListDisposable(interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
             } else {
                 loadMoreData(AppConstants.DEFAULT_ID);
             }
@@ -72,31 +83,31 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     }
 
     @Override
-    public void loadMoreData(long lastId) {
+    public void loadMoreData(final long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(getDisposable(interactor.getThingsByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getThingsByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
                         AppConstants.DEFAULT_ID : filterId),
                 list -> getViewState().onLoadFinished(list),
                 e -> Log.e(TAG, "refreshList: " + e.getMessage())));
     }
 
     @Override
-    public void onLongItemClick(IDbModel model) {
+    public void onLongItemClick(final IDbModel model) {
         if (viewMode == ViewMode.THING_MODE) {
             unsubscribeOnDestroy(interactor.deleteThings((Thing) model)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> getViewState().deleteListView((Thing) model)));
+                    .subscribe(result -> getViewState().deleteListItem((Thing) model)));
         }
     }
 
     @Override
-    public void onItemClick(IDbModel model) {
+    public void onItemClick(final IDbModel model) {
         resolveClick((Thing) model);
     }
 
 
-    private void resolveClick(Thing thing) {
+    private void resolveClick(final Thing thing) {
         if (viewMode != ViewMode.THING_MODE && isEdit) {
             idBus.passData(new Pair<>(ViewMode.THING_MODE, thing.getId()));
         } else {
@@ -105,9 +116,9 @@ public class ThingsPresenter extends BaseDbListPresenter<IThingsView> {
     }
 
     @Override
-    public void addOrUpdateListItem(long id) {
-        unsubscribeOnDestroy(getDisposable(interactor.getThing(id),
-                item -> getViewState().invalidateItemView(item),
+    public void addOrUpdateListItem(final long id) {
+        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getThing(id),
+                item -> getViewState().invalidateListItem(item),
                 e -> Log.e(TAG, e.getMessage())));
     }
 }

@@ -9,7 +9,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
@@ -59,7 +59,7 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     }
 
     @Override
-    public BaseDbListPresenter getPresenter() {
+    public IPaginator getPresenter() {
         return presenter;
     }
 

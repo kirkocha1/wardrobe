@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.wardrope;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Pair;
 
@@ -10,7 +11,9 @@ import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.WardropesInteractor;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
@@ -20,7 +23,7 @@ import javax.inject.Inject;
  * Created by kirill on 30.03.17.
  */
 @InjectViewState
-public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
+public class WardropesPresenter extends BaseMvpPresenter<IWardropeView> implements IPaginator {
     private static final String TAG = "WardropesPresenter";
 
     @Inject
@@ -29,40 +32,43 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     @Inject
     WardropesInteractor interactor;
 
-    private ViewMode mode;
+    @NonNull
+    private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
 
-    public WardropesPresenter(ViewMode mode) {
+    @NonNull
+    private final ViewMode mode;
+
+    public WardropesPresenter(@NonNull final ViewMode mode) {
         WardropeApplication.getComponent().inject(this);
         this.mode = mode;
+        loadMoreData(AppConstants.DEFAULT_ID);
     }
 
-    @Override
-    protected void onFirstViewAttach() {
-        if (mode != ViewMode.LOOK_MODE) {
-            super.onFirstViewAttach();
-        }
-    }
+//    @Override
+//    protected void onFirstViewAttach() {
+//
+//    }
 
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(getDisposable(interactor.getWardropes(lastId),
-                list -> getViewState().onLoadFinished(list), e -> Log.e(TAG, e.getMessage())));
+        interactor
+                .getWardropes(lastId)
+                .subscribe(
+                        list -> {
+                            getViewState().onLoadFinished(list);
+                        },
+                        e -> Log.e(TAG, e.getMessage())
+                );
+
+
     }
 
     @Override
     public void onLongItemClick(IDbModel model) {
         if (mode == ViewMode.WARDROPE_MODE) {
-            unsubscribeOnDestroy(getDisposable(interactor.deleteWardropes((Wardrope) model),
-                    isDel -> getViewState().deleteListView((Wardrope) model), e -> Log.e(TAG, e.getMessage())));
-        }
-    }
-
-    @Override
-    public void attachView(IWardropeView view) {
-        super.attachView(view);
-        if (mode == ViewMode.LOOK_MODE) {
-            loadMoreData(AppConstants.DEFAULT_ID);
+            unsubscribeOnDestroy(listDelegate.getDisposable(interactor.deleteWardropes((Wardrope) model),
+                    isDel -> getViewState().deleteListItem((Wardrope) model), e -> Log.e(TAG, e.getMessage())));
         }
     }
 
@@ -79,9 +85,9 @@ public class WardropesPresenter extends BaseDbListPresenter<IWardropeView> {
     }
 
     @Override
-    public void addOrUpdateListItem(long id) {
-        unsubscribeOnDestroy(getDisposable(interactor.getWardrope(id),
-                item -> getViewState().invalidateItemView(item),
+    public void addOrUpdateListItem(final long id) {
+        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getWardrope(id),
+                item -> getViewState().invalidateListItem(item),
                 e -> Log.e(TAG, e.getMessage())));
     }
 

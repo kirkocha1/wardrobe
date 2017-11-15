@@ -40,8 +40,14 @@ public abstract class AbstractRepository<M extends IDbModel> implements IReposit
         return Single.fromCallable(() -> {
             Query.CompleteBuilder builder = Query.builder().table(getTableName()).limit(LIMIT);
             builder.where(BaseColumns._ID + " > ? ").whereArgs(id + "");
-            return new ArrayList<>(storIOSQLite.get().listOfObjects(getEntityClass()).withQuery(builder.build())
-                    .prepare().executeAsBlocking());
+            List<M> entries = storIOSQLite
+                    .get()
+                    .listOfObjects(getEntityClass())
+                    .withQuery(builder.build())
+                    .prepare()
+                    .executeAsBlocking();
+
+            return new ArrayList<>(entries);
         });
     }
 

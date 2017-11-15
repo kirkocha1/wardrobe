@@ -10,7 +10,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
@@ -73,7 +73,7 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
     }
 
     @Override
-    public BaseDbListPresenter getPresenter() {
+    public IPaginator getPresenter() {
         return presenter;
     }
 

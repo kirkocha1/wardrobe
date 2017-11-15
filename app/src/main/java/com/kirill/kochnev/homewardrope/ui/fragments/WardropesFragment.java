@@ -13,7 +13,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseDbListPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
@@ -54,7 +54,7 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
     }
 
     @Override
-    public BaseDbListPresenter getPresenter() {
+    public IPaginator getPresenter() {
         return presenter;
     }
 

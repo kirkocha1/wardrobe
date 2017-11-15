@@ -4,10 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,7 +57,7 @@ public class ImageHelper {
         });
     }
 
-    public Single<Bitmap> saveImageAndIconObservable(String imagePath, String iconPath, @NotNull Bitmap bitmap) {
+    public Single<Bitmap> saveImageAndIconObservable(String imagePath, String iconPath, @NonNull Bitmap bitmap) {
         return Single.fromCallable(() -> {
             saveIcon(imagePath, bitmap, false);
             saveIcon(iconPath, bitmap, true);
