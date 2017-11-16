@@ -11,7 +11,9 @@ import android.view.View;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.di.components.WardrobeListComponent;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
@@ -46,7 +48,10 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
 
     @ProvidePresenter
     WardropesPresenter providePresenter() {
-        return new WardropesPresenter(ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE)));
+        WardrobeListComponent component = WardropeApplication
+                .getComponentHolder()
+                .getWardrobeComponent(ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE)));
+        return component.providePresenter();
     }
 
     @Override
@@ -69,6 +74,13 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
         addBtn.setOnClickListener(v -> openUpdateActivity(new Intent(getContext(), AddUpdateWardropeActivity.class)));
         addBtn.setActivated(mode == ViewMode.WARDROPE_MODE);
         addBtn.setVisibility(mode == ViewMode.WARDROPE_MODE ? View.VISIBLE : View.GONE);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        WardropeApplication.getComponentHolder().clearWardrobeComponent();
     }
 
     @Override

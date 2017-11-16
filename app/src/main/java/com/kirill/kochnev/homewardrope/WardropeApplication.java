@@ -3,16 +3,12 @@ package com.kirill.kochnev.homewardrope;
 import android.app.Application;
 import android.os.StrictMode;
 
-import com.kirill.kochnev.homewardrope.di.components.AppComponent;
-import com.kirill.kochnev.homewardrope.di.components.DaggerAppComponent;
-import com.kirill.kochnev.homewardrope.di.components.LookComponent;
-import com.kirill.kochnev.homewardrope.di.modules.DbModule;
+import com.kirill.kochnev.homewardrope.di.ComponentHolder;
 
 public class WardropeApplication extends Application {
 
     public static final String TAG = "WardropeApplication";
-    private static AppComponent component;
-    private static LookComponent lookComponent;
+    private static ComponentHolder componentHolder;
 
     @Override
     public void onCreate() {
@@ -24,25 +20,10 @@ public class WardropeApplication extends Application {
                     .penaltyLog()
                     .build());
         }
-        component = buildComponent();
+        componentHolder = new ComponentHolder(this);
     }
 
-    private AppComponent buildComponent() {
-        return DaggerAppComponent.builder().dbModule(new DbModule(this)).build();
-    }
-
-    public static LookComponent getLookComponent() {
-        if (lookComponent == null) {
-            lookComponent = component.plusComponent();
-        }
-        return lookComponent;
-    }
-
-    public static void clearLookComponent() {
-        lookComponent = null;
-    }
-
-    public static AppComponent getComponent() {
-        return component;
+    public static ComponentHolder getComponentHolder() {
+        return componentHolder;
     }
 }

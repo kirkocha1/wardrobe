@@ -48,7 +48,7 @@ public class WardropeItemView extends FrameLayout {
     }
 
     private void initUi(Context context) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
         LayoutInflater.from(context).inflate(R.layout.wardrope_item_view, this, true);
         ButterKnife.bind(this);
     }

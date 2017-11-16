@@ -6,6 +6,8 @@ import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -16,6 +18,7 @@ public class WardropesInteractor {
 
     private WardropeRepository wardropes;
 
+    @Inject
     public WardropesInteractor(WardropeRepository wardropes) {
         this.wardropes = wardropes;
     }

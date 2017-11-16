@@ -34,7 +34,7 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public UpdateLookPresenter(long lookId) {
-        WardropeApplication.getLookComponent().inject(this);
+        WardropeApplication.getComponentHolder().getLookComponent().inject(this);
         init(lookId);
     }
 

@@ -9,7 +9,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
+import com.kirill.kochnev.homewardrope.di.components.LookComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
@@ -52,7 +54,10 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     LooksPresenter providePresenter() {
         long wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
         boolean isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
-        return new LooksPresenter(mode, isEdit, wardropeId);
+        LookComponent component = WardropeApplication
+                .getComponentHolder()
+                .provideLookComponent(wardropeId, isEdit, mode);
+        return component.provideLooksPresenter();
     }
 
     @Override
@@ -80,6 +85,12 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
         addBtn.setOnClickListener(v -> openUpdateActivity(CreationLookActivity.createIntent(getContext(), AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
         addBtn.setActivated(mode == ViewMode.LOOK_MODE);
         addBtn.setVisibility(mode == ViewMode.LOOK_MODE ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        WardropeApplication.getComponentHolder().clearLookComponent();
     }
 
     @Override

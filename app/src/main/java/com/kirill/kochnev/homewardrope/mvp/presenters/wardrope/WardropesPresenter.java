@@ -7,7 +7,6 @@ import android.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
@@ -19,6 +18,7 @@ import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by kirill on 30.03.17.
@@ -27,11 +27,11 @@ import javax.inject.Inject;
 public class WardropesPresenter extends MvpPresenter<IWardropeView> implements IPaginator {
     private static final String TAG = "WardropesPresenter";
 
-    @Inject
-    IdBus bus;
+    @NonNull
+    private IdBus bus;
 
-    @Inject
-    WardropesInteractor interactor;
+    @NonNull
+    private WardropesInteractor interactor;
 
     @NonNull
     private final ViewMode mode;
@@ -42,8 +42,14 @@ public class WardropesPresenter extends MvpPresenter<IWardropeView> implements I
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
-    public WardropesPresenter(@NonNull final ViewMode mode) {
-        WardropeApplication.getComponent().inject(this);
+    @Inject
+    public WardropesPresenter(
+            @Named("mode") @NonNull final ViewMode mode,
+            @NonNull final WardropesInteractor interactor,
+            @NonNull final IdBus bus
+    ) {
+        this.bus = bus;
+        this.interactor = interactor;
         this.mode = mode;
     }
 

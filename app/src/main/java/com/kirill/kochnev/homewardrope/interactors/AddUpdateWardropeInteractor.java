@@ -5,6 +5,8 @@ import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.repositories.WardropeRepository;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -17,6 +19,7 @@ public class AddUpdateWardropeInteractor {
     private WardropeRepository wardropes;
     private Single<Wardrope> getWardropeSingle;
 
+    @Inject
     public AddUpdateWardropeInteractor(WardropeRepository wardropes) {
         this.wardropes = wardropes;
     }

@@ -10,6 +10,8 @@ import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
 import java.util.HashSet;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -22,6 +24,7 @@ public class CollageInteractor {
     private ImageHelper helper;
 
 
+    @Inject
     public CollageInteractor(ThingRepository things, ImageHelper helper) {
         this.things = things;
         this.helper = helper;

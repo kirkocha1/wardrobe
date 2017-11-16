@@ -12,6 +12,8 @@ import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -25,7 +27,7 @@ public class AddUpdateThingsInteractor {
     private ThingRepository things;
     private ImageHelper helper;
 
-
+    @Inject
     public AddUpdateThingsInteractor(ImageHelper helper, ThingRepository things) {
         this.things = things;
         this.helper = helper;

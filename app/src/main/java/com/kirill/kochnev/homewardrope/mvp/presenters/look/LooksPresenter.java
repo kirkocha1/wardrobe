@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -39,14 +40,14 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     private boolean isEdit;
     private long filterId;
 
-    @Inject
-    protected IdBus idBus;
+    @NonNull
+    private IdBus idBus;
 
-    @Inject
-    protected StateBus stateBus;
+    @NonNull
+    private StateBus stateBus;
 
-    @Inject
-    LooksInteractor interactor;
+    @NonNull
+    private LooksInteractor interactor;
 
     @NonNull
     private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
@@ -54,8 +55,18 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
-    public LooksPresenter(ViewMode mode, boolean isEdit, long filterId) {
-        WardropeApplication.getLookComponent().inject(this);
+    @Inject
+    public LooksPresenter(
+            @Named("filterId") long filterId,
+            @Named("isEdit") boolean isEdit,
+            @Named("mode") ViewMode mode,
+            @NonNull IdBus idBus,
+            @NonNull StateBus stateBus,
+            @NonNull LooksInteractor interactor
+    ) {
+        this.idBus = idBus;
+        this.stateBus = stateBus;
+        this.interactor = interactor;
         this.isEdit = isEdit;
         initMode(mode, filterId);
     }
@@ -156,7 +167,6 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     @Override
     public void onDestroy() {
         super.onDestroy();
-        WardropeApplication.clearLookComponent();
         disposableDelegate.unsubscribe();
     }
 }

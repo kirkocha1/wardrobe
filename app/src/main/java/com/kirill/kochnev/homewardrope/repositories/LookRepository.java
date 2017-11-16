@@ -21,6 +21,8 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -29,6 +31,7 @@ import io.reactivex.Single;
 
 public class LookRepository extends AbstractRepository<Look> {
 
+    @Inject
     public LookRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
     }

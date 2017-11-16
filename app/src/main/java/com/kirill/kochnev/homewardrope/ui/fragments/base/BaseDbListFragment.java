@@ -53,7 +53,6 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     protected boolean isAllLoaded = false;
     protected BaseDbAdapter<M, H> adapter;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         onCreationStart();

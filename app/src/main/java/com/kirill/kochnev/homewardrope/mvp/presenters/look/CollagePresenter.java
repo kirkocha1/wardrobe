@@ -34,7 +34,7 @@ public class CollagePresenter extends MvpPresenter<ICollageView> {
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public CollagePresenter(HashSet<Long> thingIds) {
-        WardropeApplication.getLookComponent().inject(this);
+        WardropeApplication.getComponentHolder().getLookComponent().inject(this);
         disposableDelegate.addToCompositeDisposable(
                 interactor
                         .getImages(thingIds)

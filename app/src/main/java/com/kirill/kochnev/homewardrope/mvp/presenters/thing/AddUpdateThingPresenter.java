@@ -29,7 +29,7 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public AddUpdateThingPresenter(long id) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
         initValues(id);
     }
 

@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -26,6 +28,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ThingRepository extends AbstractRepository<Thing> {
 
+    @Inject
     public ThingRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
     }

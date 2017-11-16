@@ -14,7 +14,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
@@ -130,7 +129,6 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     public boolean isSearchActive() {
         return false;
     }
-
 
     @Override
     public void openCollageFragment(HashSet<Long> thingIds) {

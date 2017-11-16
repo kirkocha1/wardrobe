@@ -10,6 +10,8 @@ import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -21,6 +23,7 @@ public class ThingsInteractor {
     private ThingRepository things;
     private ImageHelper helper;
 
+    @Inject
     public ThingsInteractor(ThingRepository things, ImageHelper helper) {
         this.things = things;
         this.helper = helper;

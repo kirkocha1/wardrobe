@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -28,6 +30,7 @@ public class LooksInteractor {
 
     private Look look = new Look();
 
+    @Inject
     public LooksInteractor(LookRepository looks, ImageHelper helper) {
         this.looks = looks;
         this.helper = helper;

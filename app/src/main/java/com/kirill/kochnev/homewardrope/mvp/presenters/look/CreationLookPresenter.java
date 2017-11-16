@@ -40,7 +40,7 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public CreationLookPresenter(long id) {
-        WardropeApplication.getLookComponent().inject(this);
+        WardropeApplication.getComponentHolder().getLookComponent().inject(this);
         if (id == AppConstants.DEFAULT_ID) {
             interactor.initializeLook();
         }

@@ -9,7 +9,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.di.components.ThingListComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
@@ -53,7 +55,10 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
 
     @ProvidePresenter
     ThingsPresenter providePresenter() {
-        return new ThingsPresenter(mode, isEdit, wardropeId);
+        ThingListComponent component = WardropeApplication
+                .getComponentHolder()
+                .getThingListComponent(wardropeId, isEdit, mode);
+        return component.providePresenter();
     }
 
     @Override
@@ -73,6 +78,12 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
         addBtn.setOnClickListener(v -> openUpdateActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
         addBtn.setActivated(mode == ViewMode.THING_MODE);
         addBtn.setVisibility(mode == ViewMode.THING_MODE ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        WardropeApplication.getComponentHolder().clearThingListComponent();
     }
 
     @Override

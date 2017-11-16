@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 /**
@@ -28,6 +30,7 @@ import io.reactivex.Single;
 
 public class WardropeRepository extends AbstractRepository<Wardrope> {
 
+    @Inject
     public WardropeRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
     }

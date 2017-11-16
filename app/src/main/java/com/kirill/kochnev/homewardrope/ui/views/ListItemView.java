@@ -46,7 +46,7 @@ public class ListItemView extends FrameLayout {
     }
 
     private void initUi(Context context) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
         LayoutInflater.from(context).inflate(R.layout.view_list_item, this, true);
         ButterKnife.bind(this);
     }

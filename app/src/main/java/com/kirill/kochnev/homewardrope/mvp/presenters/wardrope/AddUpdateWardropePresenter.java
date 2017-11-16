@@ -51,7 +51,7 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
 
 
     public AddUpdateWardropePresenter(long id) {
-        WardropeApplication.getComponent().inject(this);
+        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
         initWardrope(id);
     }
 

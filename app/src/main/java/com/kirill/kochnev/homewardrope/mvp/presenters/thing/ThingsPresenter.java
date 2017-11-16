@@ -7,7 +7,6 @@ import android.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
@@ -20,6 +19,7 @@ import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -38,14 +38,11 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     private boolean isEdit;
     private ViewMode viewMode;
 
-    @Inject
-    IdBus idBus;
+    private @NonNull IdBus idBus;
 
-    @Inject
-    StateBus stateBus;
+    private @NonNull StateBus stateBus;
 
-    @Inject
-    ThingsInteractor interactor;
+    private @NonNull ThingsInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
@@ -53,8 +50,17 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     @NonNull
     private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
 
-    public ThingsPresenter(ViewMode mode, boolean isEdit, long filterId) {
-        WardropeApplication.getComponent().inject(this);
+    @Inject
+    public ThingsPresenter(@Named("filterId") long filterId,
+                           @Named("isEdit") boolean isEdit,
+                           @Named("mode") ViewMode mode,
+                           @NonNull IdBus idBus,
+                           @NonNull StateBus stateBus,
+                           @NonNull ThingsInteractor interactor
+    ) {
+        this.idBus = idBus;
+        this.stateBus = stateBus;
+        this.interactor = interactor;
         this.isEdit = isEdit;
         initMode(mode, filterId);
     }
