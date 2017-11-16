@@ -5,13 +5,14 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
@@ -31,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class LooksPresenter extends BaseMvpPresenter<ILooksView> implements IPaginator {
+public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginator {
 
     public static final String TAG = "LooksPresenter";
     private ViewMode viewMode;
@@ -49,6 +50,9 @@ public class LooksPresenter extends BaseMvpPresenter<ILooksView> implements IPag
 
     @NonNull
     private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
+
+    @NonNull
+    private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public LooksPresenter(ViewMode mode, boolean isEdit, long filterId) {
         WardropeApplication.getLookComponent().inject(this);
@@ -75,12 +79,16 @@ public class LooksPresenter extends BaseMvpPresenter<ILooksView> implements IPag
         getViewState().setEditMode(isEdit);
         if (viewMode != ViewMode.LOOK_MODE) {
             if (isEdit) {
-                unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
-                        list -> {
-                            getViewState().onLoadFinished(list);
-                            setIds(list);
-                        },
-                        e -> Log.e(TAG, e.getMessage())));
+                disposableDelegate.addToCompositeDisposable(
+                        listDelegate.getDisposable(
+                                interactor.getLooksByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
+                                list -> {
+                                    getViewState().onLoadFinished(list);
+                                    setIds(list);
+                                },
+                                e -> Log.e(TAG, e.getMessage())
+                        )
+                );
             } else {
                 loadMoreData(AppConstants.DEFAULT_ID);
             }
@@ -100,21 +108,28 @@ public class LooksPresenter extends BaseMvpPresenter<ILooksView> implements IPag
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getLooksByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
-                        AppConstants.DEFAULT_ID : filterId),
-                list -> getViewState().onLoadFinished(list),
-                e -> Log.e(TAG, e.getMessage())));
+        disposableDelegate.addToCompositeDisposable(
+                listDelegate.getDisposable(
+                        interactor.getLooksByWardrope(
+                                lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+                                        AppConstants.DEFAULT_ID : filterId),
+                        list -> getViewState().onLoadFinished(list),
+                        e -> Log.e(TAG, e.getMessage())
+                )
+        );
     }
 
     @Override
     public void onLongItemClick(IDbModel model) {
         if (viewMode == ViewMode.LOOK_MODE) {
-            unsubscribeOnDestroy(interactor.deleteLook((Look) model)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(isDel -> {
-                        getViewState().deleteListItem((Look) model);
-                    }));
+            disposableDelegate.addToCompositeDisposable(
+                    interactor.deleteLook((Look) model)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(isDel -> {
+                                getViewState().deleteListItem((Look) model);
+                            })
+            );
         }
     }
 
@@ -130,14 +145,18 @@ public class LooksPresenter extends BaseMvpPresenter<ILooksView> implements IPag
 
     @Override
     public void addOrUpdateListItem(long id) {
-        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getLook(id),
-                item -> getViewState().invalidateListItem(item),
-                e -> Log.e(TAG, e.getMessage())));
+        disposableDelegate.addToCompositeDisposable(
+                listDelegate.getDisposable(interactor.getLook(id),
+                        item -> getViewState().invalidateListItem(item),
+                        e -> Log.e(TAG, e.getMessage())
+                )
+        );
     }
 
     @Override
     public void onDestroy() {
-        WardropeApplication.clearLookComponent();
         super.onDestroy();
+        WardropeApplication.clearLookComponent();
+        disposableDelegate.unsubscribe();
     }
 }

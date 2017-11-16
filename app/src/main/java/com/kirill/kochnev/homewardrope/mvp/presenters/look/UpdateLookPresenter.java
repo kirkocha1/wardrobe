@@ -1,13 +1,15 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
 
 import javax.inject.Inject;
@@ -20,13 +22,16 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
+public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
 
     public static final String TAG = "UpdateLookPresenter";
     public boolean isNeedToAttach = false;
 
     @Inject
     protected LooksInteractor interactor;
+
+    @NonNull
+    private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public UpdateLookPresenter(long lookId) {
         WardropeApplication.getLookComponent().inject(this);
@@ -38,7 +43,11 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     public void attachView(IUpdateLook view) {
         super.attachView(view);
         if (isNeedToAttach) {
-            unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage())));
+            disposableDelegate.addToCompositeDisposable(
+                    interactor
+                            .getLook()
+                            .subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage()))
+            );
         }
     }
 
@@ -49,25 +58,45 @@ public class UpdateLookPresenter extends BaseMvpPresenter<IUpdateLook> {
     }
 
     private void init(long lookId) {
-        unsubscribeOnDestroy(interactor.getLook(lookId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(look -> getViewState().setLookData(look),
-                        e -> Log.e(TAG, e.getMessage())));
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .getLook(lookId)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(look -> getViewState().setLookData(look),
+                                e -> Log.e(TAG, e.getMessage())
+                        )
+        );
     }
 
     public void saveLook(String name, String tag) {
-        unsubscribeOnDestroy(interactor.saveLook(name, tag)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isPut -> {
-                    Intent intent = new Intent();
-                    intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
-                    getViewState().onSave(intent);
-                }));
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .saveLook(name, tag)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(isPut -> {
+                            Intent intent = new Intent();
+                            intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
+                            getViewState().onSave(intent);
+                        })
+        );
     }
 
     public void updateClick() {
-        unsubscribeOnDestroy(interactor.getLook().subscribe(look -> getViewState().goToUpdateLookScreen(look), e -> Log.e(TAG, e.getMessage())));
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .getLook()
+                        .subscribe(
+                                look -> getViewState().goToUpdateLookScreen(look),
+                                e -> Log.e(TAG, e.getMessage())
+                        )
+        );
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableDelegate.unsubscribe();
     }
 }

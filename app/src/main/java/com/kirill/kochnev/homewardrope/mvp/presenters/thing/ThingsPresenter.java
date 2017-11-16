@@ -5,13 +5,14 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
@@ -28,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class ThingsPresenter extends BaseMvpPresenter<IThingsView> implements IPaginator {
+public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPaginator {
 
     public static final String TAG = "ThingsPresenter";
     public static final String THINGS_ID = "things_id";
@@ -45,6 +46,9 @@ public class ThingsPresenter extends BaseMvpPresenter<IThingsView> implements IP
 
     @Inject
     ThingsInteractor interactor;
+
+    @NonNull
+    private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     @NonNull
     private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
@@ -74,8 +78,15 @@ public class ThingsPresenter extends BaseMvpPresenter<IThingsView> implements IP
         getViewState().setEditMode(isEdit);
         if (viewMode != ViewMode.THING_MODE) {
             if (isEdit) {
-                interactor.getWardropeThingIds(filterId).subscribe(set -> getViewState().addThingIdsToAdapter(set));
-                unsubscribeOnDestroy(listDelegate.getListDisposable(interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
+                disposableDelegate.addToCompositeDisposable(
+                        interactor
+                                .getWardropeThingIds(filterId)
+                                .subscribe(set -> getViewState().addThingIdsToAdapter(set))
+                );
+                disposableDelegate.addToCompositeDisposable(
+                        listDelegate.getListDisposable(
+                                interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
+                );
             } else {
                 loadMoreData(AppConstants.DEFAULT_ID);
             }
@@ -85,19 +96,29 @@ public class ThingsPresenter extends BaseMvpPresenter<IThingsView> implements IP
     @Override
     public void loadMoreData(final long lastId) {
         Log.d(TAG, "loadMoreData");
-        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getThingsByWardrope(lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
-                        AppConstants.DEFAULT_ID : filterId),
-                list -> getViewState().onLoadFinished(list),
-                e -> Log.e(TAG, "refreshList: " + e.getMessage())));
+        disposableDelegate.addToCompositeDisposable(
+                listDelegate.getDisposable(
+                        interactor
+                                .getThingsByWardrope(
+                                        lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+                                                AppConstants.DEFAULT_ID : filterId
+                                ),
+                        list -> getViewState().onLoadFinished(list),
+                        e -> Log.e(TAG, "refreshList: " + e.getMessage())
+                )
+        );
     }
 
     @Override
     public void onLongItemClick(final IDbModel model) {
         if (viewMode == ViewMode.THING_MODE) {
-            unsubscribeOnDestroy(interactor.deleteThings((Thing) model)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> getViewState().deleteListItem((Thing) model)));
+            disposableDelegate.addToCompositeDisposable(
+                    interactor
+                            .deleteThings((Thing) model)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(result -> getViewState().deleteListItem((Thing) model))
+            );
         }
     }
 
@@ -117,8 +138,18 @@ public class ThingsPresenter extends BaseMvpPresenter<IThingsView> implements IP
 
     @Override
     public void addOrUpdateListItem(final long id) {
-        unsubscribeOnDestroy(listDelegate.getDisposable(interactor.getThing(id),
-                item -> getViewState().invalidateListItem(item),
-                e -> Log.e(TAG, e.getMessage())));
+        disposableDelegate.addToCompositeDisposable(
+                listDelegate.getDisposable(
+                        interactor.getThing(id),
+                        item -> getViewState().invalidateListItem(item),
+                        e -> Log.e(TAG, e.getMessage())
+                )
+        );
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableDelegate.unsubscribe();
     }
 }

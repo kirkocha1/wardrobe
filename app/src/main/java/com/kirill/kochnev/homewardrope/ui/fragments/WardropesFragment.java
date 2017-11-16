@@ -3,6 +3,7 @@ package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -59,7 +60,8 @@ public class WardropesFragment extends BaseDbListFragment<Wardrope, WardropeHold
     }
 
     @Override
-    public void onInitUi() {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE));
         if (mode == ViewMode.WARDROPE_MODE) {
             setTitle(R.string.wardropes_title);

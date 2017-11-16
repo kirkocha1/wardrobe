@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -62,8 +63,10 @@ public class ThingsFragment extends BaseDbListFragment<Thing, ThingHolder> imple
         isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
     }
 
+
     @Override
-    public void onInitUi() {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (mode == ViewMode.THING_MODE) {
             setTitle(R.string.things_title);
         }

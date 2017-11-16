@@ -122,7 +122,6 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
                 }
             }
         });
-        onInitUi();
     }
 
     public LinearLayoutManager getLayoutManager() {
@@ -159,8 +158,6 @@ public abstract class BaseDbListFragment<M extends IDbModel, H extends BaseHolde
     public abstract IPaginator getPresenter();
 
     public abstract boolean isFullPart();
-
-    public abstract void onInitUi();
 
     public void onCreationStart() {
 

@@ -1,6 +1,8 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -31,12 +33,12 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
 
 public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implements ILooksView {
 
-    public static LooksFragment newInstance(ViewMode mode, boolean isEdit, long wardropeId) {
-        Bundle args = new Bundle();
+    public static LooksFragment newInstance(@NonNull ViewMode mode, boolean isEdit, long wardropeId) {
+        final Bundle args = new Bundle();
         args.putInt(FRAGMENT_MODE, mode.getModeNum());
         args.putLong(WARDROPE_ID, wardropeId);
         args.putBoolean(FRAGMENT_IS_EDIT, isEdit);
-        LooksFragment fragment = new LooksFragment();
+        final LooksFragment fragment = new LooksFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +72,8 @@ public class LooksFragment extends BaseDbListFragment<Look, LookHolder> implemen
     }
 
     @Override
-    public void onInitUi() {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (mode == ViewMode.LOOK_MODE) {
             setTitle(R.string.looks_title);
         }

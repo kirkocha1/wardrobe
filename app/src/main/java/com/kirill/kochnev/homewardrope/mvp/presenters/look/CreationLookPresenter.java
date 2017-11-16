@@ -2,14 +2,16 @@ package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
-import com.kirill.kochnev.homewardrope.mvp.presenters.base.BaseMvpPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
@@ -24,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLookView> {
+public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookView> {
 
     public static final String TAG = "CreationLook";
 
@@ -34,12 +36,15 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     @Inject
     LooksInteractor interactor;
 
+    @NonNull
+    private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
+
     public CreationLookPresenter(long id) {
         WardropeApplication.getLookComponent().inject(this);
         if (id == AppConstants.DEFAULT_ID) {
             interactor.initializeLook();
         }
-        unsubscribeOnDestroy(bus.register(idPair -> {
+        disposableDelegate.addToCompositeDisposable(bus.register(idPair -> {
             switch (idPair.first) {
                 case THING_MODE:
                     interactor.addThingId(idPair.second);
@@ -64,7 +69,7 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     }
 
     public void processLook(String name, String tag, Bitmap bitmap) {
-        unsubscribeOnDestroy(interactor.saveLookWithBitmap(name, tag, bitmap)
+        disposableDelegate.addToCompositeDisposable(interactor.saveLookWithBitmap(name, tag, bitmap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
@@ -76,20 +81,28 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
     }
 
     public void save() {
-        unsubscribeOnDestroy(interactor.getLook()
-                .subscribe(look -> getViewState().showSaveDialog(look.getName(), look.getTag()),
-                        e -> Log.e(TAG, e.getMessage())));
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .getLook()
+                        .subscribe(look -> getViewState().showSaveDialog(look.getName(), look.getTag()),
+                                e -> Log.e(TAG, e.getMessage())
+                        )
+        );
     }
 
     public void startCreationProcess() {
-        unsubscribeOnDestroy(interactor.startCreation().subscribe(ids -> getViewState().openCollageFragment(ids),
-                e -> {
-                    if (e instanceof LookExeception) {
-                        getViewState().showError(((LookExeception) e).isNotEnough());
-                    } else {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }));
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .startCreation()
+                        .subscribe(ids -> getViewState().openCollageFragment(ids),
+                                e -> {
+                                    if (e instanceof LookExeception) {
+                                        getViewState().showError(((LookExeception) e).isNotEnough());
+                                    } else {
+                                        Log.e(TAG, e.getMessage());
+                                    }
+                                })
+        );
     }
 
     public void resolveBtnsState(CreationLookState state) {
@@ -105,5 +118,11 @@ public class CreationLookPresenter extends BaseMvpPresenter<IFirstStepCreationLo
                 getViewState().setBtnsState(false, true, false);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableDelegate.unsubscribe();
     }
 }
