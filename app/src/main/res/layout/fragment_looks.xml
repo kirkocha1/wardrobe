@@ -45,6 +45,7 @@
                 android:visibility="gone" />
 
         </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/layout_list_add" />

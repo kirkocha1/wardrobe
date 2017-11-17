@@ -2,6 +2,8 @@ package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
@@ -18,7 +21,6 @@ import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
-import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.WardropesFragment;
@@ -34,7 +36,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 27.04.17.
  */
 
-public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
+public class CreationLookActivity extends MvpAppCompatActivity implements IFirstStepCreationLookView {
 
     public static final String LOOK_ID = "look_id";
     public static final String WARDROPE_ID = "wardrope_id";
@@ -54,6 +56,9 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     @BindView(R.id.save_collage)
     FloatingActionButton save;
 
+    @BindView(R.id.title)
+    TextView title;
+
     @InjectPresenter
     CreationLookPresenter presenter;
 
@@ -70,10 +75,10 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     }
 
     @Override
-    public void onInitUi(View baseLayout) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(View.inflate(this, R.layout.activity_first_step_creation_look, null));
-        setBackButtonEnabled(true);
-        setTitleText(getString(R.string.looks_creation_title));
+        title.setText(getString(R.string.looks_creation_title));
         ButterKnife.bind(this);
         container.setDrawingCacheEnabled(true);
         create.setOnClickListener(v -> presenter.startCreationProcess());
@@ -118,16 +123,6 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
             transaction.addToBackStack(state.toString());
         }
         AnimationHelper.animateFragmentReplace(transaction, fragment, R.id.look_fragment_container);
-    }
-
-    @Override
-    public boolean isMenuActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSearchActive() {
-        return false;
     }
 
     @Override

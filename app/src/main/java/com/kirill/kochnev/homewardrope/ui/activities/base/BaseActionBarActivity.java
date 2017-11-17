@@ -26,20 +26,20 @@ public abstract class BaseActionBarActivity extends MvpAppCompatActivity impleme
     private void initUi() {
         View view = getLayoutInflater().inflate(R.layout.activity_base_action_bar, null);
         binding = DataBindingUtil.bind(view);
-        binding.menuBtn.setVisibility(isMenuActive() ? View.VISIBLE : View.GONE);
-        binding.backAction.setVisibility(isMenuActive() ? View.GONE : View.VISIBLE);
-        binding.backAction.setOnClickListener(v -> {
-            setResult(RESULT_CANCELED);
-            onBackPressed();
-        });
-        binding.search.setVisibility(isSearchActive() ? View.VISIBLE : View.GONE);
-        binding.menuBtn.setOnClickListener(v -> {
-            if (menuClick != null) {
-                menuClick.accept(v);
-            }
-        });
+//        binding.menuBtn.setVisibility(isMenuActive() ? View.VISIBLE : View.GONE);
+//        binding.backAction.setVisibility(isMenuActive() ? View.GONE : View.VISIBLE);
+//        binding.backAction.setOnClickListener(v -> {
+//            setResult(RESULT_CANCELED);
+//            onBackPressed();
+//        });
+//        binding.search.setVisibility(isSearchActive() ? View.VISIBLE : View.GONE);
+//        binding.menuBtn.setOnClickListener(v -> {
+//            if (menuClick != null) {
+//                menuClick.accept(v);
+//            }
+//        });
         onInitUi(view);
-        setSupportActionBar(binding.toolbar);
+//        setSupportActionBar(binding.toolbar);
     }
 
     @Override
@@ -65,15 +65,16 @@ public abstract class BaseActionBarActivity extends MvpAppCompatActivity impleme
     public abstract boolean isSearchActive();
 
     public void setBackButtonEnabled(boolean isEnable) {
-        binding.backAction.setVisibility(isEnable ? View.VISIBLE : View.GONE);
+//        binding.backAction.setVisibility(isEnable ? View.VISIBLE : View.GONE);
     }
 
     public void setTitle(@StringRes int resId) {
-        binding.title.setText(getString(resId));
+//        binding.title.setText(getString(resId));
     }
 
     public void setTitleText(String title) {
-        binding.title.setText(title);
+
+//        binding.title.setText(title);
     }
 
 

@@ -2,11 +2,14 @@ package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
@@ -14,7 +17,6 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
-import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -24,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 03.05.17.
  */
 
-public class UpdateLookActivity extends BaseActionBarActivity implements IUpdateLook {
+public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateLook {
 
     public static final String LOOK_ID = "look_id";
     public static final int UPDATE_LOOK_CODE = 2;
@@ -47,6 +49,9 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     @BindView(R.id.photo_look)
     ImageView pic;
 
+    @BindView(R.id.title)
+    TextView title;
+
     @InjectPresenter
     UpdateLookPresenter presenter;
 
@@ -62,10 +67,10 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     }
 
     @Override
-    public void onInitUi(View baseLayout) {
-        setBackButtonEnabled(true);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(View.inflate(this, R.layout.activity_update_look, null));
-        ButterKnife.bind(this, baseLayout);
+        ButterKnife.bind(this);
         name.setEnabled(false);
         tag.setEnabled(false);
         select.setOnClickListener(v -> {
@@ -100,18 +105,8 @@ public class UpdateLookActivity extends BaseActionBarActivity implements IUpdate
     }
 
     @Override
-    public boolean isMenuActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSearchActive() {
-        return false;
-    }
-
-    @Override
     public void setLookData(Look look) {
-        setTitleText(look.getName());
+        title.setText(look.getName());
         name.setText(look.getName());
         tag.setText(look.getTag());
         pic.setImageBitmap(look.getBitmap());

@@ -9,7 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
@@ -17,7 +19,6 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
-import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
 
 import static com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter.THINGS_ID;
 
-public class AddUpdateThingActivity extends BaseActionBarActivity implements IAddUpdateThingView {
+public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
 
     private static final int REQUEST_TAKE_PHOTO = 2;
     public static final String IS_EDIT = "is_edit";
@@ -48,6 +49,9 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
     @BindView(R.id.things_show_frame)
     FloatingActionButton edit;
 
+    @BindView(R.id.title)
+    TextView title;
+
     @InjectPresenter
     AddUpdateThingPresenter presenter;
 
@@ -60,18 +64,13 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onInitUi(View baseLayout) {
-        setBackButtonEnabled(true);
+        isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
         long thingId = getIntent().getLongExtra(THINGS_ID, -1);
         boolean isNew = thingId == AppConstants.DEFAULT_ID;
-        setTitleText(thingId == -1 ? "новая вещь" : "");
         setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
-        ButterKnife.bind(this, baseLayout);
+        ButterKnife.bind(this);
+        title.setText(thingId == -1 ? "новая вещь" : "");
         initBtns(isNew);
     }
 
@@ -99,17 +98,6 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     private void changeMode(boolean isEditMode) {
         changeMode(isEditMode, true);
-    }
-
-
-    @Override
-    public boolean isMenuActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSearchActive() {
-        return false;
     }
 
     @Override
@@ -151,7 +139,7 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     @Override
     public void showThing(Thing thing) {
-        setTitleText(thing.getName() == null ? "без имени" : thing.getName());
+        title.setText(thing.getName() == null ? "без имени" : thing.getName());
         pic.setImageBitmap(thing.getBitmap());
         this.tag.setText(thing.getTag());
         this.name.setText(thing.getName());

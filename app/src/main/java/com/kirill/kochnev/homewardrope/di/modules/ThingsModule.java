@@ -1,5 +1,7 @@
 package com.kirill.kochnev.homewardrope.di.modules;
 
+import android.support.annotation.NonNull;
+
 import com.kirill.kochnev.homewardrope.di.scopes.ThingListScope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 
@@ -12,10 +14,13 @@ import dagger.Provides;
 public class ThingsModule {
 
     private long filterId;
+
     private boolean isEdit;
+
+    @NonNull
     private ViewMode viewMode;
 
-    public ThingsModule(final long filterId, final boolean isEdit, final ViewMode viewMode) {
+    public ThingsModule(final long filterId, final boolean isEdit, @NonNull final ViewMode viewMode) {
         this.filterId = filterId;
         this.isEdit = isEdit;
         this.viewMode = viewMode;
