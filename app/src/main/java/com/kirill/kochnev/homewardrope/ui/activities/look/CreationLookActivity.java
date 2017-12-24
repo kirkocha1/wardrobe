@@ -78,9 +78,9 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(View.inflate(this, R.layout.activity_first_step_creation_look, null));
-        title.setText(getString(R.string.looks_creation_title));
         ButterKnife.bind(this);
         container.setDrawingCacheEnabled(true);
+        title.setText(getString(R.string.looks_creation_title));
         create.setOnClickListener(v -> presenter.startCreationProcess());
         save.setOnClickListener(v -> presenter.save());
         allThings.setOnClickListener(v -> {
