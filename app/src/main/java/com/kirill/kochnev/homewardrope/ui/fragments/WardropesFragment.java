@@ -30,7 +30,6 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresente
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardropesAdapter;
-import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardropeHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
@@ -78,7 +77,7 @@ public class WardropesFragment extends MvpAppCompatFragment implements IWardrope
     private ListDelegate<Wardrope, WardropeHolder> delegate;
 
     @NonNull
-    protected BaseDbAdapter<Wardrope, WardropeHolder> adapter;
+    protected WardropesAdapter adapter;
 
     @InjectPresenter
     WardropesPresenter presenter;
@@ -98,7 +97,16 @@ public class WardropesFragment extends MvpAppCompatFragment implements IWardrope
         ButterKnife.bind(this, v);
         final ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE));
         adapter = new WardropesAdapter();
-        delegate = new ListDelegate<>(list, adapter, addBtn, presenter, blankImg, mode, ViewMode.WARDROPE_MODE, new LinearLayoutManager(getContext()));
+        delegate = new ListDelegate<>(
+                list,
+                adapter,
+                addBtn,
+                presenter,
+                blankImg,
+                mode,
+                ViewMode.WARDROPE_MODE,
+                new LinearLayoutManager(getContext())
+        );
         return v;
 
     }

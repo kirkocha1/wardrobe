@@ -28,7 +28,6 @@ import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
 import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
-import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
 
@@ -77,10 +76,10 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
 
     private ViewMode mode;
 
-    @NonNull
-    private BaseDbAdapter<Look, LookHolder> adapter;
+    @Nullable
+    private LooksAdapter adapter;
 
-    @NonNull
+    @Nullable
     private ListDelegate<Look, LookHolder> delegate;
 
     @InjectPresenter
@@ -88,9 +87,9 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
 
     @ProvidePresenter
     LooksPresenter providePresenter() {
-        long wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
-        boolean isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
-        LookComponent component = WardropeApplication
+        final long wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
+        final boolean isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
+        final LookComponent component = WardropeApplication
                 .getComponentHolder()
                 .provideLookComponent(wardropeId, isEdit, mode);
         return component.provideLooksPresenter();
@@ -108,7 +107,16 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
         final View v = inflater.inflate(R.layout.fragment_looks, container, false);
         ButterKnife.bind(this, v);
         adapter = new LooksAdapter();
-        delegate = new ListDelegate<>(list, adapter, addBtn, presenter, blankImg, mode, ViewMode.LOOK_MODE, new GridLayoutManager(getContext(), 2));
+        delegate = new ListDelegate<>(
+                list,
+                adapter,
+                addBtn,
+                presenter,
+                blankImg,
+                mode,
+                ViewMode.LOOK_MODE,
+                new GridLayoutManager(getContext(), 2)
+        );
         return v;
     }
 
@@ -133,13 +141,17 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
 
     @Override
     public void setEditMode(boolean isEditMode) {
-        adapter.clear();
-        ((LooksAdapter) adapter).setEdit(isEditMode);
+        if (adapter != null) {
+            adapter.clear();
+            adapter.setEdit(isEditMode);
+        }
     }
 
     @Override
     public void markAdapterViews(HashSet<Long> set) {
-        ((LooksAdapter) adapter).setIds(set);
+        if (adapter != null) {
+            adapter.setIds(set);
+        }
     }
 
     @Override

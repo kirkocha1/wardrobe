@@ -27,7 +27,6 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.ThingsAdapter;
-import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseDbAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.ThingHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
 
@@ -50,6 +49,7 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
 
 public class ThingsFragment extends MvpAppCompatFragment implements IThingsView {
     public static final int REQUEST_CODE = 1;
+
     public static ThingsFragment createInstance(ViewMode mode, boolean isEdit, long wardropeId) {
         ThingsFragment fragment = new ThingsFragment();
         Bundle bundle = new Bundle();
@@ -76,7 +76,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     protected Toolbar toolbar;
 
     @NonNull
-    private BaseDbAdapter<Thing, ThingHolder> adapter;
+    private ThingsAdapter adapter;
 
     @NonNull
     private ListDelegate<Thing, ThingHolder> delegate;
@@ -111,7 +111,16 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
         final View v = inflater.inflate(R.layout.fragment_things, container, false);
         ButterKnife.bind(this, v);
         adapter = new ThingsAdapter();
-        delegate = new ListDelegate<>(list, adapter, addBtn, presenter, blankImg, mode, ViewMode.THING_MODE, new GridLayoutManager(getContext(), 2));
+        delegate = new ListDelegate<>(
+                list,
+                adapter,
+                addBtn,
+                presenter,
+                blankImg,
+                mode,
+                ViewMode.THING_MODE,
+                new GridLayoutManager(getContext(), 2)
+        );
         return v;
     }
 
@@ -136,12 +145,12 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     @Override
     public void setEditMode(boolean isEditMode) {
         adapter.clear();
-        ((ThingsAdapter) adapter).setEdit(isEditMode);
+        adapter.setEdit(isEditMode);
     }
 
     @Override
     public void addThingIdsToAdapter(HashSet<Long> set) {
-        ((ThingsAdapter) adapter).setIds(set);
+        adapter.setIds(set);
     }
 
     @Override
