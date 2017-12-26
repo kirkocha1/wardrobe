@@ -8,14 +8,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.di.components.AddUpdateWardropeComponent;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
-import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
-import com.kirill.kochnev.homewardrope.ui.adapters.WardropePagerAdapter;
+import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
+import com.kirill.kochnev.homewardrope.ui.adapters.WardrobePagerAdapter;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -25,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 30.03.17.
  */
 
-public class AddUpdateWardropeActivity extends BaseActionBarActivity implements IAddUpdateWardropeView {
+public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView {
 
     public static final String WARDROPE_ID = "wardrope_id";
 
@@ -50,46 +54,44 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
     @InjectPresenter
     AddUpdateWardropePresenter presenter;
 
-    private long wardropeId;
+    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @ProvidePresenter
     AddUpdateWardropePresenter providePresenter() {
-        return new AddUpdateWardropePresenter(wardropeId);
+        final long wardropeId = getIntent().getLongExtra(WARDROPE_ID, AppConstants.DEFAULT_ID);
+        final AddUpdateWardropeComponent component = WardrobeApplication.getComponentHolder().getAddUpdateWardrobeComponent(wardropeId);
+        return component.providePresenter();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        wardropeId = getIntent().getLongExtra(WARDROPE_ID, -1);
         super.onCreate(savedInstanceState);
+        final long wardropeId = getIntent().getLongExtra(WARDROPE_ID, AppConstants.DEFAULT_ID);
+        final View view = View.inflate(this, R.layout.activity_add_update_wardrobe, null);
+        setContentView(view);
+        ButterKnife.bind(this);
+        activityToolbarDelegate.init(view, wardropeId == AppConstants.DEFAULT_ID ? getString(R.string.new_wardrobe_title) : "",
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    onBackPressed();
+                });
+        initBtns(wardropeId);
+        pager.setAdapter(new WardrobePagerAdapter(this, getSupportFragmentManager(), wardropeId));
     }
 
     @Override
-    public void onInitUi(View baseLayout) {
-        setTitleText(wardropeId == -1 ? "новый гардероб" : "");
-        setBackButtonEnabled(true);
-        setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
-        ButterKnife.bind(this, baseLayout);
-        initBtns();
-        pager.setAdapter(new WardropePagerAdapter(this, getSupportFragmentManager(), wardropeId));
+    protected void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearAddUpdateWardrobeComponent();
     }
 
-    private void initBtns() {
+    private void initBtns(long wardropeId) {
         select.setOnClickListener(v -> presenter.toggleMode());
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
-        select.setVisibility(wardropeId == -1 ? View.GONE : View.VISIBLE);
-        save.setVisibility(wardropeId == -1 ? View.VISIBLE : View.GONE);
-        name.setEnabled(wardropeId == -1);
-    }
-
-    @Override
-    public boolean isMenuActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSearchActive() {
-        return false;
+        select.setVisibility(wardropeId == AppConstants.DEFAULT_ID ? View.GONE : View.VISIBLE);
+        save.setVisibility(wardropeId == AppConstants.DEFAULT_ID ? View.VISIBLE : View.GONE);
+        name.setEnabled(wardropeId == AppConstants.DEFAULT_ID);
     }
 
     @Override
@@ -100,15 +102,15 @@ public class AddUpdateWardropeActivity extends BaseActionBarActivity implements 
 
     @Override
     public void setCount(int thingsCount, int looksCount) {
-        this.thingsCount.setText(thingsCount + "");
-        this.looksCount.setText(looksCount + "");
+        this.thingsCount.setText(String.valueOf(thingsCount));
+        this.looksCount.setText(String.valueOf(looksCount));
     }
 
     @Override
     public void initView(Wardrope wardrope) {
-        setTitleText(wardrope.getName() == null ? "нет названия" : wardrope.getName());
         setCount(wardrope.getThingsCount(), wardrope.getLookIds().size());
         name.setText(wardrope.getName());
+        activityToolbarDelegate.updateTitle(wardrope.getName());
     }
 
     @Override

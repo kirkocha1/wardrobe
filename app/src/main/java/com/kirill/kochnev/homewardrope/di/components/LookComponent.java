@@ -1,11 +1,12 @@
 package com.kirill.kochnev.homewardrope.di.components;
 
-import com.kirill.kochnev.homewardrope.di.modules.LooksModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.CreateLookModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.UpdateLookModule;
 import com.kirill.kochnev.homewardrope.di.scopes.LookScope;
+import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CollagePresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
 
 import dagger.Subcomponent;
 
@@ -19,10 +20,11 @@ public interface LookComponent {
 
     LooksPresenter provideLooksPresenter();
 
-    void inject(CreationLookPresenter activity);
+    LooksInteractor provideLooksInteractor();
 
     void inject(CollagePresenter presenter);
 
-    void inject(UpdateLookPresenter presenter);
+    UpdateLookComponent plusUpdateLookComponent(UpdateLookModule module);
 
+    CreateLookComponent plusCreateLookComponent(CreateLookModule module);
 }

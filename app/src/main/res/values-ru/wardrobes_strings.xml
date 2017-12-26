@@ -4,4 +4,5 @@
     <string name="thing_by_wardrope_selected">Количество вещей: </string>
     <string name="looks_by_wardrope_selected">Количество образов: </string>
     <string name="wardropes_name_hint">Имя гардероба</string>
+    <string name="new_wardrobe_title">новый гардероб</string>
 </resources>

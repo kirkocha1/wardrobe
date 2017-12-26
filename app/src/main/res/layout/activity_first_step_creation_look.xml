@@ -1,52 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent">
 
-    <FrameLayout
-        android:id="@+id/look_fragment_container"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/TitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                tools:text="Title" />
+
+            <ImageView
+                android:id="@+id/search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/magnify"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/back_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:adjustViewBounds="true"
+                android:src="@drawable/keyboard_backspace" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/creation_look_main_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:orientation="horizontal">
+        <FrameLayout
+            android:id="@+id/look_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/save_collage"
-            style="@style/CommonButtnoStyle"
+        <LinearLayout
+            android:id="@+id/creation_look_main_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/content_save"
-            android:text="@string/looks_collage_save_btn"
-            android:visibility="gone" />
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/all_things"
-            style="@style/CommonButtnoStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tshort_empty"
-            android:text="@string/looks_all_things_btn" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/save_collage"
+                style="@style/CommonButtnoStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/content_save"
+                android:text="@string/looks_collage_save_btn"
+                android:visibility="gone" />
 
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/create_look"
-            style="@style/CommonButtnoStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black_24px"
-            android:text="@string/looks_create_btn"
-            android:visibility="gone" />
-
-    </LinearLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/all_things"
+                style="@style/CommonButtnoStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tshort_empty"
+                android:text="@string/looks_all_things_btn" />
 
 
-</RelativeLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/create_look"
+                style="@style/CommonButtnoStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_black_24px"
+                android:text="@string/looks_create_btn"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</LinearLayout>
+

@@ -2,19 +2,20 @@ package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CollagePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
-import com.kirill.kochnev.homewardrope.ui.fragments.base.BaseActionBarFragment;
 import com.kirill.kochnev.homewardrope.ui.views.CollageView;
 
 import java.util.HashSet;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 27.04.17.
  */
 
-public class CollageFragment extends BaseActionBarFragment implements ICollageView {
+public class CollageFragment extends MvpAppCompatFragment implements ICollageView {
 
     public static final String THINGS_SET = "things_set";
 
@@ -41,11 +42,11 @@ public class CollageFragment extends BaseActionBarFragment implements ICollageVi
         return new CollagePresenter((HashSet<Long>) getArguments().getSerializable(THINGS_SET));
     }
 
-    public static CollageFragment createInstance(HashSet<Long> thingsId) {
-        CollageFragment fragment = new CollageFragment();
-        Bundle agrs = new Bundle();
-        agrs.putSerializable(THINGS_SET, thingsId);
-        fragment.setArguments(agrs);
+    public static CollageFragment createInstance(@NonNull final HashSet<Long> thingsId) {
+        final CollageFragment fragment = new CollageFragment();
+        final Bundle args = new Bundle();
+        args.putSerializable(THINGS_SET, thingsId);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -59,7 +60,7 @@ public class CollageFragment extends BaseActionBarFragment implements ICollageVi
     }
 
     @Override
-    public void constructView(SparseArray<Bitmap> cache, CollageMode mode) {
+    public void constructView(@NonNull final SparseArray<Bitmap> cache, @NonNull final CollageMode mode) {
         container.inflateItems(mode, cache);
     }
 }

@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.di.modules;
+package com.kirill.kochnev.homewardrope.di.modules.look;
 
 
 import com.kirill.kochnev.homewardrope.di.scopes.LookScope;

@@ -42,7 +42,7 @@ public class LooksInteractor {
 
     public Single<DeleteResult> deleteLook(Look model) {
         helper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
-        return looks.deletItem(model);
+        return looks.deleteItem(model);
     }
 
     public Single<Look> getLook(long id) {

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.interactors.CollageInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
@@ -34,7 +34,7 @@ public class CollagePresenter extends MvpPresenter<ICollageView> {
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public CollagePresenter(HashSet<Long> thingIds) {
-        WardropeApplication.getComponentHolder().getLookComponent().inject(this);
+        WardrobeApplication.getComponentHolder().getLookComponent().inject(this);
         disposableDelegate.addToCompositeDisposable(
                 interactor
                         .getImages(thingIds)

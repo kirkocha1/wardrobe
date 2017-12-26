@@ -8,4 +8,6 @@
     <string name="looks_error_message_max">максимальное количество вещей 4</string>
     <string name="looks_error_message_min">необходимо выбрать минимум 2 вещи</string>
     <string name="looks_save_message">Are you sure, you want to save?</string>
+    <string name="look_dialog_chooser_title">Выберите имя</string>
+
 </resources>

@@ -5,9 +5,9 @@ import android.os.StrictMode;
 
 import com.kirill.kochnev.homewardrope.di.ComponentHolder;
 
-public class WardropeApplication extends Application {
+public class WardrobeApplication extends Application {
 
-    public static final String TAG = "WardropeApplication";
+    public static final String TAG = "WardrobeApplication";
     private static ComponentHolder componentHolder;
 
     @Override

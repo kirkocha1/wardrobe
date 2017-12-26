@@ -11,7 +11,8 @@ import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 
 public interface IWardropeView extends IPaginationView<Wardrope> {
 
-    void setThingsByWardrope(long id);
+    @StateStrategyType(SkipStrategy.class)
+    void navigateToThingsFilteredByWardrope(long id);
 
     @StateStrategyType(SkipStrategy.class)
     void navigateToAddUpdateWardropeView(Long id);

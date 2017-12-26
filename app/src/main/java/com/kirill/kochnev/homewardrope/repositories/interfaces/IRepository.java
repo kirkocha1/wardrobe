@@ -19,7 +19,7 @@ public interface IRepository<M> {
 
     Single<M> getItem(long id);
 
-    Single<DeleteResult> deletItem(M model);
+    Single<DeleteResult> deleteItem(M model);
 
     Single<List<M>> query(long id);
 

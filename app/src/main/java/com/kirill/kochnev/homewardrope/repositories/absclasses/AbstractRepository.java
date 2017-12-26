@@ -72,7 +72,7 @@ public abstract class AbstractRepository<M extends IDbModel> implements IReposit
     }
 
 
-    public Single<DeleteResult> deletItem(M model) {
+    public Single<DeleteResult> deleteItem(M model) {
         return Single.fromCallable(() -> storIOSQLite.delete().object(model).prepare().executeAsBlocking());
     }
 

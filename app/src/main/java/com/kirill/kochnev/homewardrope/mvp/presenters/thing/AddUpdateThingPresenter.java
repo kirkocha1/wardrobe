@@ -7,12 +7,12 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -22,14 +22,14 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
 
     public static final String TAG = "AddUpdateThingPresenter";
 
-    @Inject
-    AddUpdateThingsInteractor interactor;
+    private AddUpdateThingsInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
-    public AddUpdateThingPresenter(long id) {
-        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
+    @Inject
+    public AddUpdateThingPresenter(@Named("thingId") long id, AddUpdateThingsInteractor interactor) {
+        this.interactor = interactor;
         initValues(id);
     }
 

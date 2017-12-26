@@ -8,7 +8,7 @@ Description:
  
   the main aim of application is to help you to organize you clothers.
   You can create wardrobes and fill them with clothers,
-  also you can make looks with you clothers and attach to wardropes. 
+  also you can make looks with you clothers and attach to wardrobes.
 
 Aproaches:
   - I tried to make architecture of application close to "Clean architecture" and use Reactive style in some places.

@@ -8,10 +8,9 @@ import android.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardropeInteractor;
+import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardrobeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
@@ -20,6 +19,7 @@ import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 import java.util.HashSet;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -33,14 +33,11 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
 
     public static final String TAG = "AddUpdateWardrope";
 
-    @Inject
-    IdBus idBus;
+    private IdBus idBus;
 
-    @Inject
-    StateBus stateBus;
+    private StateBus stateBus;
 
-    @Inject
-    AddUpdateWardropeInteractor interactor;
+    private AddUpdateWardrobeInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
@@ -49,9 +46,16 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
     private HashSet<Long> looksSet = new HashSet<>();
     private boolean isEditableMode = false;
 
-
-    public AddUpdateWardropePresenter(long id) {
-        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
+    @Inject
+    public AddUpdateWardropePresenter(
+            @Named("wardrobeId") long id,
+            AddUpdateWardrobeInteractor interactor,
+            StateBus stateBus,
+            IdBus idBus
+    ) {
+        this.interactor = interactor;
+        this.idBus = idBus;
+        this.stateBus = stateBus;
         initWardrope(id);
     }
 
@@ -59,7 +63,7 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
         registerForThingIds();
         disposableDelegate.addToCompositeDisposable(
                 interactor
-                        .getWardrope(id)
+                        .getWardrobe(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -107,7 +111,7 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
     }
 
     private void returnInitialState() {
-        interactor.getWardrope().subscribe(wardrope -> {
+        interactor.getWardrobe().subscribe(wardrope -> {
             setHashSets(wardrope.getLookIds(), wardrope.getThingIds());
             getViewState().setCount(thingsSet.size(), looksSet.size());
         });
@@ -121,7 +125,7 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
     public void save(String name) {
         disposableDelegate.addToCompositeDisposable(
                 interactor
-                        .saveWardrope(new Wardrope(name, thingsSet, looksSet))
+                        .saveWardrobe(new Wardrope(name, thingsSet, looksSet))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(result -> {

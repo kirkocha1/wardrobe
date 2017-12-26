@@ -3,8 +3,8 @@ package com.kirill.kochnev.homewardrope.db.models;
 import android.provider.BaseColumns;
 
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
-import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardropeHolder;
-import com.kirill.kochnev.homewardrope.ui.views.WardropeItemView;
+import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardrobeHolder;
+import com.kirill.kochnev.homewardrope.ui.views.WardrobeItemView;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -57,7 +57,7 @@ public class Wardrope implements IDbModel {
 
     @Override
     public void inflateHolder(BaseHolder holder) {
-        WardropeItemView item = ((WardropeHolder) holder).item;
+        WardrobeItemView item = ((WardrobeHolder) holder).item;
         item.setName(name);
         item.setLooksCount(looksCount);
         item.setThingsCount(thingsCount);

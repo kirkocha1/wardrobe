@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="things_title">Вещи</string>
+    <string name="new_thing_title">новая вещь</string>
+    <string name="no_name">без имени</string>
+
 </resources>

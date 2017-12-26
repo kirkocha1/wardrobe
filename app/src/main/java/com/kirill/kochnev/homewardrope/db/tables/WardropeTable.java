@@ -10,7 +10,7 @@ import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE
 
 public class WardropeTable implements BaseColumns {
 
-    public static final String WARDROPE_TABLE = "wardropes";
+    public static final String WARDROPE_TABLE = "wardrobes";
     public static final String WARDROPE_NAME = "wardrope_name";
     public static final String WARDROPE_LOOKS_COUNT = "looks_count";
     public static final String WARDROPE_THINGS_COUNT = "things_count";

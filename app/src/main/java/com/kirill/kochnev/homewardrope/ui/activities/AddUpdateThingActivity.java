@@ -10,14 +10,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.di.components.AddUpdateThingComponent;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
-import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -25,7 +28,7 @@ import butterknife.ButterKnife;
 
 import static com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter.THINGS_ID;
 
-public class AddUpdateThingActivity extends BaseActionBarActivity implements IAddUpdateThingView {
+public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
 
     private static final int REQUEST_TAKE_PHOTO = 2;
     public static final String IS_EDIT = "is_edit";
@@ -53,40 +56,50 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     @ProvidePresenter
     AddUpdateThingPresenter providePresenter() {
-        return new AddUpdateThingPresenter(getIntent().getLongExtra(THINGS_ID, -1));
+        final AddUpdateThingComponent component = WardrobeApplication.getComponentHolder()
+                .getAddUpdateThingComponent(getIntent().getLongExtra(THINGS_ID, AppConstants.DEFAULT_ID));
+        return component.providePresenter();
     }
 
-    private boolean isEditMode;
+    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
         super.onCreate(savedInstanceState);
+        final boolean isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
+        final long thingId = getIntent().getLongExtra(THINGS_ID, -1);
+        final boolean isNew = thingId == AppConstants.DEFAULT_ID;
+        final View view = View.inflate(this, R.layout.activity_add_or_update_thing, null);
+        setContentView(view);
+        ButterKnife.bind(this);
+        activityToolbarDelegate.init(view, thingId == -1 ? getString(R.string.new_thing_title) : "",
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    onBackPressed();
+                });
+        initBtns(isNew, isEditMode);
     }
 
     @Override
-    public void onInitUi(View baseLayout) {
-        setBackButtonEnabled(true);
-        long thingId = getIntent().getLongExtra(THINGS_ID, -1);
-        boolean isNew = thingId == AppConstants.DEFAULT_ID;
-        setTitleText(thingId == -1 ? "новая вещь" : "");
-        setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
-        ButterKnife.bind(this, baseLayout);
-        initBtns(isNew);
+    protected void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearAddUpdateThingComponent();
     }
 
-    private void initBtns(boolean isNew) {
+    private void initBtns(final boolean isNew, final boolean isEditMode) {
         edit.setVisibility(isNew ? View.GONE : View.VISIBLE);
-        changeMode(isNew, false);
+        if (isEditMode) {
+            changeMode(false);
+        }
         edit.setOnClickListener(v -> {
-            isEditMode = !isEditMode;
-            changeMode(isEditMode);
+            changeMode(true);
         });
         captureBtn.setOnClickListener(v -> presenter.createUri());
         save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
     }
 
-    private void changeMode(boolean isEditMode, boolean isAnimate) {
+    private void changeMode(boolean isAnimate) {
+        final boolean isEditMode = !name.isEnabled();
         name.setEnabled(isEditMode);
         tag.setEnabled(isEditMode);
         captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.INVISIBLE);
@@ -95,21 +108,6 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
             AnimationHelper.hideShowAnimation(this, save, !isEditMode);
             AnimationHelper.hideShowAnimation(this, captureBtn, !isEditMode);
         }
-    }
-
-    private void changeMode(boolean isEditMode) {
-        changeMode(isEditMode, true);
-    }
-
-
-    @Override
-    public boolean isMenuActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSearchActive() {
-        return false;
     }
 
     @Override
@@ -151,7 +149,7 @@ public class AddUpdateThingActivity extends BaseActionBarActivity implements IAd
 
     @Override
     public void showThing(Thing thing) {
-        setTitleText(thing.getName() == null ? "без имени" : thing.getName());
+        activityToolbarDelegate.updateTitle(thing.getName() == null ? getString(R.string.no_name) : thing.getName());
         pic.setImageBitmap(thing.getBitmap());
         this.tag.setText(thing.getTag());
         this.name.setText(thing.getName());

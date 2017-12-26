@@ -2,6 +2,8 @@ package com.kirill.kochnev.homewardrope.ui.activities.look;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,18 +12,21 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
+import com.kirill.kochnev.homewardrope.di.components.CreateLookComponent;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
-import com.kirill.kochnev.homewardrope.ui.activities.base.BaseActionBarActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
-import com.kirill.kochnev.homewardrope.ui.fragments.WardropesFragment;
+import com.kirill.kochnev.homewardrope.ui.fragments.WardrobesFragment;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 import com.kirill.kochnev.homewardrope.utils.DialogHelper;
 
@@ -34,7 +39,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 27.04.17.
  */
 
-public class CreationLookActivity extends BaseActionBarActivity implements IFirstStepCreationLookView {
+public class CreationLookActivity extends MvpAppCompatActivity implements IFirstStepCreationLookView {
 
     public static final String LOOK_ID = "look_id";
     public static final String WARDROPE_ID = "wardrope_id";
@@ -59,7 +64,9 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
 
     @ProvidePresenter
     CreationLookPresenter providePresenter() {
-        return new CreationLookPresenter(getIntent().getLongExtra(LOOK_ID, -1));
+        final long lookId = getIntent().getLongExtra(LOOK_ID, -1);
+        final CreateLookComponent component = WardrobeApplication.getComponentHolder().getCreateLookComponent(lookId);
+        return component.providePresenter();
     }
 
     public static Intent createIntent(Context context, long lookId, long wardropeId) {
@@ -69,13 +76,20 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         return intent;
     }
 
+    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
+
     @Override
-    public void onInitUi(View baseLayout) {
-        setContentView(View.inflate(this, R.layout.activity_first_step_creation_look, null));
-        setBackButtonEnabled(true);
-        setTitleText(getString(R.string.looks_creation_title));
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final View view = View.inflate(this, R.layout.activity_first_step_creation_look, null);
+        setContentView(view);
         ButterKnife.bind(this);
         container.setDrawingCacheEnabled(true);
+        activityToolbarDelegate.init(view, getString(R.string.looks_creation_title),
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    onBackPressed();
+                });
         create.setOnClickListener(v -> presenter.startCreationProcess());
         save.setOnClickListener(v -> presenter.save());
         allThings.setOnClickListener(v -> {
@@ -89,7 +103,13 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
                     CreationLookState.valueOf(getSupportFragmentManager().getBackStackEntryAt(count).getName());
             presenter.resolveBtnsState(transactionState);
         });
-        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START);
+        initFragment(WardrobesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearCreateLookComponent();
     }
 
     @Override
@@ -97,15 +117,17 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
         View dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
         TextView nameView = (TextView) dialogView.findViewById(R.id.new_name);
         TextView tagView = (TextView) dialogView.findViewById(R.id.new_tag);
+        nameView.setEnabled(true);
+        tagView.setEnabled(true);
         if (oldName != null) {
             nameView.setText(oldName);
         }
         if (oldTag != null) {
             tagView.setText(oldTag);
         }
-        DialogHelper.showOKCancelDialog(this, "Выберите имя", dialogView, (dialog, which) -> {
-            String name = ((TextView) dialogView.findViewById(R.id.new_name)).getText().toString();
-            String tag = ((TextView) dialogView.findViewById(R.id.new_tag)).getText().toString();
+        DialogHelper.showOKCancelDialog(this, getString(R.string.look_dialog_chooser_title), dialogView, (dialog, which) -> {
+            String name = nameView.getText().toString();
+            String tag = tagView.getText().toString();
             presenter.processLook(name, tag, container.getDrawingCache());
             dialog.dismiss();
         }, null);
@@ -121,22 +143,14 @@ public class CreationLookActivity extends BaseActionBarActivity implements IFirs
     }
 
     @Override
-    public boolean isMenuActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isSearchActive() {
-        return false;
-    }
-
-    @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
         initFragment(CollageFragment.createInstance(thingIds), CreationLookState.COLLAGE);
     }
 
     @Override
-    public void onSuccess(Intent intent) {
+    public void onSuccess(long lookId) {
+        Intent intent = new Intent();
+        intent.putExtra(AppConstants.ADD_UPDATED_ID, lookId);
         setResult(RESULT_OK, intent);
         finish();
     }

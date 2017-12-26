@@ -48,6 +48,6 @@ public class ThingsInteractor {
 
     public Single<DeleteResult> deleteThings(Thing model) {
         helper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
-        return things.deletItem(model);
+        return things.deleteItem(model);
     }
 }

@@ -7,12 +7,12 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -25,39 +25,31 @@ import io.reactivex.schedulers.Schedulers;
 public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
 
     public static final String TAG = "UpdateLookPresenter";
-    public boolean isNeedToAttach = false;
 
-    @Inject
-    protected LooksInteractor interactor;
+    private final long lookId;
+    private final LooksInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
-    public UpdateLookPresenter(long lookId) {
-        WardropeApplication.getComponentHolder().getLookComponent().inject(this);
-        init(lookId);
-    }
-
-
-    @Override
-    public void attachView(IUpdateLook view) {
-        super.attachView(view);
-        if (isNeedToAttach) {
-            disposableDelegate.addToCompositeDisposable(
-                    interactor
-                            .getLook()
-                            .subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage()))
-            );
-        }
+    @Inject
+    public UpdateLookPresenter(@Named("lookId") long lookId, LooksInteractor interactor) {
+        this.interactor = interactor;
+        this.lookId = lookId;
     }
 
     @Override
-    public void detachView(IUpdateLook view) {
-        isNeedToAttach = true;
-        super.detachView(view);
+    protected void onFirstViewAttach() {
+        updateListItem(lookId);
     }
 
-    private void init(long lookId) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableDelegate.unsubscribe();
+    }
+
+    public void updateListItem(long lookId) {
         disposableDelegate.addToCompositeDisposable(
                 interactor
                         .getLook(lookId)
@@ -76,10 +68,12 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(isPut -> {
-                            Intent intent = new Intent();
-                            intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
-                            getViewState().onSave(intent);
-                        })
+                                    Intent intent = new Intent();
+                                    intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
+                                    getViewState().onSave(intent);
+                                },
+                                e -> Log.e(TAG, e.getMessage())
+                        )
         );
     }
 
@@ -92,11 +86,5 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
                                 e -> Log.e(TAG, e.getMessage())
                         )
         );
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        disposableDelegate.unsubscribe();
     }
 }
