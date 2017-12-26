@@ -66,7 +66,7 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
         wardropeId = getIntent().getLongExtra(WARDROPE_ID, -1);
         setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
         ButterKnife.bind(this);
-        title.setText(wardropeId == -1 ? "новый гардероб" : "");
+        title.setText(wardropeId == -1 ? getString(R.string.new_wardrobe_title) : "");
         initBtns();
         pager.setAdapter(new WardropePagerAdapter(this, getSupportFragmentManager(), wardropeId));
     }
@@ -88,8 +88,8 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
 
     @Override
     public void setCount(int thingsCount, int looksCount) {
-        this.thingsCount.setText(thingsCount + "");
-        this.looksCount.setText(looksCount + "");
+        this.thingsCount.setText(String.valueOf(thingsCount));
+        this.looksCount.setText(String.valueOf(looksCount));
     }
 
     @Override

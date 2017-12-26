@@ -70,7 +70,7 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
         boolean isNew = thingId == AppConstants.DEFAULT_ID;
         setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
         ButterKnife.bind(this);
-        title.setText(thingId == -1 ? "новая вещь" : "");
+        title.setText(thingId == -1 ? getString(R.string.new_thing_title) : "");
         initBtns(isNew);
     }
 

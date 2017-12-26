@@ -19,13 +19,22 @@ import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
 
 public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implements OnClick<M> {
 
-    private RecyclerView list;
-    private View blankImg;
-    private FloatingActionButton addBtn;
+    @BindView(R.id.list_items)
+    RecyclerView list;
+
+    @BindView(R.id.blank_image)
+    View blankImg;
+
+    @BindView(R.id.add)
+    FloatingActionButton addBtn;
+
     private Context context;
 
     private LinearLayoutManager layoutManager;
@@ -37,28 +46,31 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
     private ViewMode mainState;
 
     public ListDelegate(
-            @NonNull final RecyclerView list,
+            @NonNull final View view,
             @NonNull final BaseDbAdapter<M, H> adapter,
-            @NonNull final FloatingActionButton addBtn,
             @NonNull final IPaginator paginator,
-            @NonNull final View blankImg,
             @NonNull final ViewMode mode,
             @NonNull final ViewMode mainState,
-            @NonNull final LinearLayoutManager layoutManager
+            @NonNull final View.OnClickListener addButtonListener
     ) {
-        this.list = list;
+        ButterKnife.bind(this, view);
         this.adapter = adapter;
         this.paginator = paginator;
         this.context = list.getContext();
-        this.addBtn = addBtn;
-        this.blankImg = blankImg;
         this.mode = mode;
         this.mainState = mainState;
-        this.layoutManager = layoutManager;
-        init();
+        this.layoutManager = new LinearLayoutManager(view.getContext());
+        adjustList();
+        adjustAddButton(addButtonListener);
     }
 
-    private void init() {
+    private void adjustAddButton(View.OnClickListener listener) {
+        addBtn.setOnClickListener(listener);
+        addBtn.setActivated(mode == mainState);
+        addBtn.setVisibility(mode == mainState ? View.VISIBLE : View.GONE);
+    }
+
+    private void adjustList() {
         adapter.setClickListner(this);
         list.setLayoutManager(layoutManager);
         list.setAdapter(adapter);
@@ -91,6 +103,11 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
                 }
             }
         });
+
+    }
+
+    public void setLayoutManager(LinearLayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -134,4 +151,5 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
             }
         }
     }
+
 }

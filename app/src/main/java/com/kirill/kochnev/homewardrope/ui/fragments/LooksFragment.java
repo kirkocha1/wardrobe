@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -30,6 +27,7 @@ import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
+import com.kirill.kochnev.homewardrope.ui.fragments.base.ToolbarDelegate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -49,7 +47,7 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
 
     public static final int REQUEST_CODE = 1;
 
-    public static LooksFragment newInstance(@NonNull ViewMode mode, boolean isEdit, long wardropeId) {
+    public static LooksFragment newInstance(@NonNull final ViewMode mode, boolean isEdit, long wardropeId) {
         final Bundle args = new Bundle();
         args.putInt(FRAGMENT_MODE, mode.getModeNum());
         args.putLong(WARDROPE_ID, wardropeId);
@@ -58,15 +56,6 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
         fragment.setArguments(args);
         return fragment;
     }
-
-    @BindView(R.id.list_items)
-    protected RecyclerView list;
-
-    @BindView(R.id.add)
-    protected FloatingActionButton addBtn;
-
-    @BindView(R.id.blank_image)
-    protected RelativeLayout blankImg;
 
     @BindView(R.id.title)
     protected TextView title;
@@ -81,6 +70,10 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
 
     @Nullable
     private ListDelegate<Look, LookHolder> delegate;
+
+    @NonNull
+    private ToolbarDelegate toolbarDelegate = new ToolbarDelegate();
+
 
     @InjectPresenter
     LooksPresenter presenter;
@@ -104,33 +97,20 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_looks, container, false);
-        ButterKnife.bind(this, v);
+        final View view = inflater.inflate(R.layout.fragment_looks, container, false);
+        ButterKnife.bind(this, view);
         adapter = new LooksAdapter();
+        toolbarDelegate.init(view, mode, ViewMode.LOOK_MODE, R.string.looks_title);
         delegate = new ListDelegate<>(
-                list,
+                view,
                 adapter,
-                addBtn,
                 presenter,
-                blankImg,
                 mode,
                 ViewMode.LOOK_MODE,
-                new GridLayoutManager(getContext(), 2)
+                v -> openUpdateActivity(CreationLookActivity.createIntent(getContext(), AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
         );
-        return v;
-    }
-
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (mode == ViewMode.LOOK_MODE) {
-            title.setText(R.string.looks_title);
-            toolbar.setVisibility(View.VISIBLE);
-        }
-        addBtn.setOnClickListener(v -> openUpdateActivity(CreationLookActivity.createIntent(getContext(), AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID)));
-        addBtn.setActivated(mode == ViewMode.LOOK_MODE);
-        addBtn.setVisibility(mode == ViewMode.LOOK_MODE ? View.VISIBLE : View.GONE);
+        delegate.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        return view;
     }
 
     @Override

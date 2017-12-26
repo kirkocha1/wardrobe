@@ -108,9 +108,9 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
         if (oldTag != null) {
             tagView.setText(oldTag);
         }
-        DialogHelper.showOKCancelDialog(this, "Выберите имя", dialogView, (dialog, which) -> {
-            String name = ((TextView) dialogView.findViewById(R.id.new_name)).getText().toString();
-            String tag = ((TextView) dialogView.findViewById(R.id.new_tag)).getText().toString();
+        DialogHelper.showOKCancelDialog(this, getString(R.string.look_dialog_chooser_title), dialogView, (dialog, which) -> {
+            String name = nameView.getText().toString();
+            String tag = tagView.getText().toString();
             presenter.processLook(name, tag, container.getDrawingCache());
             dialog.dismiss();
         }, null);

@@ -3,7 +3,7 @@
     <string name="wardropes_title">Wardropes</string>
     <string name="thing_by_wardrope_selected">Things AMOUNT: </string>
     <string name="looks_by_wardrope_selected">Looks AMOUNT: </string>
-
+    <string name="new_wardrobe_title">new wardrobe</string>
     <string name="wardropes_name_hint">Wardrope name</string>
 
 </resources>

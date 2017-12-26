@@ -52,6 +52,12 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposableDelegate.unsubscribe();
+    }
+
+    @Override
     public void detachView(IUpdateLook view) {
         isNeedToAttach = true;
         super.detachView(view);
@@ -76,10 +82,12 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(isPut -> {
-                            Intent intent = new Intent();
-                            intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
-                            getViewState().onSave(intent);
-                        })
+                                    Intent intent = new Intent();
+                                    intent.putExtra(AppConstants.ADD_UPDATED_ID, isPut.getId());
+                                    getViewState().onSave(intent);
+                                },
+                                e -> Log.e(TAG, e.getMessage())
+                        )
         );
     }
 
@@ -94,9 +102,4 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
         );
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        disposableDelegate.unsubscribe();
-    }
 }

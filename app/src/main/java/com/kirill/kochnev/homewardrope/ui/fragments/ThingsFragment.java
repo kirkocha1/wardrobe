@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -29,6 +26,7 @@ import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.ThingsAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.ThingHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
+import com.kirill.kochnev.homewardrope.ui.fragments.base.ToolbarDelegate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -50,7 +48,7 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeAct
 public class ThingsFragment extends MvpAppCompatFragment implements IThingsView {
     public static final int REQUEST_CODE = 1;
 
-    public static ThingsFragment createInstance(ViewMode mode, boolean isEdit, long wardropeId) {
+    public static ThingsFragment createInstance(@NonNull final ViewMode mode, boolean isEdit, long wardropeId) {
         ThingsFragment fragment = new ThingsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(FRAGMENT_MODE, mode.getModeNum());
@@ -59,15 +57,6 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
         fragment.setArguments(bundle);
         return fragment;
     }
-
-    @BindView(R.id.list_items)
-    protected RecyclerView list;
-
-    @BindView(R.id.add)
-    protected FloatingActionButton addBtn;
-
-    @BindView(R.id.blank_image)
-    protected RelativeLayout blankImg;
 
     @BindView(R.id.title)
     protected TextView title;
@@ -80,6 +69,9 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
 
     @NonNull
     private ListDelegate<Thing, ThingHolder> delegate;
+
+    @NonNull
+    private ToolbarDelegate toolbarDelegate = new ToolbarDelegate();
 
     private ViewMode mode;
     private long wardropeId;
@@ -108,32 +100,20 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_things, container, false);
-        ButterKnife.bind(this, v);
+        final View view = inflater.inflate(R.layout.fragment_things, container, false);
+        ButterKnife.bind(this, view);
         adapter = new ThingsAdapter();
+        toolbarDelegate.init(view, mode, ViewMode.THING_MODE, R.string.things_title);
         delegate = new ListDelegate<>(
-                list,
+                view,
                 adapter,
-                addBtn,
                 presenter,
-                blankImg,
                 mode,
                 ViewMode.THING_MODE,
-                new GridLayoutManager(getContext(), 2)
+                v -> openUpdateActivity(new Intent(getContext(), AddUpdateThingActivity.class))
         );
-        return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (mode == ViewMode.THING_MODE) {
-            title.setText(R.string.things_title);
-            toolbar.setVisibility(View.VISIBLE);
-        }
-        addBtn.setOnClickListener(v -> openUpdateActivity(new Intent(getContext(), AddUpdateThingActivity.class)));
-        addBtn.setActivated(mode == ViewMode.THING_MODE);
-        addBtn.setVisibility(mode == ViewMode.THING_MODE ? View.VISIBLE : View.GONE);
+        delegate.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        return view;
     }
 
     @Override
