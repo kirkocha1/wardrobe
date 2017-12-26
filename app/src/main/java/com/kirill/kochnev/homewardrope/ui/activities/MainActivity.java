@@ -25,7 +25,7 @@ import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends MvpAppCompatActivity {
+public class MainActivity extends MvpAppCompatActivity implements DrawerController {
 
     public static final String TAG = "MainActivity";
     public static final String FRAGMENT_STATE_TAG = "current_fragment_tag";

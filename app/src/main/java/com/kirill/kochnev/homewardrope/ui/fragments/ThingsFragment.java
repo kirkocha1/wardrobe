@@ -21,10 +21,11 @@ import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.DrawerController;
 import com.kirill.kochnev.homewardrope.ui.adapters.ThingsAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.ThingHolder;
-import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.FragmentToolbarDelegate;
+import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -102,6 +103,12 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
                 new GridLayoutManager(getContext(), 2),
                 v -> startActivityForResult(new Intent(getContext(), AddUpdateThingActivity.class), REQUEST_CODE)
         );
+        fragmentToolbarDelegate.setMenuListener(v -> {
+            if (getActivity() instanceof DrawerController) {
+                final DrawerController drawer = (DrawerController) getActivity();
+                drawer.toggleDrawer();
+            }
+        });
         return view;
     }
 

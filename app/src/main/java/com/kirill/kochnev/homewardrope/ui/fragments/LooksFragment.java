@@ -1,5 +1,6 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.kirill.kochnev.homewardrope.di.components.LookComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
+import com.kirill.kochnev.homewardrope.ui.activities.DrawerController;
 import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
@@ -29,6 +31,7 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
 import java.util.HashSet;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity.WARDROPE_ID;
@@ -66,12 +69,12 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
 
     @ProvidePresenter
     LooksPresenter providePresenter() {
-        final long wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
+        final long wardrobeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
         final boolean isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
         final ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
         final LookComponent component = WardrobeApplication
                 .getComponentHolder()
-                .provideLookComponent(wardropeId, isEdit, mode);
+                .provideLookComponent(wardrobeId, isEdit, mode);
         return component.provideLooksPresenter();
     }
 
@@ -94,6 +97,12 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
                         REQUEST_CODE
                 )
         );
+        fragmentToolbarDelegate.setMenuListener(v -> {
+            if (getActivity() instanceof DrawerController) {
+                final DrawerController drawer = (DrawerController) getActivity();
+                drawer.toggleDrawer();
+            }
+        });
         return view;
     }
 
@@ -101,6 +110,12 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
     public void onDestroy() {
         super.onDestroy();
         WardrobeApplication.getComponentHolder().clearLookComponent();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
+            presenter.addOrUpdateListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
+        }
     }
 
     @Override

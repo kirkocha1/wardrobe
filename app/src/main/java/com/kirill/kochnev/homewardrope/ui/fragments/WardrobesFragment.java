@@ -23,6 +23,7 @@ import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.DrawerController;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardrobesAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardrobeHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.FragmentToolbarDelegate;
@@ -79,6 +80,13 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
         fragmentToolbarDelegate.init(view, mode, ViewMode.WARDROPE_MODE, R.string.wardropes_title);
         delegate = new ListDelegate<>(view, adapter, presenter, mode, ViewMode.WARDROPE_MODE,
                 v -> startActivityForResult(new Intent(getContext(), AddUpdateWardrobeActivity.class), REQUEST_CODE));
+
+        fragmentToolbarDelegate.setMenuListener(v -> {
+            if (getActivity() instanceof DrawerController) {
+                final DrawerController drawer = (DrawerController) getActivity();
+                drawer.toggleDrawer();
+            }
+        });
         return view;
 
     }

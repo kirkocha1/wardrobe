@@ -117,6 +117,8 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
         View dialogView = getLayoutInflater().inflate(R.layout.name_tag_view, null);
         TextView nameView = (TextView) dialogView.findViewById(R.id.new_name);
         TextView tagView = (TextView) dialogView.findViewById(R.id.new_tag);
+        nameView.setEnabled(true);
+        tagView.setEnabled(true);
         if (oldName != null) {
             nameView.setText(oldName);
         }
