@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -17,6 +16,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
+import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -49,9 +49,6 @@ public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateL
     @BindView(R.id.photo_look)
     ImageView pic;
 
-    @BindView(R.id.title)
-    TextView title;
-
     @InjectPresenter
     UpdateLookPresenter presenter;
 
@@ -66,11 +63,19 @@ public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateL
         return intent;
     }
 
+    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(View.inflate(this, R.layout.activity_update_look, null));
+        final View view = View.inflate(this, R.layout.activity_update_look, null);
+        setContentView(view);
         ButterKnife.bind(this);
+        activityToolbarDelegate.init(view, "",
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    onBackPressed();
+                });
         name.setEnabled(false);
         tag.setEnabled(false);
         select.setOnClickListener(v -> {
@@ -106,7 +111,7 @@ public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateL
 
     @Override
     public void setLookData(Look look) {
-        title.setText(look.getName());
+        activityToolbarDelegate.updateTitle(look.getName());
         name.setText(look.getName());
         tag.setText(look.getTag());
         pic.setImageBitmap(look.getBitmap());

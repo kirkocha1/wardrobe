@@ -26,16 +26,6 @@
                 tools:text="Title" />
 
             <ImageView
-                android:id="@+id/search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/magnify"
-                android:visibility="gone" />
-
-            <ImageView
                 android:id="@+id/back_action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

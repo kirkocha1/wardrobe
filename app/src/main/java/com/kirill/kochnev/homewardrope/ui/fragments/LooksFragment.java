@@ -1,6 +1,5 @@
 package com.kirill.kochnev.homewardrope.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,8 +23,8 @@ import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
+import com.kirill.kochnev.homewardrope.ui.fragments.base.FragmentToolbarDelegate;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
-import com.kirill.kochnev.homewardrope.ui.fragments.base.ToolbarDelegate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -59,7 +58,7 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
     private ListDelegate<Look, LookHolder> delegate;
 
     @NonNull
-    private ToolbarDelegate toolbarDelegate = new ToolbarDelegate();
+    private FragmentToolbarDelegate fragmentToolbarDelegate = new FragmentToolbarDelegate();
 
 
     @InjectPresenter
@@ -82,7 +81,7 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
         final View view = inflater.inflate(R.layout.fragment_looks, container, false);
         final ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
         adapter = new LooksAdapter();
-        toolbarDelegate.init(view, mode, ViewMode.LOOK_MODE, R.string.looks_title);
+        fragmentToolbarDelegate.init(view, mode, ViewMode.LOOK_MODE, R.string.looks_title);
         delegate = new ListDelegate<>(
                 view,
                 adapter,
@@ -90,7 +89,10 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
                 mode,
                 ViewMode.LOOK_MODE,
                 new GridLayoutManager(getContext(), 2),
-                v -> openUpdateActivity(CreationLookActivity.createIntent(getContext(), AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
+                v -> startActivityForResult(
+                        CreationLookActivity.createIntent(getContext(), AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID),
+                        REQUEST_CODE
+                )
         );
         return view;
     }
@@ -118,11 +120,7 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
 
     @Override
     public void navigateToUpdateLookView(Long id) {
-        openUpdateActivity(UpdateLookActivity.createIntent(getContext(), id));
-    }
-
-    public void openUpdateActivity(Intent intent) {
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivityForResult(UpdateLookActivity.createIntent(getContext(), id), REQUEST_CODE);
     }
 
     @Override

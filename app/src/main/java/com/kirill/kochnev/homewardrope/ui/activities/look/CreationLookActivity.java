@@ -21,6 +21,7 @@ import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
+import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.WardrobesFragment;
@@ -56,9 +57,6 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
     @BindView(R.id.save_collage)
     FloatingActionButton save;
 
-    @BindView(R.id.title)
-    TextView title;
-
     @InjectPresenter
     CreationLookPresenter presenter;
 
@@ -74,13 +72,20 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
         return intent;
     }
 
+    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(View.inflate(this, R.layout.activity_first_step_creation_look, null));
+        final View view = View.inflate(this, R.layout.activity_first_step_creation_look, null);
+        setContentView(view);
         ButterKnife.bind(this);
         container.setDrawingCacheEnabled(true);
-        title.setText(getString(R.string.looks_creation_title));
+        activityToolbarDelegate.init(view, getString(R.string.looks_creation_title),
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    onBackPressed();
+                });
         create.setOnClickListener(v -> presenter.startCreationProcess());
         save.setOnClickListener(v -> presenter.save());
         allThings.setOnClickListener(v -> {

@@ -15,6 +15,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardrobePagerAdapter;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
@@ -47,13 +48,11 @@ public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements I
     @BindView(R.id.looks_count)
     TextView looksCount;
 
-    @BindView(R.id.title)
-    TextView title;
-
     @InjectPresenter
     AddUpdateWardropePresenter presenter;
 
     private long wardropeId;
+    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @ProvidePresenter
     AddUpdateWardropePresenter providePresenter() {
@@ -64,9 +63,14 @@ public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements I
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         wardropeId = getIntent().getLongExtra(WARDROPE_ID, -1);
-        setContentView(View.inflate(this, R.layout.activity_add_update_wardrobe, null));
+        final View view = View.inflate(this, R.layout.activity_add_update_wardrobe, null);
+        setContentView(view);
         ButterKnife.bind(this);
-        title.setText(wardropeId == -1 ? getString(R.string.new_wardrobe_title) : "");
+        activityToolbarDelegate.init(view, wardropeId == -1 ? getString(R.string.new_wardrobe_title) : "",
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    onBackPressed();
+                });
         initBtns();
         pager.setAdapter(new WardrobePagerAdapter(this, getSupportFragmentManager(), wardropeId));
     }
@@ -96,6 +100,7 @@ public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements I
     public void initView(Wardrope wardrope) {
         setCount(wardrope.getThingsCount(), wardrope.getLookIds().size());
         name.setText(wardrope.getName());
+        activityToolbarDelegate.updateTitle(wardrope.getName());
     }
 
     @Override

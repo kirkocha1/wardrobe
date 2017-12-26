@@ -12,7 +12,7 @@ import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ToolbarDelegate {
+public class FragmentToolbarDelegate {
 
     @BindView(R.id.title)
     protected TextView title;

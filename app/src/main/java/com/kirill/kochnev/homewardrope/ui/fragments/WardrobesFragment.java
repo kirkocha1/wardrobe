@@ -25,8 +25,8 @@ import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardrobesAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardrobeHolder;
+import com.kirill.kochnev.homewardrope.ui.fragments.base.FragmentToolbarDelegate;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
-import com.kirill.kochnev.homewardrope.ui.fragments.base.ToolbarDelegate;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import java.util.List;
@@ -54,7 +54,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
     private ListDelegate<Wardrope, WardrobeHolder> delegate;
 
     @NonNull
-    private ToolbarDelegate toolbarDelegate = new ToolbarDelegate();
+    private FragmentToolbarDelegate fragmentToolbarDelegate = new FragmentToolbarDelegate();
 
     @NonNull
     protected WardrobesAdapter adapter;
@@ -76,9 +76,9 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
         final View view = inflater.inflate(R.layout.fragment_wardrobes, container, false);
         final ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE));
         adapter = new WardrobesAdapter();
-        toolbarDelegate.init(view, mode, ViewMode.WARDROPE_MODE, R.string.wardropes_title);
+        fragmentToolbarDelegate.init(view, mode, ViewMode.WARDROPE_MODE, R.string.wardropes_title);
         delegate = new ListDelegate<>(view, adapter, presenter, mode, ViewMode.WARDROPE_MODE,
-                v -> openUpdateActivity(new Intent(getContext(), AddUpdateWardrobeActivity.class)));
+                v -> startActivityForResult(new Intent(getContext(), AddUpdateWardrobeActivity.class), REQUEST_CODE));
         return view;
 
     }
@@ -93,7 +93,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
     public void navigateToAddUpdateWardropeView(Long id) {
         Intent intent = new Intent(getContext(), AddUpdateWardrobeActivity.class);
         intent.putExtra(WARDROPE_ID, id);
-        openUpdateActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
 
@@ -107,10 +107,6 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
             presenter.addOrUpdateListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
         }
-    }
-
-    public void openUpdateActivity(Intent intent) {
-        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override

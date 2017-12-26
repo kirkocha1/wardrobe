@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -19,6 +18,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -49,9 +49,6 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
     @BindView(R.id.things_show_frame)
     FloatingActionButton edit;
 
-    @BindView(R.id.title)
-    TextView title;
-
     @InjectPresenter
     AddUpdateThingPresenter presenter;
 
@@ -61,6 +58,7 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
     }
 
     private boolean isEditMode;
+    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +66,14 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
         isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
         long thingId = getIntent().getLongExtra(THINGS_ID, -1);
         boolean isNew = thingId == AppConstants.DEFAULT_ID;
-        setContentView(View.inflate(this, R.layout.activity_add_or_update_thing, null));
+        final View view = View.inflate(this, R.layout.activity_add_or_update_thing, null);
+        setContentView(view);
         ButterKnife.bind(this);
-        title.setText(thingId == -1 ? getString(R.string.new_thing_title) : "");
+        activityToolbarDelegate.init(view, thingId == -1 ? getString(R.string.new_thing_title) : "",
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    onBackPressed();
+                });
         initBtns(isNew);
     }
 
@@ -139,7 +142,7 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
 
     @Override
     public void showThing(Thing thing) {
-        title.setText(thing.getName() == null ? "без имени" : thing.getName());
+        activityToolbarDelegate.updateTitle(thing.getName() == null ? getString(R.string.no_name) : thing.getName());
         pic.setImageBitmap(thing.getBitmap());
         this.tag.setText(thing.getTag());
         this.name.setText(thing.getName());

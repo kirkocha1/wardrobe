@@ -24,7 +24,7 @@ import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.ThingsAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.ThingHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.ListDelegate;
-import com.kirill.kochnev.homewardrope.ui.fragments.base.ToolbarDelegate;
+import com.kirill.kochnev.homewardrope.ui.fragments.base.FragmentToolbarDelegate;
 
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +61,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     private ListDelegate<Thing, ThingHolder> delegate;
 
     @NonNull
-    private ToolbarDelegate toolbarDelegate = new ToolbarDelegate();
+    private FragmentToolbarDelegate fragmentToolbarDelegate = new FragmentToolbarDelegate();
 
     private ViewMode mode;
     private long wardrobeId;
@@ -92,7 +92,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_things, container, false);
         adapter = new ThingsAdapter();
-        toolbarDelegate.init(view, mode, ViewMode.THING_MODE, R.string.things_title);
+        fragmentToolbarDelegate.init(view, mode, ViewMode.THING_MODE, R.string.things_title);
         delegate = new ListDelegate<>(
                 view,
                 adapter,
@@ -100,7 +100,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
                 mode,
                 ViewMode.THING_MODE,
                 new GridLayoutManager(getContext(), 2),
-                v -> openUpdateActivity(new Intent(getContext(), AddUpdateThingActivity.class))
+                v -> startActivityForResult(new Intent(getContext(), AddUpdateThingActivity.class), REQUEST_CODE)
         );
         return view;
     }
@@ -127,7 +127,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
         Intent intent = new Intent(getContext(), AddUpdateThingActivity.class);
         intent.putExtra(THINGS_ID, id);
         intent.putExtra(IS_EDIT, isEdit);
-        openUpdateActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -152,7 +152,4 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
         }
     }
 
-    public void openUpdateActivity(Intent intent) {
-        startActivityForResult(intent, REQUEST_CODE);
-    }
 }

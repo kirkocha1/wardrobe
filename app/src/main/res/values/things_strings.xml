@@ -2,4 +2,6 @@
 <resources>
     <string name="things_title">Things</string>
     <string name="new_thing_title">new thing</string>
+    <string name="no_name">no name</string>
+
 </resources>
