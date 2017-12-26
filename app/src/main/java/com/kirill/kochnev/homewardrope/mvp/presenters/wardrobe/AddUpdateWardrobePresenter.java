@@ -1,4 +1,4 @@
-package com.kirill.kochnev.homewardrope.mvp.presenters.wardrope;
+package com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -8,11 +8,11 @@ import android.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardrobeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
-import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardrobeView;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
@@ -29,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeView> {
+public class AddUpdateWardrobePresenter extends MvpPresenter<IAddUpdateWardrobeView> {
 
     public static final String TAG = "AddUpdateWardrope";
 
@@ -47,7 +47,7 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
     private boolean isEditableMode = false;
 
     @Inject
-    public AddUpdateWardropePresenter(
+    public AddUpdateWardrobePresenter(
             @Named("wardrobeId") long id,
             AddUpdateWardrobeInteractor interactor,
             StateBus stateBus,
@@ -106,7 +106,7 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
         if (!isEditableMode) {
             returnInitialState();
         }
-        stateBus.passData(new Pair<>(ViewMode.WARDROPE_MODE, isEditableMode));
+        stateBus.passData(new Pair<>(ViewMode.WARDROBE_MODE, isEditableMode));
         getViewState().changeBtnsMode(isEditableMode);
     }
 
@@ -125,11 +125,11 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
     public void save(String name) {
         disposableDelegate.addToCompositeDisposable(
                 interactor
-                        .saveWardrobe(new Wardrope(name, thingsSet, looksSet))
+                        .saveWardrobe(new Wardrobe(name, thingsSet, looksSet))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(result -> {
-                                    Log.d(TAG, "put wardrope");
+                                    Log.d(TAG, "put wardrobe");
                                     Intent intent = new Intent();
                                     intent.putExtra(AppConstants.ADD_UPDATED_ID, result.getId());
                                     getViewState().onSave(intent);

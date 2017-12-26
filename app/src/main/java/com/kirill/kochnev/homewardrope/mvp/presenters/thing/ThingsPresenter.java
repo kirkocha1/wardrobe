@@ -106,7 +106,7 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
                 listDelegate.getDisposable(
                         interactor
                                 .getThingsByWardrope(
-                                        lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+                                        lastId, viewMode == ViewMode.WARDROBE_MODE && isEdit ?
                                                 AppConstants.DEFAULT_ID : filterId
                                 ),
                         list -> getViewState().onLoadFinished(list),

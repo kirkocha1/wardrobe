@@ -2,7 +2,7 @@ package com.kirill.kochnev.homewardrope.db.tables;
 
 import android.provider.BaseColumns;
 
-import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
+import static com.kirill.kochnev.homewardrope.db.WardrobeSqlHelper.CREATION_DATE;
 
 /**
  * Created by kirill on 03.04.17.

@@ -1,6 +1,6 @@
 package com.kirill.kochnev.homewardrope.interactors;
 
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.repositories.WardrobeRepository;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 
@@ -23,15 +23,15 @@ public class WardrobesInteractor {
         this.wardrobes = wardrobes;
     }
 
-    public Single<DeleteResult> deleteWardropes(Wardrope model) {
+    public Single<DeleteResult> deleteWardropes(Wardrobe model) {
         return wardrobes.deleteItem(model);
     }
 
-    public Single<List<Wardrope>> getWardrobes(long id) {
+    public Single<List<Wardrobe>> getWardrobes(long id) {
         return wardrobes.query(id);
     }
 
-    public Single<Wardrope> getWardrobe(long id) {
+    public Single<Wardrobe> getWardrobe(long id) {
         return wardrobes.getItem(id);
     }
 }

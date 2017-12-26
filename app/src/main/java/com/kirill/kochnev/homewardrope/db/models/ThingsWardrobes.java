@@ -3,7 +3,6 @@ package com.kirill.kochnev.homewardrope.db.models;
 import android.provider.BaseColumns;
 
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
-import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -11,32 +10,32 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
  * Created by kirill on 30.03.17.
  */
 
-@StorIOSQLiteType(table = ThingsWardropesTable.THINGS_WARDROPES_TABLE)
-public class ThingsWardropes {
+@StorIOSQLiteType(table = ThingsWardropesTable.THINGS_WARDROBES_TABLE)
+public class ThingsWardrobes {
 
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
     Long _id;
 
-    @StorIOSQLiteColumn(name = ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID)
-    long wardropeId;
+    @StorIOSQLiteColumn(name = ThingsWardropesTable.THINGS_WARDROBES_WARDROBES_ID)
+    long wardrobeId;
 
-    @StorIOSQLiteColumn(name = ThingsWardropesTable.THINGS_WARDROPES_THING_ID)
+    @StorIOSQLiteColumn(name = ThingsWardropesTable.THINGS_WARDROBES_THING_ID)
     long thingId;
 
-    public ThingsWardropes() {
+    public ThingsWardrobes() {
     }
 
-    public ThingsWardropes(long wardropeId, long thingId) {
-        this.wardropeId = wardropeId;
+    public ThingsWardrobes(long wardrobeId, long thingId) {
+        this.wardrobeId = wardrobeId;
         this.thingId = thingId;
     }
 
-    public Long getWardropeId() {
-        return this.wardropeId;
+    public Long getWardrobeId() {
+        return this.wardrobeId;
     }
 
-    public void setWardropeId(Long wardropeId) {
-        this.wardropeId = wardropeId;
+    public void setWardrobeId(Long wardrobeId) {
+        this.wardrobeId = wardrobeId;
     }
 
     public Long getThingId() {

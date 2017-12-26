@@ -6,7 +6,7 @@ package com.kirill.kochnev.homewardrope.enums;
 
 public enum CreationLookState {
     ALL_THINGS,
-    WARDROPES,
+    WARDROBES,
     COLLAGE,
     START
 }

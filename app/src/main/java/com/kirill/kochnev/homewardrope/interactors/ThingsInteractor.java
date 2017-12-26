@@ -3,7 +3,7 @@ package com.kirill.kochnev.homewardrope.interactors;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
-import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardropeSpecification;
+import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardrobeSpecification;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 
@@ -37,7 +37,7 @@ public class ThingsInteractor {
         Single<List<Thing>> single;
         single = things.query(lastId);
         if (wardropeId != AppConstants.DEFAULT_ID) {
-            single = things.query(new ThingsByWardropeSpecification(lastId, wardropeId));
+            single = things.query(new ThingsByWardrobeSpecification(lastId, wardropeId));
         }
         return single;
     }

@@ -8,7 +8,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 
 public enum ViewMode {
     LOOK_MODE(2),
-    WARDROPE_MODE(1),
+    WARDROBE_MODE(1),
     THING_MODE(0),
     DEFAULT(AppConstants.DEFAULT_ID);
 

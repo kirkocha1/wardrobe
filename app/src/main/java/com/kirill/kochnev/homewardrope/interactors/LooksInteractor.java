@@ -6,7 +6,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.repositories.LookRepository;
-import com.kirill.kochnev.homewardrope.repositories.utils.LooksByWardropeSpecification;
+import com.kirill.kochnev.homewardrope.repositories.utils.LooksByWardrobeSpecification;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -89,7 +89,7 @@ public class LooksInteractor {
         Single<List<Look>> single;
         single = looks.query(lastId);
         if (wardropeId != AppConstants.DEFAULT_ID) {
-            single = looks.query(new LooksByWardropeSpecification(lastId, wardropeId));
+            single = looks.query(new LooksByWardrobeSpecification(lastId, wardropeId));
         }
         return single;
     }

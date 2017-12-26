@@ -1,10 +1,10 @@
 package com.kirill.kochnev.homewardrope.repositories;
 
 import com.kirill.kochnev.homewardrope.db.models.Thing;
-import com.kirill.kochnev.homewardrope.db.models.ThingsWardropes;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.ThingsWardrobes;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.db.tables.ThingsTable;
-import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
+import com.kirill.kochnev.homewardrope.db.tables.WardrobeTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
@@ -38,13 +38,13 @@ public class ThingRepository extends AbstractRepository<Thing> {
     public Single<HashSet<Long>> getWardropeThingIds(long wardropeId) {
         return Single.create(sub -> {
             try {
-                List<ThingsWardropes> thingsWardropesList = storIOSQLite.get()
-                        .listOfObjects(ThingsWardropes.class)
-                        .withQuery(Query.builder().table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
-                                .where(ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + "=?").whereArgs(wardropeId).build())
+                List<ThingsWardrobes> thingsWardrobesList = storIOSQLite.get()
+                        .listOfObjects(ThingsWardrobes.class)
+                        .withQuery(Query.builder().table(ThingsWardropesTable.THINGS_WARDROBES_TABLE)
+                                .where(ThingsWardropesTable.THINGS_WARDROBES_WARDROBES_ID + "=?").whereArgs(wardropeId).build())
                         .prepare().executeAsBlocking();
                 HashSet<Long> result = new HashSet<>();
-                for (ThingsWardropes entity : thingsWardropesList) {
+                for (ThingsWardrobes entity : thingsWardrobesList) {
                     result.add(entity.getThingId());
                 }
                 sub.onSuccess(result);
@@ -77,40 +77,40 @@ public class ThingRepository extends AbstractRepository<Thing> {
 
     private void deleteThingIdFromThingsWardrobesTable(Thing model) {
         storIOSQLite.delete().byQuery(DeleteQuery.builder()
-                .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
-                .where(ThingsWardropesTable.THINGS_WARDROPES_THING_ID + "=?")
+                .table(ThingsWardropesTable.THINGS_WARDROBES_TABLE)
+                .where(ThingsWardropesTable.THINGS_WARDROBES_THING_ID + "=?")
                 .whereArgs(model.getId()).build())
                 .prepare()
                 .executeAsBlocking();
     }
 
     private void decreaseWardrobesCount(Thing model) {
-        List<ThingsWardropes> thingsWardropes = storIOSQLite.get()
-                .listOfObjects(ThingsWardropes.class)
+        List<ThingsWardrobes> thingsWardropes = storIOSQLite.get()
+                .listOfObjects(ThingsWardrobes.class)
                 .withQuery(Query.builder()
-                        .table(ThingsWardropesTable.THINGS_WARDROPES_TABLE)
-                        .where(ThingsWardropesTable.THINGS_WARDROPES_THING_ID + "=?")
+                        .table(ThingsWardropesTable.THINGS_WARDROBES_TABLE)
+                        .where(ThingsWardropesTable.THINGS_WARDROBES_THING_ID + "=?")
                         .whereArgs(model.getId()).build())
                 .prepare()
                 .executeAsBlocking();
 
         StringBuilder filteredWardrobesIds = new StringBuilder();
-        for (ThingsWardropes thingsWardropesItem : thingsWardropes) {
+        for (ThingsWardrobes thingsWardrobesItem : thingsWardropes) {
             if (filteredWardrobesIds.length() == 0) {
-                filteredWardrobesIds.append(thingsWardropesItem.getWardropeId());
+                filteredWardrobesIds.append(thingsWardrobesItem.getWardrobeId());
             } else {
-                filteredWardrobesIds.append("," + thingsWardropesItem.getWardropeId());
+                filteredWardrobesIds.append("," + thingsWardrobesItem.getWardrobeId());
             }
         }
 
-        List<Wardrope> wardrobes = storIOSQLite.get()
-                .listOfObjects(Wardrope.class)
+        List<Wardrobe> wardrobes = storIOSQLite.get()
+                .listOfObjects(Wardrobe.class)
                 .withQuery(Query.builder()
-                        .table(WardropeTable.WARDROPE_TABLE).where(Wardrope._ID + " IN (" + filteredWardrobesIds + ")")
+                        .table(WardrobeTable.WARDROBE_TABLE).where(Wardrobe._ID + " IN (" + filteredWardrobesIds + ")")
                         .build())
                 .prepare()
                 .executeAsBlocking();
-        for (Wardrope wardrobe : wardrobes) {
+        for (Wardrobe wardrobe : wardrobes) {
             wardrobe.setThingsCount(wardrobe.getThingsCount() - 1);
         }
         storIOSQLite.put().objects(wardrobes).prepare().executeAsBlocking();

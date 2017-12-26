@@ -25,7 +25,7 @@ import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends MvpAppCompatActivity implements DrawerController {
+public class MainActivity extends MvpAppCompatActivity implements IDrawerController {
 
     public static final String TAG = "MainActivity";
     public static final String FRAGMENT_STATE_TAG = "current_fragment_tag";
@@ -93,7 +93,7 @@ public class MainActivity extends MvpAppCompatActivity implements DrawerControll
                 setFragmentContent(ThingsFragment.createInstance(ViewMode.THING_MODE, false, AppConstants.DEFAULT_ID));
                 break;
             case R.id.nav_wardropes:
-                setFragmentContent(WardrobesFragment.createInstance(ViewMode.WARDROPE_MODE));
+                setFragmentContent(WardrobesFragment.createInstance(ViewMode.WARDROBE_MODE));
                 break;
             case R.id.nav_looks:
                 setFragmentContent(LooksFragment.newInstance(ViewMode.LOOK_MODE, false, AppConstants.DEFAULT_ID));
@@ -114,7 +114,7 @@ public class MainActivity extends MvpAppCompatActivity implements DrawerControll
         if (savedInstanceState != null) {
             currentFragmentName = savedInstanceState.getString(FRAGMENT_STATE_TAG, WardrobesFragment.class.getName());
         } else {
-            setContentView(WardrobesFragment.createInstance(ViewMode.WARDROPE_MODE));
+            setContentView(WardrobesFragment.createInstance(ViewMode.WARDROBE_MODE));
         }
     }
 

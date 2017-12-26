@@ -7,23 +7,23 @@ import android.util.Log;
 
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.CREATE_LOOKS_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.ThingsTable.CREATE_THINGS_TABLE;
-import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.CREATE_WARDROPES_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.WardrobeTable.CREATE_WARDROBES_TABLE;
 import static com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable.CREATE_LOOKS_THINGS_TABLE;
-import static com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable.CREATE_THINGS_WARDROPES_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.manytomany.ThingsWardropesTable.CREATE_THINGS_WARDROBES_TABLE;
 
 /**
  * Created by Kirill Kochnev on 26.02.17.
  */
 
-public class WardropeSqlHelper extends SQLiteOpenHelper {
-    private static final String TAG = "WardropeSqlHelper";
+public class WardrobeSqlHelper extends SQLiteOpenHelper {
+    private static final String TAG = "WardrobeSqlHelper";
 
     private static final int DB_VERSION = 2;
-    private static final String DB_NAME = "wardrope.db";
+    private static final String DB_NAME = "wardrobe.db";
 
     public static final String CREATION_DATE = "creation_date";
 
-    public WardropeSqlHelper(Context context) {
+    public WardrobeSqlHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -64,11 +64,11 @@ public class WardropeSqlHelper extends SQLiteOpenHelper {
     private void createTables(SQLiteDatabase db) {
         Log.d(TAG, "DB CREATION");
         Log.d(TAG, CREATE_THINGS_TABLE);
-        Log.d(TAG, CREATE_WARDROPES_TABLE);
-        Log.d(TAG, CREATE_THINGS_WARDROPES_TABLE);
+        Log.d(TAG, CREATE_WARDROBES_TABLE);
+        Log.d(TAG, CREATE_THINGS_WARDROBES_TABLE);
 
         db.execSQL(CREATE_THINGS_TABLE);
-        db.execSQL(CREATE_WARDROPES_TABLE);
-        db.execSQL(CREATE_THINGS_WARDROPES_TABLE);
+        db.execSQL(CREATE_WARDROBES_TABLE);
+        db.execSQL(CREATE_THINGS_WARDROBES_TABLE);
     }
 }

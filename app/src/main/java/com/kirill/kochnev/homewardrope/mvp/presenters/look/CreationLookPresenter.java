@@ -67,7 +67,7 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
                 case THING_MODE:
                     interactor.addThingId(idPair.second);
                     break;
-                case WARDROPE_MODE:
+                case WARDROBE_MODE:
                     interactor.addWardropeId(idPair.second);
                     break;
             }
@@ -123,7 +123,7 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
     public void resolveBtnsState(CreationLookState state) {
         switch (state) {
             case ALL_THINGS:
-            case WARDROPES:
+            case WARDROBES:
                 getViewState().setBtnsState(true, false, false);
                 break;
             case START:

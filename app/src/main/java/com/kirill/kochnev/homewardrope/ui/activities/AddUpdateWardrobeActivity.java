@@ -14,10 +14,10 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardrobeApplication;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.di.components.AddUpdateWardropeComponent;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.AddUpdateWardrobePresenter;
+import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardrobeView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardrobePagerAdapter;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 30.03.17.
  */
 
-public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView {
+public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements IAddUpdateWardrobeView {
 
     public static final String WARDROPE_ID = "wardrope_id";
 
@@ -52,12 +52,12 @@ public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements I
     TextView looksCount;
 
     @InjectPresenter
-    AddUpdateWardropePresenter presenter;
+    AddUpdateWardrobePresenter presenter;
 
     private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @ProvidePresenter
-    AddUpdateWardropePresenter providePresenter() {
+    AddUpdateWardrobePresenter providePresenter() {
         final long wardropeId = getIntent().getLongExtra(WARDROPE_ID, AppConstants.DEFAULT_ID);
         final AddUpdateWardropeComponent component = WardrobeApplication.getComponentHolder().getAddUpdateWardrobeComponent(wardropeId);
         return component.providePresenter();
@@ -107,10 +107,10 @@ public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements I
     }
 
     @Override
-    public void initView(Wardrope wardrope) {
-        setCount(wardrope.getThingsCount(), wardrope.getLookIds().size());
-        name.setText(wardrope.getName());
-        activityToolbarDelegate.updateTitle(wardrope.getName());
+    public void initView(Wardrobe wardrobe) {
+        setCount(wardrobe.getThingsCount(), wardrobe.getLookIds().size());
+        name.setText(wardrobe.getName());
+        activityToolbarDelegate.updateTitle(wardrobe.getName());
     }
 
     @Override

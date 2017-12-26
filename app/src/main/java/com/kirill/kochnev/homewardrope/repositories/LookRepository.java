@@ -5,9 +5,9 @@ import android.provider.BaseColumns;
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.db.models.LooksThings;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.db.tables.LooksTable;
-import com.kirill.kochnev.homewardrope.db.tables.WardropeTable;
+import com.kirill.kochnev.homewardrope.db.tables.WardrobeTable;
 import com.kirill.kochnev.homewardrope.db.tables.manytomany.LooksThingsTable;
 import com.kirill.kochnev.homewardrope.repositories.absclasses.AbstractRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ISpecification;
@@ -106,24 +106,24 @@ public class LookRepository extends AbstractRepository<Look> {
                 .where(LooksTable._ID + "=?")
                 .whereArgs(lookId).build()).prepare().executeAsBlocking();
         if (oldLook != null && oldLook.getWardropeId() != null) {
-            Wardrope wardrope = getLookWardrope(oldLook.getWardropeId());
-            if (wardrope != null) {
-                wardrope.setLooksCount(wardrope.getLooksCount() - 1);
-                storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+            Wardrobe wardrobe = getLookWardrope(oldLook.getWardropeId());
+            if (wardrobe != null) {
+                wardrobe.setLooksCount(wardrobe.getLooksCount() - 1);
+                storIOSQLite.put().object(wardrobe).prepare().executeAsBlocking();
             }
         }
     }
 
     private void increaseWardropeLookCount(long wardrobeId) {
-        Wardrope wardrope = getLookWardrope(wardrobeId);
-        if (wardrope != null) {
-            wardrope.setLooksCount(wardrope.getLooksCount() + 1);
-            storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+        Wardrobe wardrobe = getLookWardrope(wardrobeId);
+        if (wardrobe != null) {
+            wardrobe.setLooksCount(wardrobe.getLooksCount() + 1);
+            storIOSQLite.put().object(wardrobe).prepare().executeAsBlocking();
         }
     }
 
-    private Wardrope getLookWardrope(Long id) {
-        return storIOSQLite.get().object(Wardrope.class).withQuery(Query.builder().table(WardropeTable.WARDROPE_TABLE)
+    private Wardrobe getLookWardrope(Long id) {
+        return storIOSQLite.get().object(Wardrobe.class).withQuery(Query.builder().table(WardrobeTable.WARDROBE_TABLE)
                 .where(BaseColumns._ID + " = ?").whereArgs(id + "")
                 .build())
                 .prepare()
@@ -143,10 +143,10 @@ public class LookRepository extends AbstractRepository<Look> {
                                 .prepare().executeAsBlocking();
                     }
                 }
-                Wardrope wardrope = getLookWardrope(model.getWardropeId());
-                if (wardrope != null) {
-                    wardrope.setLooksCount(wardrope.getLooksCount() - 1);
-                    storIOSQLite.put().object(wardrope).prepare().executeAsBlocking();
+                Wardrobe wardrobe = getLookWardrope(model.getWardropeId());
+                if (wardrobe != null) {
+                    wardrobe.setLooksCount(wardrobe.getLooksCount() - 1);
+                    storIOSQLite.put().object(wardrobe).prepare().executeAsBlocking();
                 }
                 DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
                 storIOSQLite.lowLevel().setTransactionSuccessful();

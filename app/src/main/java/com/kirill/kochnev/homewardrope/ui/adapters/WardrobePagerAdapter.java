@@ -50,10 +50,10 @@ public class WardrobePagerAdapter extends FragmentPagerAdapter {
         Fragment result = null;
         switch (position) {
             case THINGS_FRAGMENT_ID:
-                result = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardrobeId == AppConstants.DEFAULT_ID, wardrobeId);
+                result = ThingsFragment.createInstance(ViewMode.WARDROBE_MODE, wardrobeId == AppConstants.DEFAULT_ID, wardrobeId);
                 break;
             case LOOKS_FRAGMENT_ID:
-                result = LooksFragment.newInstance(ViewMode.WARDROPE_MODE, wardrobeId == AppConstants.DEFAULT_ID, wardrobeId);
+                result = LooksFragment.newInstance(ViewMode.WARDROBE_MODE, wardrobeId == AppConstants.DEFAULT_ID, wardrobeId);
                 break;
         }
         return result;

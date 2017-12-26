@@ -11,17 +11,17 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 import java.util.Date;
 import java.util.HashSet;
 
-import static com.kirill.kochnev.homewardrope.db.WardropeSqlHelper.CREATION_DATE;
-import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_LOOKS_COUNT;
-import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_NAME;
-import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_TABLE;
-import static com.kirill.kochnev.homewardrope.db.tables.WardropeTable.WARDROPE_THINGS_COUNT;
+import static com.kirill.kochnev.homewardrope.db.WardrobeSqlHelper.CREATION_DATE;
+import static com.kirill.kochnev.homewardrope.db.tables.WardrobeTable.WARDROBE_LOOKS_COUNT;
+import static com.kirill.kochnev.homewardrope.db.tables.WardrobeTable.WARDROBE_NAME;
+import static com.kirill.kochnev.homewardrope.db.tables.WardrobeTable.WARDROBE_TABLE;
+import static com.kirill.kochnev.homewardrope.db.tables.WardrobeTable.WARDROBE_THINGS_COUNT;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
  */
-@StorIOSQLiteType(table = WARDROPE_TABLE)
-public class Wardrope implements IDbModel {
+@StorIOSQLiteType(table = WARDROBE_TABLE)
+public class Wardrobe implements IDbModel {
 
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
     Long _id;
@@ -29,13 +29,13 @@ public class Wardrope implements IDbModel {
     @StorIOSQLiteColumn(name = CREATION_DATE)
     String creationDate;
 
-    @StorIOSQLiteColumn(name = WARDROPE_NAME)
+    @StorIOSQLiteColumn(name = WARDROBE_NAME)
     String name;
 
-    @StorIOSQLiteColumn(name = WARDROPE_THINGS_COUNT)
+    @StorIOSQLiteColumn(name = WARDROBE_THINGS_COUNT)
     int thingsCount;
 
-    @StorIOSQLiteColumn(name = WARDROPE_LOOKS_COUNT)
+    @StorIOSQLiteColumn(name = WARDROBE_LOOKS_COUNT)
     int looksCount;
 
     private HashSet<Long> thingIds;
@@ -43,11 +43,11 @@ public class Wardrope implements IDbModel {
     private HashSet<Long> lookIds;
 
 
-    public Wardrope() {
+    public Wardrobe() {
         creationDate = new Date().toString();
     }
 
-    public Wardrope(String name, HashSet<Long> thingIds, HashSet<Long> lookIds) {
+    public Wardrobe(String name, HashSet<Long> thingIds, HashSet<Long> lookIds) {
         this.name = name;
         this.thingIds = thingIds;
         this.lookIds = lookIds;

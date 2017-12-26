@@ -2,14 +2,14 @@ package com.kirill.kochnev.homewardrope.mvp.views;
 
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 
 /**
  * Created by kirill on 30.03.17.
  */
 
-public interface IWardropeView extends IPaginationView<Wardrope> {
+public interface IWardrobeView extends IPaginationView<Wardrobe> {
 
     @StateStrategyType(SkipStrategy.class)
     void navigateToThingsFilteredByWardrope(long id);

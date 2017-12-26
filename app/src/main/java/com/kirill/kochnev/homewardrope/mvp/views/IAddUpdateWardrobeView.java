@@ -5,17 +5,17 @@ import android.content.Intent;
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 
 /**
  * Created by kirill on 30.03.17.
  */
 @StateStrategyType(SkipStrategy.class)
-public interface IAddUpdateWardropeView extends MvpView {
+public interface IAddUpdateWardrobeView extends MvpView {
 
     void setCount(int thingsCount, int looksCount);
 
-    void initView(Wardrope wardrope);
+    void initView(Wardrobe wardrobe);
 
     void onSave(Intent intent);
 

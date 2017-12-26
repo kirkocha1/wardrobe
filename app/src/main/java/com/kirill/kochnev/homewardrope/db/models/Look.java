@@ -1,6 +1,6 @@
 package com.kirill.kochnev.homewardrope.db.models;
 
-import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
+import com.kirill.kochnev.homewardrope.db.WardrobeSqlHelper;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.LookHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
@@ -14,7 +14,7 @@ import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_FULL_IMA
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_ICON_IMAGE_PATH;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_NAME;
 import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_TAG;
-import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_WARDROPE_ID;
+import static com.kirill.kochnev.homewardrope.db.tables.LooksTable.LOOK_WARDROBE_ID;
 
 /**
  * Created by Kirill Kochnev on 12.02.17.
@@ -26,7 +26,7 @@ public class Look extends BitmapModel implements IDbModel {
     @StorIOSQLiteColumn(key = true, name = _ID)
     Long _id;
 
-    @StorIOSQLiteColumn(name = WardropeSqlHelper.CREATION_DATE)
+    @StorIOSQLiteColumn(name = WardrobeSqlHelper.CREATION_DATE)
     String creationDate;
 
     @StorIOSQLiteColumn(name = LOOK_NAME)
@@ -41,7 +41,7 @@ public class Look extends BitmapModel implements IDbModel {
     @StorIOSQLiteColumn(name = LOOK_ICON_IMAGE_PATH)
     String iconImagePath;
 
-    @StorIOSQLiteColumn(name = LOOK_WARDROPE_ID)
+    @StorIOSQLiteColumn(name = LOOK_WARDROBE_ID)
     Long wardropeId;
 
 

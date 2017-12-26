@@ -9,8 +9,8 @@ import com.kirill.kochnev.homewardrope.di.modules.UtilsModule;
 import com.kirill.kochnev.homewardrope.di.modules.WardropeModule;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.AddUpdateWardrobePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.WardrobesPresenter;
 import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
 import com.kirill.kochnev.homewardrope.ui.views.WardrobeItemView;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
@@ -45,9 +45,9 @@ public interface AppComponent {
 
     AddUpdateThingComponent plusAddUpdateThingComponent(AddUpdateThingModule module);
 
-    void inject(AddUpdateWardropePresenter presenter);
+    void inject(AddUpdateWardrobePresenter presenter);
 
-    void inject(WardropesPresenter presenter);
+    void inject(WardrobesPresenter presenter);
 
     void inject(ThingsPresenter presenter);
 

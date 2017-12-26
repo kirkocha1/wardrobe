@@ -2,7 +2,7 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
 
-import com.kirill.kochnev.homewardrope.db.WardropeSqlHelper;
+import com.kirill.kochnev.homewardrope.db.WardrobeSqlHelper;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.ThingHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
@@ -27,7 +27,7 @@ public class Thing extends BitmapModel implements IDbModel {
     @StorIOSQLiteColumn(key = true, name = BaseColumns._ID)
     Long _id;
 
-    @StorIOSQLiteColumn(name = WardropeSqlHelper.CREATION_DATE)
+    @StorIOSQLiteColumn(name = WardrobeSqlHelper.CREATION_DATE)
     String creationDate;
 
     @StorIOSQLiteColumn(name = THING_NAME)

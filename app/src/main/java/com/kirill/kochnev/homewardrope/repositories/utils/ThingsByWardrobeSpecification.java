@@ -14,14 +14,14 @@ import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
  * Created by kirill on 26.04.17.
  */
 
-public class ThingsByWardropeSpecification implements ISpecification {
+public class ThingsByWardrobeSpecification implements ISpecification {
     public static final String TAG = "ThingsByWardrope";
     private long id;
-    private long wardropeId;
+    private long wardrobeId;
 
-    public ThingsByWardropeSpecification(long id, long wardropeId) {
+    public ThingsByWardrobeSpecification(long id, long wardrobeId) {
         this.id = id;
-        this.wardropeId = wardropeId;
+        this.wardrobeId = wardrobeId;
     }
 
     @Override
@@ -35,11 +35,11 @@ public class ThingsByWardropeSpecification implements ISpecification {
             return result;
         }
 
-        String join = "JOIN " + ThingsWardropesTable.THINGS_WARDROPES_TABLE +
-                " ON " + ThingsWardropesTable.THINGS_WARDROPES_THING_ID + " = " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID;
+        String join = "JOIN " + ThingsWardropesTable.THINGS_WARDROBES_TABLE +
+                " ON " + ThingsWardropesTable.THINGS_WARDROBES_THING_ID + " = " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID;
 
-        String where = "WHERE " + ThingsWardropesTable.THINGS_WARDROPES_TABLE + "."
-                + ThingsWardropesTable.THINGS_WARDROPES_WARDROPES_ID + " = " + wardropeId;
+        String where = "WHERE " + ThingsWardropesTable.THINGS_WARDROBES_TABLE + "."
+                + ThingsWardropesTable.THINGS_WARDROBES_WARDROBES_ID + " = " + wardropeId;
         if (id == -1) {
             result = "SELECT " + ThingsTable.THINGS_TABLE + ".*" + " FROM " + ThingsTable.THINGS_TABLE + " " + join + " " + where +
                     " ORDER BY " + ThingsTable.THINGS_TABLE + "." + ThingsTable._ID +
@@ -61,6 +61,6 @@ public class ThingsByWardropeSpecification implements ISpecification {
 
     @Override
     public RawQuery.CompleteBuilder getRawQueryStatement() {
-        return RawQuery.builder().query(queryThings(id, wardropeId));
+        return RawQuery.builder().query(queryThings(id, wardrobeId));
     }
 }

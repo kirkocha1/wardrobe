@@ -121,7 +121,7 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
                         interactor.getLooksByWardrope(
-                                lastId, viewMode == ViewMode.WARDROPE_MODE && isEdit ?
+                                lastId, viewMode == ViewMode.WARDROBE_MODE && isEdit ?
                                         AppConstants.DEFAULT_ID : filterId),
                         list -> getViewState().onLoadFinished(list),
                         e -> Log.e(TAG, e.getMessage())

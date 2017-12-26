@@ -16,14 +16,14 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardrobeApplication;
-import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.di.components.WardrobeListComponent;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.IWardropeView;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.WardrobesPresenter;
+import com.kirill.kochnev.homewardrope.mvp.views.IWardrobeView;
 import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity;
-import com.kirill.kochnev.homewardrope.ui.activities.DrawerController;
+import com.kirill.kochnev.homewardrope.ui.activities.IDrawerController;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardrobesAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardrobeHolder;
 import com.kirill.kochnev.homewardrope.ui.fragments.base.FragmentToolbarDelegate;
@@ -40,7 +40,7 @@ import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeAct
  * Created by kirill on 30.03.17.
  */
 
-public class WardrobesFragment extends MvpAppCompatFragment implements IWardropeView {
+public class WardrobesFragment extends MvpAppCompatFragment implements IWardrobeView {
     public static final int REQUEST_CODE = 1;
 
     public static WardrobesFragment createInstance(@NonNull final ViewMode mode) {
@@ -52,7 +52,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
     }
 
     @Nullable
-    private ListDelegate<Wardrope, WardrobeHolder> delegate;
+    private ListDelegate<Wardrobe, WardrobeHolder> delegate;
 
     @NonNull
     private FragmentToolbarDelegate fragmentToolbarDelegate = new FragmentToolbarDelegate();
@@ -61,10 +61,10 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
     protected WardrobesAdapter adapter;
 
     @InjectPresenter
-    WardropesPresenter presenter;
+    WardrobesPresenter presenter;
 
     @ProvidePresenter
-    WardropesPresenter providePresenter() {
+    WardrobesPresenter providePresenter() {
         WardrobeListComponent component = WardrobeApplication
                 .getComponentHolder()
                 .getWardrobeComponent(ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE)));
@@ -77,13 +77,13 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
         final View view = inflater.inflate(R.layout.fragment_wardrobes, container, false);
         final ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE));
         adapter = new WardrobesAdapter();
-        fragmentToolbarDelegate.init(view, mode, ViewMode.WARDROPE_MODE, R.string.wardropes_title);
-        delegate = new ListDelegate<>(view, adapter, presenter, mode, ViewMode.WARDROPE_MODE,
+        fragmentToolbarDelegate.init(view, mode, ViewMode.WARDROBE_MODE, R.string.wardropes_title);
+        delegate = new ListDelegate<>(view, adapter, presenter, mode, ViewMode.WARDROBE_MODE,
                 v -> startActivityForResult(new Intent(getContext(), AddUpdateWardrobeActivity.class), REQUEST_CODE));
 
         fragmentToolbarDelegate.setMenuListener(v -> {
-            if (getActivity() instanceof DrawerController) {
-                final DrawerController drawer = (DrawerController) getActivity();
+            if (getActivity() instanceof IDrawerController) {
+                final IDrawerController drawer = (IDrawerController) getActivity();
                 drawer.toggleDrawer();
             }
         });
@@ -107,7 +107,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
 
     @Override
     public void navigateToThingsFilteredByWardrope(long id) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction().addToBackStack(CreationLookState.WARDROPES.toString());
+        FragmentTransaction transaction = getFragmentManager().beginTransaction().addToBackStack(CreationLookState.WARDROBES.toString());
         AnimationHelper.animateFragmentReplace(transaction, ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, id), R.id.look_fragment_container);
     }
 
@@ -118,17 +118,17 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
     }
 
     @Override
-    public void onLoadFinished(List<Wardrope> data) {
+    public void onLoadFinished(List<Wardrobe> data) {
         delegate.onLoadFinished(data);
     }
 
     @Override
-    public void invalidateListItem(Wardrope model) {
+    public void invalidateListItem(Wardrobe model) {
         delegate.invalidateListItem(model);
     }
 
     @Override
-    public void deleteListItem(Wardrope model) {
+    public void deleteListItem(Wardrobe model) {
         delegate.deleteListItem(model);
     }
 }

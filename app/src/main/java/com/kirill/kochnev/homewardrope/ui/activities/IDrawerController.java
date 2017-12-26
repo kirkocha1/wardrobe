@@ -1,6 +1,6 @@
 package com.kirill.kochnev.homewardrope.ui.activities;
 
-public interface DrawerController {
+public interface IDrawerController {
 
     void toggleDrawer();
 }

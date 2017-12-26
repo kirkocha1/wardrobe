@@ -20,7 +20,7 @@ import com.kirill.kochnev.homewardrope.di.components.LookComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ILooksView;
-import com.kirill.kochnev.homewardrope.ui.activities.DrawerController;
+import com.kirill.kochnev.homewardrope.ui.activities.IDrawerController;
 import com.kirill.kochnev.homewardrope.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.ui.adapters.LooksAdapter;
@@ -98,8 +98,8 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
                 )
         );
         fragmentToolbarDelegate.setMenuListener(v -> {
-            if (getActivity() instanceof DrawerController) {
-                final DrawerController drawer = (DrawerController) getActivity();
+            if (getActivity() instanceof IDrawerController) {
+                final IDrawerController drawer = (IDrawerController) getActivity();
                 drawer.toggleDrawer();
             }
         });
