@@ -2,12 +2,12 @@ package com.kirill.kochnev.homewardrope.ui.fragments;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -34,9 +34,6 @@ public class CollageFragment extends MvpAppCompatFragment implements ICollageVie
     @BindView(R.id.collage_container)
     CollageView container;
 
-    @BindView(R.id.title)
-    protected TextView title;
-
     @InjectPresenter
     CollagePresenter presenter;
 
@@ -45,11 +42,11 @@ public class CollageFragment extends MvpAppCompatFragment implements ICollageVie
         return new CollagePresenter((HashSet<Long>) getArguments().getSerializable(THINGS_SET));
     }
 
-    public static CollageFragment createInstance(HashSet<Long> thingsId) {
-        CollageFragment fragment = new CollageFragment();
-        Bundle agrs = new Bundle();
-        agrs.putSerializable(THINGS_SET, thingsId);
-        fragment.setArguments(agrs);
+    public static CollageFragment createInstance(@NonNull final HashSet<Long> thingsId) {
+        final CollageFragment fragment = new CollageFragment();
+        final Bundle args = new Bundle();
+        args.putSerializable(THINGS_SET, thingsId);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -59,12 +56,11 @@ public class CollageFragment extends MvpAppCompatFragment implements ICollageVie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_collage, container, false);
         ButterKnife.bind(this, view);
-        title.setText(R.string.looks_title);
         return view;
     }
 
     @Override
-    public void constructView(SparseArray<Bitmap> cache, CollageMode mode) {
+    public void constructView(@NonNull final SparseArray<Bitmap> cache, @NonNull final CollageMode mode) {
         container.inflateItems(mode, cache);
     }
 }

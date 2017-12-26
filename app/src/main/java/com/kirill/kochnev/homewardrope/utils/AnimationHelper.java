@@ -17,7 +17,7 @@ import com.kirill.kochnev.homewardrope.R;
 ///TODO refactor this class
 public class AnimationHelper {
     public static void animateFragmentReplace(FragmentTransaction transaction, Fragment fragment, @IdRes int containerId, String tag) {
-        transaction.setCustomAnimations(R.anim.slide_out_left, R.anim.slide_in_right);
+        transaction.setCustomAnimations(R.anim.fade_out, R.anim.fade_in);
         if (tag != null) {
             transaction.replace(containerId, fragment, tag).commit();
         } else {
