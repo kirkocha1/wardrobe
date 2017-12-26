@@ -17,6 +17,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
+import com.kirill.kochnev.homewardrope.di.components.CreateLookComponent;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
@@ -62,7 +64,9 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
 
     @ProvidePresenter
     CreationLookPresenter providePresenter() {
-        return new CreationLookPresenter(getIntent().getLongExtra(LOOK_ID, -1));
+        final long lookId = getIntent().getLongExtra(LOOK_ID, -1);
+        final CreateLookComponent component = WardrobeApplication.getComponentHolder().getCreateLookComponent(lookId);
+        return component.providePresenter();
     }
 
     public static Intent createIntent(Context context, long lookId, long wardropeId) {
@@ -100,6 +104,12 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
             presenter.resolveBtnsState(transactionState);
         });
         initFragment(WardrobesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearCreateLookComponent();
     }
 
     @Override

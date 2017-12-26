@@ -10,7 +10,7 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.interactors.WardropesInteractor;
+import com.kirill.kochnev.homewardrope.interactors.WardrobesInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
@@ -31,7 +31,7 @@ public class WardropesPresenter extends MvpPresenter<IWardropeView> implements I
     private IdBus bus;
 
     @NonNull
-    private WardropesInteractor interactor;
+    private WardrobesInteractor interactor;
 
     @NonNull
     private final ViewMode mode;
@@ -45,7 +45,7 @@ public class WardropesPresenter extends MvpPresenter<IWardropeView> implements I
     @Inject
     public WardropesPresenter(
             @Named("mode") @NonNull final ViewMode mode,
-            @NonNull final WardropesInteractor interactor,
+            @NonNull final WardrobesInteractor interactor,
             @NonNull final IdBus bus
     ) {
         this.bus = bus;
@@ -62,7 +62,7 @@ public class WardropesPresenter extends MvpPresenter<IWardropeView> implements I
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
         interactor
-                .getWardropes(lastId)
+                .getWardrobes(lastId)
                 .subscribe(
                         list -> {
                             getViewState().onLoadFinished(list);
@@ -100,7 +100,7 @@ public class WardropesPresenter extends MvpPresenter<IWardropeView> implements I
     public void addOrUpdateListItem(final long id) {
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
-                        interactor.getWardrope(id),
+                        interactor.getWardrobe(id),
                         item -> getViewState().invalidateListItem(item),
                         e -> Log.e(TAG, e.getMessage())
                 )

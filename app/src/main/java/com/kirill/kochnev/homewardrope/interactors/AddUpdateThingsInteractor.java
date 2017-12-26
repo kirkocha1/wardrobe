@@ -2,7 +2,6 @@ package com.kirill.kochnev.homewardrope.interactors;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
@@ -10,7 +9,6 @@ import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -48,20 +46,11 @@ public class AddUpdateThingsInteractor {
     }
 
     public Single<Uri> getPhotoUri() {
-        return Single.create(sub -> {
-            File photoFile = null;
-            try {
-                photoFile = helper.createImageFile("thing");
-                thing.setFullImagePath(photoFile.getAbsolutePath());
-                thing.setIconImagePath(helper.createIconImageFile("thing").getAbsolutePath());
-            } catch (IOException ex) {
-                Log.e(TAG, "problems with creating image uri, error: " + ex.getMessage());
-                sub.onError(ex);
-            }
-            if (photoFile != null) {
-                Uri photoURI = Uri.fromFile(photoFile);
-                sub.onSuccess(photoURI);
-            }
+        return Single.fromCallable(() -> {
+            File photoFile = helper.createImageFile("thing");
+            thing.setFullImagePath(photoFile.getAbsolutePath());
+            thing.setIconImagePath(helper.createIconImageFile("thing").getAbsolutePath());
+            return Uri.fromFile(photoFile);
         });
     }
 

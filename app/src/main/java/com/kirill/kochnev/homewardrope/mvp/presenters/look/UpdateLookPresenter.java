@@ -13,6 +13,7 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDe
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -27,14 +28,14 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
     public static final String TAG = "UpdateLookPresenter";
     public boolean isNeedToAttach = false;
 
-    @Inject
-    protected LooksInteractor interactor;
+    private LooksInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
-    public UpdateLookPresenter(long lookId) {
-        WardrobeApplication.getComponentHolder().getLookComponent().inject(this);
+    @Inject
+    public UpdateLookPresenter(@Named("lookId") long lookId, LooksInteractor interactor) {
+        this.interactor = interactor;
         init(lookId);
     }
 

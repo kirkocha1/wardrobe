@@ -13,7 +13,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
+import com.kirill.kochnev.homewardrope.di.components.UpdateLookComponent;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.UpdateLookPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
 import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
@@ -54,7 +56,9 @@ public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateL
 
     @ProvidePresenter
     UpdateLookPresenter providePresenter() {
-        return new UpdateLookPresenter(getIntent().getLongExtra(LOOK_ID, AppConstants.DEFAULT_ID));
+        final long lookId = getIntent().getLongExtra(LOOK_ID, -1);
+        final UpdateLookComponent component = WardrobeApplication.getComponentHolder().getUpdateLookComponent(lookId);
+        return component.provideUpdateLookPresenter();
     }
 
     public static Intent createIntent(Context context, long lookId) {
@@ -88,6 +92,12 @@ public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateL
         captureBtn.setOnClickListener(v -> {
             presenter.updateClick();
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearUpdateLookComponent();
     }
 
     @Override

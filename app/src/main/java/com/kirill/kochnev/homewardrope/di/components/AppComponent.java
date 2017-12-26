@@ -1,7 +1,9 @@
 package com.kirill.kochnev.homewardrope.di.components;
 
+import com.kirill.kochnev.homewardrope.di.modules.AddUpdateThingModule;
+import com.kirill.kochnev.homewardrope.di.modules.AddUpdateWardrobeModule;
 import com.kirill.kochnev.homewardrope.di.modules.DbModule;
-import com.kirill.kochnev.homewardrope.di.modules.LooksModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
 import com.kirill.kochnev.homewardrope.di.modules.ThingsModule;
 import com.kirill.kochnev.homewardrope.di.modules.UtilsModule;
 import com.kirill.kochnev.homewardrope.di.modules.WardropeModule;
@@ -38,6 +40,10 @@ public interface AppComponent {
     WardrobeListComponent plusWardropeComponent(WardropeModule module);
 
     ThingListComponent plusThingListComponent(ThingsModule module);
+
+    AddUpdateWardropeComponent plusAddUpdateWardropeComponent(AddUpdateWardrobeModule module);
+
+    AddUpdateThingComponent plusAddUpdateThingComponent(AddUpdateThingModule module);
 
     void inject(AddUpdateWardropePresenter presenter);
 

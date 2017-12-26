@@ -28,10 +28,10 @@ import io.reactivex.Single;
  * Created by kirill on 30.03.17.
  */
 
-public class WardropeRepository extends AbstractRepository<Wardrope> {
+public class WardrobeRepository extends AbstractRepository<Wardrope> {
 
     @Inject
-    public WardropeRepository(StorIOSQLite storIOSQLite) {
+    public WardrobeRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
     }
 

@@ -17,6 +17,7 @@ import com.kirill.kochnev.homewardrope.utils.LookExeception;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -30,17 +31,17 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
 
     public static final String TAG = "CreationLook";
 
-    @Inject
-    IdBus bus;
+    private IdBus bus;
 
-    @Inject
-    LooksInteractor interactor;
+    private LooksInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
-    public CreationLookPresenter(long id) {
-        WardrobeApplication.getComponentHolder().getLookComponent().inject(this);
+    @Inject
+    public CreationLookPresenter(@Named("lookId") final long id, LooksInteractor interactor, IdBus bus) {
+        this.interactor = interactor;
+        this.bus = bus;
         if (id == AppConstants.DEFAULT_ID) {
             interactor.initializeLook();
         }

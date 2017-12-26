@@ -15,7 +15,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.di.components.AddUpdateThingComponent;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
@@ -54,18 +56,19 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
 
     @ProvidePresenter
     AddUpdateThingPresenter providePresenter() {
-        return new AddUpdateThingPresenter(getIntent().getLongExtra(THINGS_ID, -1));
+        final AddUpdateThingComponent component = WardrobeApplication.getComponentHolder()
+                .getAddUpdateThingComponent(getIntent().getLongExtra(THINGS_ID, AppConstants.DEFAULT_ID));
+        return component.providePresenter();
     }
 
-    private boolean isEditMode;
     private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
-        long thingId = getIntent().getLongExtra(THINGS_ID, -1);
-        boolean isNew = thingId == AppConstants.DEFAULT_ID;
+        final boolean isEditMode = getIntent().getBooleanExtra(IS_EDIT, true);
+        final long thingId = getIntent().getLongExtra(THINGS_ID, -1);
+        final boolean isNew = thingId == AppConstants.DEFAULT_ID;
         final View view = View.inflate(this, R.layout.activity_add_or_update_thing, null);
         setContentView(view);
         ButterKnife.bind(this);
@@ -74,21 +77,29 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
                     setResult(RESULT_CANCELED);
                     onBackPressed();
                 });
-        initBtns(isNew);
+        initBtns(isNew, isEditMode);
     }
 
-    private void initBtns(boolean isNew) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearAddUpdateThingComponent();
+    }
+
+    private void initBtns(final boolean isNew, final boolean isEditMode) {
         edit.setVisibility(isNew ? View.GONE : View.VISIBLE);
-        changeMode(isNew, false);
+        if (isEditMode) {
+            changeMode(false);
+        }
         edit.setOnClickListener(v -> {
-            isEditMode = !isEditMode;
-            changeMode(isEditMode);
+            changeMode(true);
         });
         captureBtn.setOnClickListener(v -> presenter.createUri());
         save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
     }
 
-    private void changeMode(boolean isEditMode, boolean isAnimate) {
+    private void changeMode(boolean isAnimate) {
+        final boolean isEditMode = !name.isEnabled();
         name.setEnabled(isEditMode);
         tag.setEnabled(isEditMode);
         captureBtn.setVisibility(isEditMode ? View.VISIBLE : View.INVISIBLE);
@@ -97,10 +108,6 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
             AnimationHelper.hideShowAnimation(this, save, !isEditMode);
             AnimationHelper.hideShowAnimation(this, captureBtn, !isEditMode);
         }
-    }
-
-    private void changeMode(boolean isEditMode) {
-        changeMode(isEditMode, true);
     }
 
     @Override

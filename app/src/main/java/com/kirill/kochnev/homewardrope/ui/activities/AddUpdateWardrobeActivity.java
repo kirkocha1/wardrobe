@@ -11,8 +11,11 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
+import com.kirill.kochnev.homewardrope.di.components.AddUpdateWardropeComponent;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
@@ -51,37 +54,44 @@ public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements I
     @InjectPresenter
     AddUpdateWardropePresenter presenter;
 
-    private long wardropeId;
     private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @ProvidePresenter
     AddUpdateWardropePresenter providePresenter() {
-        return new AddUpdateWardropePresenter(wardropeId);
+        final long wardropeId = getIntent().getLongExtra(WARDROPE_ID, AppConstants.DEFAULT_ID);
+        final AddUpdateWardropeComponent component = WardrobeApplication.getComponentHolder().getAddUpdateWardrobeComponent(wardropeId);
+        return component.providePresenter();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        wardropeId = getIntent().getLongExtra(WARDROPE_ID, -1);
+        final long wardropeId = getIntent().getLongExtra(WARDROPE_ID, AppConstants.DEFAULT_ID);
         final View view = View.inflate(this, R.layout.activity_add_update_wardrobe, null);
         setContentView(view);
         ButterKnife.bind(this);
-        activityToolbarDelegate.init(view, wardropeId == -1 ? getString(R.string.new_wardrobe_title) : "",
+        activityToolbarDelegate.init(view, wardropeId == AppConstants.DEFAULT_ID ? getString(R.string.new_wardrobe_title) : "",
                 v -> {
                     setResult(RESULT_CANCELED);
                     onBackPressed();
                 });
-        initBtns();
+        initBtns(wardropeId);
         pager.setAdapter(new WardrobePagerAdapter(this, getSupportFragmentManager(), wardropeId));
     }
 
-    private void initBtns() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearAddUpdateWardrobeComponent();
+    }
+
+    private void initBtns(long wardropeId) {
         select.setOnClickListener(v -> presenter.toggleMode());
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
-        select.setVisibility(wardropeId == -1 ? View.GONE : View.VISIBLE);
-        save.setVisibility(wardropeId == -1 ? View.VISIBLE : View.GONE);
-        name.setEnabled(wardropeId == -1);
+        select.setVisibility(wardropeId == AppConstants.DEFAULT_ID ? View.GONE : View.VISIBLE);
+        save.setVisibility(wardropeId == AppConstants.DEFAULT_ID ? View.VISIBLE : View.GONE);
+        name.setEnabled(wardropeId == AppConstants.DEFAULT_ID);
     }
 
     @Override
