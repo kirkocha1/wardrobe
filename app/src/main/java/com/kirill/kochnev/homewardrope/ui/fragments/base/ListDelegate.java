@@ -142,11 +142,13 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
 
 
     public void onLoadFinished(List<M> data) {
-        boolean isBlank = adapter.getItemCount() == 0 && (data == null || data.size() == 0);
-        blankImg.setVisibility(isBlank ? View.VISIBLE : View.GONE);
-        isLoading = false;
-        isAllLoaded = data == null || data.size() < LIMIT;
-        adapter.addData(data);
+        list.post(() -> {
+            boolean isBlank = adapter.getItemCount() == 0 && (data == null || data.size() == 0);
+            blankImg.setVisibility(isBlank ? View.VISIBLE : View.GONE);
+            isLoading = false;
+            isAllLoaded = data == null || data.size() < LIMIT;
+            adapter.addData(data);
+        });
     }
 
 

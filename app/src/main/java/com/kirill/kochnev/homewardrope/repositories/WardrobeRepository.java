@@ -114,7 +114,7 @@ public class WardrobeRepository extends AbstractRepository<Wardrope> {
     }
 
     @Override
-    public Single<DeleteResult> deletItem(Wardrope model) {
+    public Single<DeleteResult> deleteItem(Wardrope model) {
         return Single.create(sub -> {
             storIOSQLite.lowLevel().beginTransaction();
             try {

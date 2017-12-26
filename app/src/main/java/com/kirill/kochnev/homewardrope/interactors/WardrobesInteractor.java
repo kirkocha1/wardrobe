@@ -24,7 +24,7 @@ public class WardrobesInteractor {
     }
 
     public Single<DeleteResult> deleteWardropes(Wardrope model) {
-        return wardrobes.deletItem(model);
+        return wardrobes.deleteItem(model);
     }
 
     public Single<List<Wardrope>> getWardrobes(long id) {

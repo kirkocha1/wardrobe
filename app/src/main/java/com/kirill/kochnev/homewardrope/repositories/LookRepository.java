@@ -131,7 +131,7 @@ public class LookRepository extends AbstractRepository<Look> {
     }
 
     @Override
-    public Single<DeleteResult> deletItem(Look model) {
+    public Single<DeleteResult> deleteItem(Look model) {
         return Single.create(sub -> {
             storIOSQLite.lowLevel().beginTransaction();
             try {
