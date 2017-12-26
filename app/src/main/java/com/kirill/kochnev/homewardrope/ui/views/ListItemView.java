@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.utils.interfaces.ILoader;
 
 import javax.inject.Inject;
@@ -46,7 +46,7 @@ public class ListItemView extends FrameLayout {
     }
 
     private void initUi(Context context) {
-        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
+        WardrobeApplication.getComponentHolder().getMainComponent().inject(this);
         LayoutInflater.from(context).inflate(R.layout.view_list_item, this, true);
         ButterKnife.bind(this);
     }

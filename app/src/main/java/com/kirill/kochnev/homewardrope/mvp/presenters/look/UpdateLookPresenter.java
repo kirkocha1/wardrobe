@@ -7,7 +7,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
@@ -34,7 +34,7 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public UpdateLookPresenter(long lookId) {
-        WardropeApplication.getComponentHolder().getLookComponent().inject(this);
+        WardrobeApplication.getComponentHolder().getLookComponent().inject(this);
         init(lookId);
     }
 

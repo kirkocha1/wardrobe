@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.utils.interfaces.ILoader;
 
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 20.04.17.
  */
 
-public class WardropeItemView extends FrameLayout {
+public class WardrobeItemView extends FrameLayout {
 
     @Inject
     ILoader imageLoader;
@@ -37,19 +37,19 @@ public class WardropeItemView extends FrameLayout {
     @BindView(R.id.looks_count)
     TextView looksCount;
 
-    public WardropeItemView(Context context) {
+    public WardrobeItemView(Context context) {
         super(context);
         initUi(context);
     }
 
-    public WardropeItemView(Context context, AttributeSet attrs) {
+    public WardrobeItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initUi(context);
     }
 
     private void initUi(Context context) {
-        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
-        LayoutInflater.from(context).inflate(R.layout.wardrope_item_view, this, true);
+        WardrobeApplication.getComponentHolder().getMainComponent().inject(this);
+        LayoutInflater.from(context).inflate(R.layout.wardrobe_item_view, this, true);
         ButterKnife.bind(this);
     }
 

@@ -8,7 +8,7 @@ import android.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardropeInteractor;
@@ -51,7 +51,7 @@ public class AddUpdateWardropePresenter extends MvpPresenter<IAddUpdateWardropeV
 
 
     public AddUpdateWardropePresenter(long id) {
-        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
+        WardrobeApplication.getComponentHolder().getMainComponent().inject(this);
         initWardrope(id);
     }
 

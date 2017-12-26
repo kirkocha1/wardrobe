@@ -15,7 +15,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardropeView;
-import com.kirill.kochnev.homewardrope.ui.adapters.WardropePagerAdapter;
+import com.kirill.kochnev.homewardrope.ui.adapters.WardrobePagerAdapter;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 30.03.17.
  */
 
-public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView {
+public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements IAddUpdateWardropeView {
 
     public static final String WARDROPE_ID = "wardrope_id";
 
@@ -64,11 +64,11 @@ public class AddUpdateWardropeActivity extends MvpAppCompatActivity implements I
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         wardropeId = getIntent().getLongExtra(WARDROPE_ID, -1);
-        setContentView(View.inflate(this, R.layout.activity_add_update_wardrope, null));
+        setContentView(View.inflate(this, R.layout.activity_add_update_wardrobe, null));
         ButterKnife.bind(this);
         title.setText(wardropeId == -1 ? getString(R.string.new_wardrobe_title) : "");
         initBtns();
-        pager.setAdapter(new WardropePagerAdapter(this, getSupportFragmentManager(), wardropeId));
+        pager.setAdapter(new WardrobePagerAdapter(this, getSupportFragmentManager(), wardropeId));
     }
 
     private void initBtns() {

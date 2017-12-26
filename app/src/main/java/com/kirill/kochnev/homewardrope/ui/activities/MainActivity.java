@@ -19,7 +19,7 @@ import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.ui.fragments.LooksFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
-import com.kirill.kochnev.homewardrope.ui.fragments.WardropesFragment;
+import com.kirill.kochnev.homewardrope.ui.fragments.WardrobesFragment;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import butterknife.BindView;
@@ -93,14 +93,14 @@ public class MainActivity extends MvpAppCompatActivity {
                 setFragmentContent(ThingsFragment.createInstance(ViewMode.THING_MODE, false, AppConstants.DEFAULT_ID));
                 break;
             case R.id.nav_wardropes:
-                setFragmentContent(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));
+                setFragmentContent(WardrobesFragment.createInstance(ViewMode.WARDROPE_MODE));
                 break;
             case R.id.nav_looks:
                 setFragmentContent(LooksFragment.newInstance(ViewMode.LOOK_MODE, false, AppConstants.DEFAULT_ID));
                 break;
 
             default:
-                setFragmentContent(new WardropesFragment());
+                setFragmentContent(new WardrobesFragment());
         }
     }
 
@@ -112,9 +112,9 @@ public class MainActivity extends MvpAppCompatActivity {
         });
         adjustNavigation(R.menu.navigation_menu, R.layout.navigation_header);
         if (savedInstanceState != null) {
-            currentFragmentName = savedInstanceState.getString(FRAGMENT_STATE_TAG, WardropesFragment.class.getName());
+            currentFragmentName = savedInstanceState.getString(FRAGMENT_STATE_TAG, WardrobesFragment.class.getName());
         } else {
-            setContentView(WardropesFragment.createInstance(ViewMode.WARDROPE_MODE));
+            setContentView(WardrobesFragment.createInstance(ViewMode.WARDROPE_MODE));
         }
     }
 

@@ -7,7 +7,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateThingsInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
@@ -29,7 +29,7 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     public AddUpdateThingPresenter(long id) {
-        WardropeApplication.getComponentHolder().getMainComponent().inject(this);
+        WardrobeApplication.getComponentHolder().getMainComponent().inject(this);
         initValues(id);
     }
 

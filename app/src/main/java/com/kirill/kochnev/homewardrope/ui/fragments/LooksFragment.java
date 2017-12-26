@@ -5,18 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.di.components.LookComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
@@ -32,12 +30,9 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.ToolbarDelegate;
 import java.util.HashSet;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
-import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
+import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity.WARDROPE_ID;
 
 /**
  * Created by kirill on 21.04.17.
@@ -57,18 +52,10 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
         return fragment;
     }
 
-    @BindView(R.id.title)
-    protected TextView title;
-
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
-
-    private ViewMode mode;
-
     @Nullable
     private LooksAdapter adapter;
 
-    @Nullable
+    @NonNull
     private ListDelegate<Look, LookHolder> delegate;
 
     @NonNull
@@ -82,23 +69,18 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
     LooksPresenter providePresenter() {
         final long wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
         final boolean isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
-        final LookComponent component = WardropeApplication
+        final ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
+        final LookComponent component = WardrobeApplication
                 .getComponentHolder()
                 .provideLookComponent(wardropeId, isEdit, mode);
         return component.provideLooksPresenter();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
-        super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_looks, container, false);
-        ButterKnife.bind(this, view);
+        final ViewMode mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
         adapter = new LooksAdapter();
         toolbarDelegate.init(view, mode, ViewMode.LOOK_MODE, R.string.looks_title);
         delegate = new ListDelegate<>(
@@ -107,16 +89,16 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
                 presenter,
                 mode,
                 ViewMode.LOOK_MODE,
+                new GridLayoutManager(getContext(), 2),
                 v -> openUpdateActivity(CreationLookActivity.createIntent(getContext(), AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
         );
-        delegate.setLayoutManager(new GridLayoutManager(getContext(), 2));
         return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        WardropeApplication.getComponentHolder().clearLookComponent();
+        WardrobeApplication.getComponentHolder().clearLookComponent();
     }
 
     @Override

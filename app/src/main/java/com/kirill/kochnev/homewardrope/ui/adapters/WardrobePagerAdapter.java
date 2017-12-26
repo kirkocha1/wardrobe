@@ -15,20 +15,20 @@ import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
  * Created by kirill on 11.05.17.
  */
 
-public class WardropePagerAdapter extends FragmentPagerAdapter {
+public class WardrobePagerAdapter extends FragmentPagerAdapter {
 
     public static final int LOOKS_FRAGMENT_ID = 1;
     public static final int THINGS_FRAGMENT_ID = 0;
     public static final int FRAGMENTS_COUNT = 2;
 
-    private long wardropeId;
+    private long wardrobeId;
     private Context context;
 
 
-    public WardropePagerAdapter(Context context, FragmentManager fm, long wardropeId) {
+    public WardrobePagerAdapter(Context context, FragmentManager fm, long wardrobeId) {
         super(fm);
         this.context = context;
-        this.wardropeId = wardropeId;
+        this.wardrobeId = wardrobeId;
     }
 
     @Override
@@ -50,10 +50,10 @@ public class WardropePagerAdapter extends FragmentPagerAdapter {
         Fragment result = null;
         switch (position) {
             case THINGS_FRAGMENT_ID:
-                result = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardropeId == AppConstants.DEFAULT_ID, wardropeId);
+                result = ThingsFragment.createInstance(ViewMode.WARDROPE_MODE, wardrobeId == AppConstants.DEFAULT_ID, wardrobeId);
                 break;
             case LOOKS_FRAGMENT_ID:
-                result = LooksFragment.newInstance(ViewMode.WARDROPE_MODE, wardropeId == AppConstants.DEFAULT_ID, wardropeId);
+                result = LooksFragment.newInstance(ViewMode.WARDROPE_MODE, wardrobeId == AppConstants.DEFAULT_ID, wardrobeId);
                 break;
         }
         return result;

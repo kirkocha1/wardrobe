@@ -5,7 +5,7 @@ import android.view.View;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.db.models.Wardrope;
 import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
-import com.kirill.kochnev.homewardrope.ui.views.WardropeItemView;
+import com.kirill.kochnev.homewardrope.ui.views.WardrobeItemView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -14,12 +14,12 @@ import butterknife.ButterKnife;
  * Created by kirill on 07.04.17.
  */
 
-public class WardropeHolder extends BaseHolder<Wardrope> {
+public class WardrobeHolder extends BaseHolder<Wardrope> {
 
     @BindView(R.id.wardrope_list_item)
-    public WardropeItemView item;
+    public WardrobeItemView item;
 
-    public WardropeHolder(View itemView) {
+    public WardrobeHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }

@@ -5,18 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
-import com.kirill.kochnev.homewardrope.WardropeApplication;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.di.components.ThingListComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
@@ -31,15 +29,12 @@ import com.kirill.kochnev.homewardrope.ui.fragments.base.ToolbarDelegate;
 import java.util.HashSet;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static android.app.Activity.RESULT_OK;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
 import static com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter.THINGS_ID;
 import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity.IS_EDIT;
-import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardropeActivity.WARDROPE_ID;
+import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity.WARDROPE_ID;
 
 /**
  * Created by Kirill Kochnev on 24.02.17.
@@ -58,11 +53,6 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
         return fragment;
     }
 
-    @BindView(R.id.title)
-    protected TextView title;
-
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
 
     @NonNull
     private ThingsAdapter adapter;
@@ -74,7 +64,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     private ToolbarDelegate toolbarDelegate = new ToolbarDelegate();
 
     private ViewMode mode;
-    private long wardropeId;
+    private long wardrobeId;
     private boolean isEdit;
 
 
@@ -83,16 +73,16 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
 
     @ProvidePresenter
     ThingsPresenter providePresenter() {
-        ThingListComponent component = WardropeApplication
+        ThingListComponent component = WardrobeApplication
                 .getComponentHolder()
-                .getThingListComponent(wardropeId, isEdit, mode);
+                .getThingListComponent(wardrobeId, isEdit, mode);
         return component.providePresenter();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mode = ViewMode.getByNum(getArguments().getInt(FRAGMENT_MODE, AppConstants.DEFAULT_ID));
-        wardropeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
+        wardrobeId = getArguments().getLong(WARDROPE_ID, AppConstants.DEFAULT_ID);
         isEdit = getArguments().getBoolean(FRAGMENT_IS_EDIT);
         super.onCreate(savedInstanceState);
     }
@@ -101,7 +91,6 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_things, container, false);
-        ButterKnife.bind(this, view);
         adapter = new ThingsAdapter();
         toolbarDelegate.init(view, mode, ViewMode.THING_MODE, R.string.things_title);
         delegate = new ListDelegate<>(
@@ -110,16 +99,16 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
                 presenter,
                 mode,
                 ViewMode.THING_MODE,
+                new GridLayoutManager(getContext(), 2),
                 v -> openUpdateActivity(new Intent(getContext(), AddUpdateThingActivity.class))
         );
-        delegate.setLayoutManager(new GridLayoutManager(getContext(), 2));
         return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        WardropeApplication.getComponentHolder().clearThingListComponent();
+        WardrobeApplication.getComponentHolder().clearThingListComponent();
     }
 
     @Override

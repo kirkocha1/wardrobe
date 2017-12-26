@@ -10,7 +10,7 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.AddUpdateWardropePresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrope.WardropesPresenter;
 import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
-import com.kirill.kochnev.homewardrope.ui.views.WardropeItemView;
+import com.kirill.kochnev.homewardrope.ui.views.WardrobeItemView;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -47,7 +47,7 @@ public interface AppComponent {
 
     void inject(AddUpdateThingPresenter presenter);
 
-    void inject(WardropeItemView view);
+    void inject(WardrobeItemView view);
 
     void inject(ListItemView view);
 }

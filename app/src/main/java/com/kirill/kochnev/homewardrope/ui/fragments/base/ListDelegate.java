@@ -53,13 +53,25 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
             @NonNull final ViewMode mainState,
             @NonNull final View.OnClickListener addButtonListener
     ) {
+        this(view, adapter, paginator, mode, mainState, new LinearLayoutManager(view.getContext()), addButtonListener);
+    }
+
+    public ListDelegate(
+            @NonNull final View view,
+            @NonNull final BaseDbAdapter<M, H> adapter,
+            @NonNull final IPaginator paginator,
+            @NonNull final ViewMode mode,
+            @NonNull final ViewMode mainState,
+            @NonNull final LinearLayoutManager layoutManager,
+            @NonNull final View.OnClickListener addButtonListener
+    ) {
         ButterKnife.bind(this, view);
         this.adapter = adapter;
         this.paginator = paginator;
         this.context = list.getContext();
         this.mode = mode;
         this.mainState = mainState;
-        this.layoutManager = new LinearLayoutManager(view.getContext());
+        this.layoutManager = layoutManager;
         adjustList();
         adjustAddButton(addButtonListener);
     }

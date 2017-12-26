@@ -16,6 +16,6 @@ public class ThingsWardropesTable implements BaseColumns {
             _ID + " INTEGER PRIMARY KEY NOT NULL, " +
             THINGS_WARDROPES_THING_ID + " INTEGER NOT NULL, " +
             THINGS_WARDROPES_WARDROPES_ID + " INTEGER NOT NULL, " +
-            "FOREIGN KEY(" + THINGS_WARDROPES_WARDROPES_ID + ") REFERENCES wardropes(" + BaseColumns._ID + "), "
+            "FOREIGN KEY(" + THINGS_WARDROPES_WARDROPES_ID + ") REFERENCES wardrobes(" + BaseColumns._ID + "), "
             + "FOREIGN KEY(" + THINGS_WARDROPES_THING_ID + ") REFERENCES things(" + BaseColumns._ID + ")" + ")";
 }

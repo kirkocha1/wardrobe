@@ -23,7 +23,7 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.ui.fragments.CollageFragment;
 import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
-import com.kirill.kochnev.homewardrope.ui.fragments.WardropesFragment;
+import com.kirill.kochnev.homewardrope.ui.fragments.WardrobesFragment;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 import com.kirill.kochnev.homewardrope.utils.DialogHelper;
 
@@ -94,7 +94,7 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
                     CreationLookState.valueOf(getSupportFragmentManager().getBackStackEntryAt(count).getName());
             presenter.resolveBtnsState(transactionState);
         });
-        initFragment(WardropesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START);
+        initFragment(WardrobesFragment.createInstance(ViewMode.LOOK_MODE), CreationLookState.START);
     }
 
     @Override
