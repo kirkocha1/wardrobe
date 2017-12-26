@@ -106,7 +106,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrope
 
 
     @Override
-    public void setThingsByWardrope(long id) {
+    public void navigateToThingsFilteredByWardrope(long id) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction().addToBackStack(CreationLookState.WARDROPES.toString());
         AnimationHelper.animateFragmentReplace(transaction, ThingsFragment.createInstance(ViewMode.LOOK_MODE, true, id), R.id.look_fragment_container);
     }

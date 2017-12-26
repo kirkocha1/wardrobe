@@ -91,7 +91,7 @@ public class WardropesPresenter extends MvpPresenter<IWardropeView> implements I
                 break;
             case LOOK_MODE:
                 bus.passData(new Pair<>(ViewMode.WARDROPE_MODE, model.getId()));
-                getViewState().setThingsByWardrope(model.getId());
+                getViewState().navigateToThingsFilteredByWardrope(model.getId());
                 break;
         }
     }

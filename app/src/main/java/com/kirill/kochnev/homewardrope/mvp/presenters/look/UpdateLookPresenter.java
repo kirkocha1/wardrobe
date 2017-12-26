@@ -7,7 +7,6 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IUpdateLook;
@@ -26,9 +25,9 @@ import io.reactivex.schedulers.Schedulers;
 public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
 
     public static final String TAG = "UpdateLookPresenter";
-    public boolean isNeedToAttach = false;
 
-    private LooksInteractor interactor;
+    private final long lookId;
+    private final LooksInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
@@ -36,20 +35,12 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
     @Inject
     public UpdateLookPresenter(@Named("lookId") long lookId, LooksInteractor interactor) {
         this.interactor = interactor;
-        init(lookId);
+        this.lookId = lookId;
     }
 
-
     @Override
-    public void attachView(IUpdateLook view) {
-        super.attachView(view);
-        if (isNeedToAttach) {
-            disposableDelegate.addToCompositeDisposable(
-                    interactor
-                            .getLook()
-                            .subscribe(look -> getViewState().setLookData(look), e -> Log.e(TAG, e.getMessage()))
-            );
-        }
+    protected void onFirstViewAttach() {
+        updateListItem(lookId);
     }
 
     @Override
@@ -58,13 +49,7 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
         disposableDelegate.unsubscribe();
     }
 
-    @Override
-    public void detachView(IUpdateLook view) {
-        isNeedToAttach = true;
-        super.detachView(view);
-    }
-
-    private void init(long lookId) {
+    public void updateListItem(long lookId) {
         disposableDelegate.addToCompositeDisposable(
                 interactor
                         .getLook(lookId)
@@ -102,5 +87,4 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
                         )
         );
     }
-
 }

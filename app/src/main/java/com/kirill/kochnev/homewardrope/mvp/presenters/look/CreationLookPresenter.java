@@ -1,6 +1,5 @@
 package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -8,7 +7,6 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
@@ -31,6 +29,7 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
 
     public static final String TAG = "CreationLook";
 
+    private long lookId;
     private IdBus bus;
 
     private LooksInteractor interactor;
@@ -42,8 +41,26 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
     public CreationLookPresenter(@Named("lookId") final long id, LooksInteractor interactor, IdBus bus) {
         this.interactor = interactor;
         this.bus = bus;
-        if (id == AppConstants.DEFAULT_ID) {
+        this.lookId = id;
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        if (lookId == AppConstants.DEFAULT_ID) {
             interactor.initializeLook();
+        } else {
+            disposableDelegate.addToCompositeDisposable(
+                    interactor
+                            .getLook(lookId)
+                            .subscribe(
+                                    look -> {
+                                    },
+                                    e -> {
+                                        Log.e(TAG, e.getMessage());
+                                    }
+                            )
+            );
+
         }
         disposableDelegate.addToCompositeDisposable(bus.register(idPair -> {
             switch (idPair.first) {
@@ -73,12 +90,9 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
         disposableDelegate.addToCompositeDisposable(interactor.saveLookWithBitmap(name, tag, bitmap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                            Intent intent = new Intent();
-                            intent.putExtra(AppConstants.ADD_UPDATED_ID, result.getId());
-                            getViewState().onSuccess(intent);
-                        },
-                        e -> Log.e(TAG, e.getMessage())));
+                .subscribe(result -> getViewState().onSuccess(result.getId()),
+                        e -> Log.e(TAG, e.getMessage()))
+        );
     }
 
     public void save() {

@@ -101,9 +101,19 @@ public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateL
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == UPDATE_LOOK_CODE && data != null) {
+            presenter.updateListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
+        }
+    }
+
+    @Override
     public void goToUpdateLookScreen(Look look) {
-        startActivityForResult(CreationLookActivity.createIntent(this, look.getId(), look.getWardropeId() == null ?
-                AppConstants.DEFAULT_ID : look.getWardropeId()), UPDATE_LOOK_CODE);
+        startActivityForResult(CreationLookActivity
+                        .createIntent(this, look.getId(), look.getWardropeId() == null ?
+                                AppConstants.DEFAULT_ID : look.getWardropeId()),
+                UPDATE_LOOK_CODE
+        );
     }
 
     private void changeBtnStatus(boolean isVisible) {

@@ -148,7 +148,9 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
     }
 
     @Override
-    public void onSuccess(Intent intent) {
+    public void onSuccess(long lookId) {
+        Intent intent = new Intent();
+        intent.putExtra(AppConstants.ADD_UPDATED_ID, lookId);
         setResult(RESULT_OK, intent);
         finish();
     }
