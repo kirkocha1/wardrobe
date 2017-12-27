@@ -36,21 +36,21 @@ public class LooksInteractor {
         this.helper = helper;
     }
 
-    public Single<List<Look>> getLooks(long id) {
-        return looks.query(id);
-    }
-
     public Single<DeleteResult> deleteLook(Look model) {
         helper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
-        return looks.deleteItem(model);
+        return looks
+                .deleteItem(model);
+
     }
 
     public Single<Look> getLook(long id) {
-        return looks.getItem(id).map(look -> {
-            this.look = look;
-            look.setBitmap(helper.makeImage(look.getFullImagePath()));
-            return look;
-        });
+        return looks
+                .getItem(id)
+                .map(look -> {
+                    this.look = look;
+                    look.setBitmap(helper.makeImage(look.getFullImagePath()));
+                    return look;
+                });
     }
 
     public Single<Look> getLook() {
@@ -60,29 +60,33 @@ public class LooksInteractor {
     public Single<RepoResult> saveLook(String name, String tag) {
         look.setName(name);
         look.setTag(tag);
-        return looks.putItem(look);
+        return looks
+                .putItem(look);
     }
 
     public Single<RepoResult> saveLookWithBitmap(String name, String tag, Bitmap bitmap) {
-        return Single.fromCallable(() -> {
-            look.setName(name);
-            look.setTag(tag);
-            look.setFullImagePath(helper.createImageFile("look").getAbsolutePath());
-            look.setIconImagePath(helper.createIconImageFile("look").getAbsolutePath());
-            return look;
-        }).flatMap(o -> helper.saveImageAndIconObservable(look.getFullImagePath(), look.getIconImagePath(), bitmap))
+        return Single
+                .fromCallable(() -> {
+                    look.setName(name);
+                    look.setTag(tag);
+                    look.setFullImagePath(helper.createImageFile("look").getAbsolutePath());
+                    look.setIconImagePath(helper.createIconImageFile("look").getAbsolutePath());
+                    return look;
+                })
+                .flatMap(o -> helper.saveImageAndIconObservable(look.getFullImagePath(), look.getIconImagePath(), bitmap))
                 .flatMap(cropImg -> looks.putItem(look));
     }
 
     public Single<HashSet<Long>> startCreation() {
-        return Single.fromCallable(() -> {
-            int size = look.getThingIds().size();
-            boolean isSizeIsValid = size >= AppConstants.MIN_COLLAGE_COUNT && size <= AppConstants.MAX_COLLAGE_COUNT;
-            if (!isSizeIsValid) {
-                throw new LookExeception("validation error, incompatable count of views", size <= AppConstants.MIN_COLLAGE_COUNT);
-            }
-            return look.getThingIds();
-        });
+        return Single
+                .fromCallable(() -> {
+                    int size = look.getThingIds().size();
+                    boolean isSizeIsValid = size >= AppConstants.MIN_COLLAGE_COUNT && size <= AppConstants.MAX_COLLAGE_COUNT;
+                    if (!isSizeIsValid) {
+                        throw new LookExeception("validation error, incompatable count of views", size <= AppConstants.MIN_COLLAGE_COUNT);
+                    }
+                    return look.getThingIds();
+                });
     }
 
     public Single<List<Look>> getLooksByWardrope(long lastId, long wardropeId) {

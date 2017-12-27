@@ -24,14 +24,17 @@ public class WardrobesInteractor {
     }
 
     public Single<DeleteResult> deleteWardropes(Wardrobe model) {
-        return wardrobes.deleteItem(model);
+        return wardrobes
+                .deleteItem(model);
     }
 
     public Single<List<Wardrobe>> getWardrobes(long id) {
-        return wardrobes.query(id);
+        return wardrobes
+                .query(id);
     }
 
     public Single<Wardrobe> getWardrobe(long id) {
-        return wardrobes.getItem(id);
+        return wardrobes
+                .getItem(id);
     }
 }

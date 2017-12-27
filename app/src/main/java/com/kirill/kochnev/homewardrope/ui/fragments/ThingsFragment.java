@@ -91,7 +91,12 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_things, container, false);
+        return inflater.inflate(R.layout.fragment_things, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         adapter = new ThingsAdapter();
         fragmentToolbarDelegate.init(view, mode, ViewMode.THING_MODE, R.string.things_title);
         delegate = new ListDelegate<>(
@@ -109,7 +114,6 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
                 drawer.toggleDrawer();
             }
         });
-        return view;
     }
 
     @Override

@@ -30,7 +30,8 @@ public class ThingsInteractor {
     }
 
     public Single<HashSet<Long>> getWardropeThingIds(long filterId) {
-        return things.getWardropeThingIds(filterId);
+        return things
+                .getWardropeThingIds(filterId);
     }
 
     public Single<List<Thing>> getThingsByWardrope(long lastId, long wardropeId) {

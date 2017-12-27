@@ -61,14 +61,15 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
     @Override
     public void loadMoreData(long lastId) {
         Log.d(TAG, "loadMoreData");
-        interactor
+        disposableDelegate.addToCompositeDisposable(interactor
                 .getWardrobes(lastId)
                 .subscribe(
                         list -> {
                             getViewState().onLoadFinished(list);
                         },
                         e -> Log.e(TAG, e.getMessage())
-                );
+                )
+        );
     }
 
     @Override

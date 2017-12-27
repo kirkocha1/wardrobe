@@ -31,7 +31,8 @@ public class CollageInteractor {
     }
 
     public Single<SparseArray<Bitmap>> getImages(HashSet<Long> thingIds) {
-        return things.query(new ThingsByIdsSpecofication(thingIds))
+        return things
+                .query(new ThingsByIdsSpecofication(thingIds))
                 .map(list -> {
                     SparseArray<Bitmap> imageCache = new SparseArray<>();
                     int i = 0;
