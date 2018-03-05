@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.interactors.CollageInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
@@ -14,6 +13,7 @@ import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
 import java.util.HashSet;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -27,14 +27,14 @@ public class CollagePresenter extends MvpPresenter<ICollageView> {
 
     public static final String TAG = "CollagePresenter";
 
-    @Inject
-    protected CollageInteractor interactor;
-
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
-    public CollagePresenter(HashSet<Long> thingIds) {
-        WardrobeApplication.getComponentHolder().getLookComponent().inject(this);
+    @Inject
+    public CollagePresenter(
+            @Named("ThingIds") HashSet<Long> thingIds,
+            @NonNull final CollageInteractor interactor
+    ) {
         disposableDelegate.addToCompositeDisposable(
                 interactor
                         .getImages(thingIds)

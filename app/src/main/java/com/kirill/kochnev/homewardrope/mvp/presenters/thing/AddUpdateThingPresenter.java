@@ -22,15 +22,24 @@ public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
 
     public static final String TAG = "AddUpdateThingPresenter";
 
-    private AddUpdateThingsInteractor interactor;
+    private @NonNull final AddUpdateThingsInteractor interactor;
+    private long thingId;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     @Inject
-    public AddUpdateThingPresenter(@Named("thingId") long id, AddUpdateThingsInteractor interactor) {
+    AddUpdateThingPresenter(
+            @Named("thingId") long id,
+            @NonNull final AddUpdateThingsInteractor interactor
+    ) {
         this.interactor = interactor;
-        initValues(id);
+        thingId = id;
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        initValues(thingId);
     }
 
     private void initValues(long id) {

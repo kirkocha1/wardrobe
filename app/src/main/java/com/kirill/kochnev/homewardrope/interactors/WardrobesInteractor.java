@@ -1,13 +1,19 @@
 package com.kirill.kochnev.homewardrope.interactors;
 
+import android.support.annotation.NonNull;
+import android.util.Pair;
+
 import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.repositories.WardrobeRepository;
+import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -16,11 +22,13 @@ import io.reactivex.Single;
 
 public class WardrobesInteractor {
 
-    private WardrobeRepository wardrobes;
+    private @NonNull final WardrobeRepository wardrobes;
+    private @NonNull final IdBus bus;
 
     @Inject
-    public WardrobesInteractor(WardrobeRepository wardrobes) {
+    WardrobesInteractor(@NonNull final WardrobeRepository wardrobes, @NonNull final IdBus bus) {
         this.wardrobes = wardrobes;
+        this.bus = bus;
     }
 
     public Single<DeleteResult> deleteWardropes(Wardrobe model) {
@@ -36,5 +44,11 @@ public class WardrobesInteractor {
     public Single<Wardrobe> getWardrobe(long id) {
         return wardrobes
                 .getItem(id);
+    }
+
+    public Completable passClickedWardrobeData(@NonNull final Pair<ViewMode, Long> data) {
+        return Completable.fromAction(() -> {
+            bus.passData(data);
+        });
     }
 }

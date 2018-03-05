@@ -15,7 +15,6 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDe
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardrobeView;
-import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,9 +25,6 @@ import javax.inject.Named;
 @InjectViewState
 public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements IPaginator {
     private static final String TAG = "WardrobesPresenter";
-
-    @NonNull
-    private IdBus bus;
 
     @NonNull
     private WardrobesInteractor interactor;
@@ -45,10 +41,8 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
     @Inject
     public WardrobesPresenter(
             @Named("mode") @NonNull final ViewMode mode,
-            @NonNull final WardrobesInteractor interactor,
-            @NonNull final IdBus bus
+            @NonNull final WardrobesInteractor interactor
     ) {
-        this.bus = bus;
         this.interactor = interactor;
         this.mode = mode;
     }
@@ -91,8 +85,13 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
                 getViewState().navigateToAddUpdateWardropeView(model.getId());
                 break;
             case LOOK_MODE:
-                bus.passData(new Pair<>(ViewMode.WARDROBE_MODE, model.getId()));
-                getViewState().navigateToThingsFilteredByWardrope(model.getId());
+                interactor
+                        .passClickedWardrobeData(new Pair<>(ViewMode.WARDROBE_MODE, model.getId()))
+                        .subscribe(
+                                () -> getViewState().navigateToThingsFilteredByWardrope(model.getId()),
+                                e -> Log.e(TAG, e.getMessage())
+                        );
+
                 break;
         }
     }
