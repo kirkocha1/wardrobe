@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope.interactors;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
@@ -22,11 +23,11 @@ public class AddUpdateThingsInteractor {
     public static final String TAG = "UpdateThingsInteractor";
     private Thing thing = new Thing();
 
-    private ThingRepository things;
-    private ImageHelper helper;
+    private @NonNull final ThingRepository things;
+    private @NonNull final ImageHelper helper;
 
     @Inject
-    public AddUpdateThingsInteractor(ImageHelper helper, ThingRepository things) {
+    AddUpdateThingsInteractor(@NonNull final ImageHelper helper, @NonNull final ThingRepository things) {
         this.things = things;
         this.helper = helper;
     }

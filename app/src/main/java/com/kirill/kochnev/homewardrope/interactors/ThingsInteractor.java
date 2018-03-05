@@ -1,10 +1,16 @@
 package com.kirill.kochnev.homewardrope.interactors;
 
+import android.support.annotation.NonNull;
+import android.util.Pair;
+
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
+import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardrobeSpecification;
 import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
+import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 
 import java.util.HashSet;
@@ -12,6 +18,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 /**
@@ -20,13 +28,22 @@ import io.reactivex.Single;
 
 public class ThingsInteractor {
 
-    private ThingRepository things;
-    private ImageHelper helper;
+    private @NonNull final ThingRepository things;
+    private @NonNull final ImageHelper helper;
+    private @NonNull IdBus idBus;
+    private @NonNull StateBus stateBus;
 
     @Inject
-    public ThingsInteractor(ThingRepository things, ImageHelper helper) {
+    ThingsInteractor(
+            @NonNull ThingRepository things,
+            @NonNull ImageHelper helper,
+            @NonNull IdBus idBus,
+            @NonNull StateBus stateBus
+    ) {
         this.things = things;
         this.helper = helper;
+        this.idBus = idBus;
+        this.stateBus = stateBus;
     }
 
     public Single<HashSet<Long>> getWardropeThingIds(long filterId) {
@@ -41,6 +58,14 @@ public class ThingsInteractor {
             single = things.query(new ThingsByWardrobeSpecification(lastId, wardropeId));
         }
         return single;
+    }
+
+    public Observable<Pair<ViewMode, Boolean>> observeEditableModeChanges() {
+        return stateBus.getBus();
+    }
+
+    public Completable sendThingIdWithMode(ViewMode mode, long thingId) {
+        return Completable.fromAction(() -> idBus.passData(new Pair<>(mode, thingId)));
     }
 
     public Single<Thing> getThing(long id) {

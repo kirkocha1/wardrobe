@@ -2,11 +2,12 @@ package com.kirill.kochnev.homewardrope.di.components;
 
 import com.kirill.kochnev.homewardrope.di.modules.AddUpdateThingModule;
 import com.kirill.kochnev.homewardrope.di.modules.AddUpdateWardrobeModule;
+import com.kirill.kochnev.homewardrope.di.modules.CollageModule;
 import com.kirill.kochnev.homewardrope.di.modules.DbModule;
-import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
 import com.kirill.kochnev.homewardrope.di.modules.ThingsModule;
 import com.kirill.kochnev.homewardrope.di.modules.UtilsModule;
 import com.kirill.kochnev.homewardrope.di.modules.WardropeModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.AddUpdateWardrobePresenter;
@@ -44,6 +45,8 @@ public interface AppComponent {
     AddUpdateWardropeComponent plusAddUpdateWardropeComponent(AddUpdateWardrobeModule module);
 
     AddUpdateThingComponent plusAddUpdateThingComponent(AddUpdateThingModule module);
+
+    CollageComponent plusCollageComponent(CollageModule module);
 
     void inject(AddUpdateWardrobePresenter presenter);
 

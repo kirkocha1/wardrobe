@@ -26,7 +26,7 @@ public class WardrobesInteractor {
     private @NonNull final IdBus bus;
 
     @Inject
-    public WardrobesInteractor(@NonNull final WardrobeRepository wardrobes, @NonNull final IdBus bus) {
+    WardrobesInteractor(@NonNull final WardrobeRepository wardrobes, @NonNull final IdBus bus) {
         this.wardrobes = wardrobes;
         this.bus = bus;
     }

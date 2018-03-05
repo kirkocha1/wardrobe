@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.interactors;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import com.kirill.kochnev.homewardrope.db.models.Thing;
@@ -20,12 +21,11 @@ import io.reactivex.Single;
 
 public class CollageInteractor {
 
-    private ThingRepository things;
-    private ImageHelper helper;
-
+    private @NonNull final ThingRepository things;
+    private @NonNull final ImageHelper helper;
 
     @Inject
-    public CollageInteractor(ThingRepository things, ImageHelper helper) {
+    public CollageInteractor(@NonNull final ThingRepository things, @NonNull final ImageHelper helper) {
         this.things = things;
         this.helper = helper;
     }

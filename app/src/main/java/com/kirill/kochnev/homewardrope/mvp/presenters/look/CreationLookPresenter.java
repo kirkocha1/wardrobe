@@ -12,7 +12,6 @@ import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IFirstStepCreationLookView;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
-import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,19 +27,18 @@ import io.reactivex.schedulers.Schedulers;
 public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookView> {
 
     public static final String TAG = "CreationLook";
-
     private long lookId;
-    private IdBus bus;
-
-    private LooksInteractor interactor;
+    private @NonNull final LooksInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     @Inject
-    public CreationLookPresenter(@Named("lookId") final long id, LooksInteractor interactor, IdBus bus) {
+    CreationLookPresenter(
+            @Named("lookId") final long id,
+            @NonNull final LooksInteractor interactor
+    ) {
         this.interactor = interactor;
-        this.bus = bus;
         this.lookId = id;
     }
 
@@ -60,19 +58,24 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
                                     }
                             )
             );
-
         }
-        disposableDelegate.addToCompositeDisposable(bus.register(idPair -> {
-            switch (idPair.first) {
-                case THING_MODE:
-                    interactor.addThingId(idPair.second);
-                    break;
-                case WARDROBE_MODE:
-                    interactor.addWardropeId(idPair.second);
-                    break;
-            }
-
-        }));
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .observeWardrobeIdOrThingsId()
+                        .subscribe(
+                                idPair -> {
+                                    switch (idPair.first) {
+                                        case THING_MODE:
+                                            interactor.addThingId(idPair.second);
+                                            break;
+                                        case WARDROBE_MODE:
+                                            interactor.addWardropeId(idPair.second);
+                                            break;
+                                    }
+                                },
+                                e -> Log.e(TAG, e.getMessage())
+                        )
+        );
     }
 
     public void clearIds() {

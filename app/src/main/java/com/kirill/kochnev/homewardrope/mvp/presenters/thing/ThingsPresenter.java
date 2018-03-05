@@ -2,7 +2,6 @@ package com.kirill.kochnev.homewardrope.mvp.presenters.thing;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -15,8 +14,6 @@ import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDe
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.ListLoaderDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
-import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
-import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,11 +34,6 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     private long filterId = AppConstants.DEFAULT_ID;
     private boolean isEdit;
     private ViewMode viewMode;
-
-    private @NonNull IdBus idBus;
-
-    private @NonNull StateBus stateBus;
-
     private @NonNull ThingsInteractor interactor;
 
     @NonNull
@@ -54,12 +46,8 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     public ThingsPresenter(@Named("filterId") long filterId,
                            @Named("isEdit") boolean isEdit,
                            @Named("mode") ViewMode mode,
-                           @NonNull IdBus idBus,
-                           @NonNull StateBus stateBus,
                            @NonNull ThingsInteractor interactor
     ) {
-        this.idBus = idBus;
-        this.stateBus = stateBus;
         this.interactor = interactor;
         this.isEdit = isEdit;
         initMode(mode, filterId);
@@ -72,14 +60,20 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
 
     private void initMode(final ViewMode mode, final long wardropeId) {
         viewMode = mode;
-        this.filterId = wardropeId;
+        filterId = wardropeId;
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .observeEditableModeChanges()
+                        .subscribe(
+                                state -> updateModeState(state.second),
+                                e -> Log.e(TAG, e.getMessage())
+                        )
+        );
         getViewState().setEditMode(isEdit);
-        stateBus.register(statePair -> {
-            updateModeState(statePair.second);
-        });
+
     }
 
-    public void updateModeState(final boolean mode) {
+    private void updateModeState(final boolean mode) {
         isEdit = mode;
         getViewState().setEditMode(isEdit);
         if (viewMode != ViewMode.THING_MODE) {
@@ -136,7 +130,15 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
 
     private void resolveClick(final Thing thing) {
         if (viewMode != ViewMode.THING_MODE && isEdit) {
-            idBus.passData(new Pair<>(ViewMode.THING_MODE, thing.getId()));
+            disposableDelegate.addToCompositeDisposable(
+                    interactor
+                            .sendThingIdWithMode(ViewMode.THING_MODE, thing.getId())
+                            .subscribe(
+                                    () -> {
+                                    },
+                                    e -> Log.e(TAG, e.getMessage())
+                            )
+            );
         } else {
             getViewState().navigateToAddUpdateThingView(false, thing.getId());
         }

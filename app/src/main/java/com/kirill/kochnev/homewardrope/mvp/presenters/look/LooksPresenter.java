@@ -2,7 +2,6 @@ package com.kirill.kochnev.homewardrope.mvp.presenters.look;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -40,17 +39,9 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     private long filterId;
 
     @NonNull
-    private IdBus idBus;
-
-    @NonNull
-    private StateBus stateBus;
-
-    @NonNull
     private LooksInteractor interactor;
-
     @NonNull
     private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
-
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
@@ -63,8 +54,6 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
             @NonNull StateBus stateBus,
             @NonNull LooksInteractor interactor
     ) {
-        this.idBus = idBus;
-        this.stateBus = stateBus;
         this.interactor = interactor;
         this.isEdit = isEdit;
         initMode(mode, filterId);
@@ -79,9 +68,14 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
         this.viewMode = mode;
         this.filterId = wardropeId;
         getViewState().setEditMode(isEdit);
-        stateBus.register(statePair -> {
-            updateModeState(statePair.second);
-        });
+        disposableDelegate.addToCompositeDisposable(
+                interactor
+                        .observeEditableModeChanges()
+                        .subscribe(
+                                state -> updateModeState(state.second),
+                                e -> Log.e(TAG, e.getMessage())
+                        )
+        );
     }
 
     private void updateModeState(boolean mode) {
@@ -146,7 +140,16 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     @Override
     public void onItemClick(IDbModel model) {
         if (viewMode != ViewMode.LOOK_MODE && isEdit) {
-            idBus.passData(new Pair<>(ViewMode.LOOK_MODE, model.getId()));
+            disposableDelegate.addToCompositeDisposable(
+                    interactor
+                            .sendLookIdWithMode(ViewMode.LOOK_MODE, model.getId())
+                            .subscribe(
+                                    () -> {
+                                    },
+                                    e -> Log.e(TAG, e.getMessage())
+                            )
+            );
+
         } else {
             getViewState().navigateToUpdateLookView(model.getId());
         }

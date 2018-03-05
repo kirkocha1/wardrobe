@@ -13,8 +13,6 @@ import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardrobeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
 import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardrobeView;
-import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
-import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 
 import java.util.HashSet;
 
@@ -33,11 +31,7 @@ public class AddUpdateWardrobePresenter extends MvpPresenter<IAddUpdateWardrobeV
 
     public static final String TAG = "AddUpdateWardrope";
 
-    private IdBus idBus;
-
-    private StateBus stateBus;
-
-    private AddUpdateWardrobeInteractor interactor;
+    private @NonNull final AddUpdateWardrobeInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
@@ -49,13 +43,9 @@ public class AddUpdateWardrobePresenter extends MvpPresenter<IAddUpdateWardrobeV
     @Inject
     public AddUpdateWardrobePresenter(
             @Named("wardrobeId") long id,
-            AddUpdateWardrobeInteractor interactor,
-            StateBus stateBus,
-            IdBus idBus
+            @NonNull final AddUpdateWardrobeInteractor interactor
     ) {
         this.interactor = interactor;
-        this.idBus = idBus;
-        this.stateBus = stateBus;
         initWardrope(id);
     }
 
@@ -79,17 +69,22 @@ public class AddUpdateWardrobePresenter extends MvpPresenter<IAddUpdateWardrobeV
 
     private void registerForThingIds() {
         disposableDelegate.addToCompositeDisposable(
-                idBus.register(pairId -> {
-                    switch (pairId.first) {
-                        case LOOK_MODE:
-                            updateSet(pairId.second, looksSet);
-                            break;
-                        case THING_MODE:
-                            updateSet(pairId.second, thingsSet);
-                            break;
-                    }
-                    getViewState().setCount(thingsSet.size(), looksSet.size());
-                })
+                interactor
+                        .observeThingIds()
+                        .subscribe(
+                                pairId -> {
+                                    switch (pairId.first) {
+                                        case LOOK_MODE:
+                                            updateSet(pairId.second, looksSet);
+                                            break;
+                                        case THING_MODE:
+                                            updateSet(pairId.second, thingsSet);
+                                            break;
+                                    }
+                                    getViewState().setCount(thingsSet.size(), looksSet.size());
+                                },
+                                e -> Log.e(TAG, e.getMessage())
+                        )
         );
     }
 
@@ -106,8 +101,13 @@ public class AddUpdateWardrobePresenter extends MvpPresenter<IAddUpdateWardrobeV
         if (!isEditableMode) {
             returnInitialState();
         }
-        stateBus.passData(new Pair<>(ViewMode.WARDROBE_MODE, isEditableMode));
-        getViewState().changeBtnsMode(isEditableMode);
+        interactor
+                .changeEditableMode(new Pair<>(ViewMode.WARDROBE_MODE, isEditableMode))
+                .subscribe(
+                        () -> getViewState().changeBtnsMode(isEditableMode),
+                        e -> Log.e(TAG, e.getMessage())
+                );
+
     }
 
     private void returnInitialState() {

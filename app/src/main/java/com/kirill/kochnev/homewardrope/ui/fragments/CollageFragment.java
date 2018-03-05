@@ -13,6 +13,8 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.kirill.kochnev.homewardrope.R;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
+import com.kirill.kochnev.homewardrope.di.components.CollageComponent;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.CollagePresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.ICollageView;
@@ -39,7 +41,10 @@ public class CollageFragment extends MvpAppCompatFragment implements ICollageVie
 
     @ProvidePresenter
     CollagePresenter providePresenter() {
-        return new CollagePresenter((HashSet<Long>) getArguments().getSerializable(THINGS_SET));
+        CollageComponent component = WardrobeApplication
+                .getComponentHolder()
+                .getCreateCollageComponent((HashSet<Long>) getArguments().getSerializable(THINGS_SET));
+        return component.providePresenter();
     }
 
     public static CollageFragment createInstance(@NonNull final HashSet<Long> thingsId) {
@@ -62,5 +67,11 @@ public class CollageFragment extends MvpAppCompatFragment implements ICollageVie
     @Override
     public void constructView(@NonNull final SparseArray<Bitmap> cache, @NonNull final CollageMode mode) {
         container.inflateItems(mode, cache);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        WardrobeApplication.getComponentHolder().clearCollageComponent();
     }
 }

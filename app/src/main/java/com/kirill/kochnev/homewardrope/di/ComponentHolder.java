@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.kirill.kochnev.homewardrope.di.components.AddUpdateThingComponent;
 import com.kirill.kochnev.homewardrope.di.components.AddUpdateWardropeComponent;
 import com.kirill.kochnev.homewardrope.di.components.AppComponent;
+import com.kirill.kochnev.homewardrope.di.components.CollageComponent;
 import com.kirill.kochnev.homewardrope.di.components.CreateLookComponent;
 import com.kirill.kochnev.homewardrope.di.components.DaggerAppComponent;
 import com.kirill.kochnev.homewardrope.di.components.LookComponent;
@@ -14,13 +15,16 @@ import com.kirill.kochnev.homewardrope.di.components.UpdateLookComponent;
 import com.kirill.kochnev.homewardrope.di.components.WardrobeListComponent;
 import com.kirill.kochnev.homewardrope.di.modules.AddUpdateThingModule;
 import com.kirill.kochnev.homewardrope.di.modules.AddUpdateWardrobeModule;
-import com.kirill.kochnev.homewardrope.di.modules.look.CreateLookModule;
+import com.kirill.kochnev.homewardrope.di.modules.CollageModule;
 import com.kirill.kochnev.homewardrope.di.modules.DbModule;
-import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
 import com.kirill.kochnev.homewardrope.di.modules.ThingsModule;
-import com.kirill.kochnev.homewardrope.di.modules.look.UpdateLookModule;
 import com.kirill.kochnev.homewardrope.di.modules.WardropeModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.CreateLookModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
+import com.kirill.kochnev.homewardrope.di.modules.look.UpdateLookModule;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
+
+import java.util.HashSet;
 
 public class ComponentHolder {
 
@@ -28,7 +32,7 @@ public class ComponentHolder {
     private LookComponent lookComponent;
     private UpdateLookComponent updateLookComponent;
     private CreateLookComponent createLookComponent;
-
+    private CollageComponent collageComponent;
     private WardrobeListComponent wardrobeListComponent;
     private ThingListComponent thingListComponent;
     private AddUpdateThingComponent addUpdateThingComponent;
@@ -107,6 +111,18 @@ public class ComponentHolder {
             createLookComponent = lookComponent.plusCreateLookComponent(new CreateLookModule(lookId));
         }
         return createLookComponent;
+    }
+
+    @NonNull
+    public CollageComponent getCreateCollageComponent(@NonNull final HashSet<Long> thingIds) {
+        if (collageComponent == null) {
+            collageComponent = mainComponent.plusCollageComponent(new CollageModule(thingIds));
+        }
+        return collageComponent;
+    }
+
+    public void clearCollageComponent() {
+        collageComponent = null;
     }
 
     public void clearAddUpdateThingComponent() {

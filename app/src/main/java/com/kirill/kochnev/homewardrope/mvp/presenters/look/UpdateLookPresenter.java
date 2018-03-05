@@ -27,13 +27,16 @@ public class UpdateLookPresenter extends MvpPresenter<IUpdateLook> {
     public static final String TAG = "UpdateLookPresenter";
 
     private final long lookId;
-    private final LooksInteractor interactor;
+    private @NonNull final LooksInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     @Inject
-    public UpdateLookPresenter(@Named("lookId") long lookId, LooksInteractor interactor) {
+    UpdateLookPresenter(
+            @Named("lookId") long lookId,
+            @NonNull final LooksInteractor interactor
+    ) {
         this.interactor = interactor;
         this.lookId = lookId;
     }
