@@ -80,12 +80,12 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
             if (isEdit) {
                 disposableDelegate.addToCompositeDisposable(
                         interactor
-                                .getWardropeThingIds(filterId)
+                                .getWardrobeThingIds(filterId)
                                 .subscribe(set -> getViewState().addThingIdsToAdapter(set))
                 );
                 disposableDelegate.addToCompositeDisposable(
                         listDelegate.getListDisposable(
-                                interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
+                                interactor.getThingsByWardrobe(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
                 );
             } else {
                 loadMoreData(AppConstants.DEFAULT_ID);
@@ -99,7 +99,7 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
                         interactor
-                                .getThingsByWardrope(
+                                .getThingsByWardrobe(
                                         lastId, viewMode == ViewMode.WARDROBE_MODE && isEdit ?
                                                 AppConstants.DEFAULT_ID : filterId
                                 ),
@@ -145,7 +145,7 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     }
 
     @Override
-    public void addOrUpdateListItem(final long id) {
+    public void putListItem(final long id) {
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
                         interactor.getThing(id),

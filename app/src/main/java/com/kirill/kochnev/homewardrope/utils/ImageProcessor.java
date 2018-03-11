@@ -25,11 +25,11 @@ import static com.kirill.kochnev.homewardrope.AppConstants.REQ_WIDTH;
  * Created by kirill on 28.04.17.
  */
 
-public class ImageHelper {
+public class ImageProcessor {
 
     private Context context;
 
-    public ImageHelper(Context context) {
+    public ImageProcessor(Context context) {
         this.context = context;
     }
 

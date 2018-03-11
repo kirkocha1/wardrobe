@@ -69,7 +69,7 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
                                             interactor.addThingId(idPair.second);
                                             break;
                                         case WARDROBE_MODE:
-                                            interactor.addWardropeId(idPair.second);
+                                            interactor.addWardrobeId(idPair.second);
                                             break;
                                     }
                                 },
@@ -85,7 +85,7 @@ public class CreationLookPresenter extends MvpPresenter<IFirstStepCreationLookVi
     public void clearIds(boolean isThings) {
         interactor.clear();
         if (isThings) {
-            interactor.addWardropeId(null);
+            interactor.addWardrobeId(null);
         }
     }
 

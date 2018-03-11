@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.kirill.kochnev.homewardrope.db.RepoResult;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
-import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.kirill.kochnev.homewardrope.utils.ImageProcessor;
 
 import java.io.File;
 
@@ -19,15 +19,16 @@ import io.reactivex.Single;
  * Created by kirill on 11.05.17.
  */
 
-public class AddUpdateThingsInteractor {
+public class PutThingsInteractor {
     public static final String TAG = "UpdateThingsInteractor";
+
     private Thing thing = new Thing();
 
     private @NonNull final ThingRepository things;
-    private @NonNull final ImageHelper helper;
+    private @NonNull final ImageProcessor helper;
 
     @Inject
-    AddUpdateThingsInteractor(@NonNull final ImageHelper helper, @NonNull final ThingRepository things) {
+    PutThingsInteractor(@NonNull final ImageProcessor helper, @NonNull final ThingRepository things) {
         this.things = things;
         this.helper = helper;
     }

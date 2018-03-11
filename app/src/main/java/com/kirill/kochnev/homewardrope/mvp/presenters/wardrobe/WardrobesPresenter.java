@@ -97,7 +97,7 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
     }
 
     @Override
-    public void addOrUpdateListItem(final long id) {
+    public void putListItem(final long id) {
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
                         interactor.getWardrobe(id),

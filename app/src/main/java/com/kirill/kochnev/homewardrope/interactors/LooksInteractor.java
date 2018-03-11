@@ -10,7 +10,7 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.repositories.LookRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.LooksByWardrobeSpecification;
-import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.kirill.kochnev.homewardrope.utils.ImageProcessor;
 import com.kirill.kochnev.homewardrope.utils.LookExeception;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
@@ -33,7 +33,7 @@ import io.reactivex.Single;
 public class LooksInteractor {
 
     private @NonNull final LookRepository looks;
-    private @NonNull final ImageHelper helper;
+    private @NonNull final ImageProcessor helper;
     private @NonNull IdBus idBus;
     private @NonNull StateBus stateBus;
 
@@ -42,7 +42,7 @@ public class LooksInteractor {
     @Inject
     LooksInteractor(
             @NonNull LookRepository looks,
-            @NonNull ImageHelper helper,
+            @NonNull ImageProcessor helper,
             @NonNull IdBus idBus,
             @NonNull StateBus stateBus
     ) {
@@ -54,9 +54,7 @@ public class LooksInteractor {
 
     public Single<DeleteResult> deleteLook(Look model) {
         helper.deleteImage(model.getFullImagePath(), model.getIconImagePath());
-        return looks
-                .deleteItem(model);
-
+        return looks.deleteItem(model);
     }
 
     public Single<Look> getLook(long id) {
@@ -136,8 +134,8 @@ public class LooksInteractor {
         return Completable.fromAction(() -> idBus.passData(new Pair<>(mode, lookId)));
     }
 
-    public void addWardropeId(Long id) {
-        look.setWardropeId(id);
+    public void addWardrobeId(Long id) {
+        look.setWardrobeId(id);
     }
 
     public void initializeLook() {

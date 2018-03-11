@@ -10,5 +10,5 @@ public interface IPaginator {
 
     void onItemClick(final IDbModel model);
 
-    void addOrUpdateListItem(final long id);
+    void putListItem(final long id);
 }

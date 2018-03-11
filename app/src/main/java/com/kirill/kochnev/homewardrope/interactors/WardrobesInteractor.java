@@ -47,8 +47,6 @@ public class WardrobesInteractor {
     }
 
     public Completable passClickedWardrobeData(@NonNull final Pair<ViewMode, Long> data) {
-        return Completable.fromAction(() -> {
-            bus.passData(data);
-        });
+        return Completable.fromAction(() -> bus.passData(data));
     }
 }

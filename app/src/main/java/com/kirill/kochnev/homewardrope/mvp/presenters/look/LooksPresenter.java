@@ -102,7 +102,7 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     private void setIds(List<Look> list) {
         HashSet<Long> ids = new HashSet<>();
         for (Look look : list) {
-            if (look.getWardropeId() != null && look.getWardropeId() == filterId) {
+            if (look.getWardrobeId() != null && look.getWardrobeId() == filterId) {
                 ids.add(look.getId());
             }
         }
@@ -157,7 +157,7 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     }
 
     @Override
-    public void addOrUpdateListItem(long id) {
+    public void putListItem(long id) {
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(interactor.getLook(id),
                         item -> getViewState().invalidateListItem(item),

@@ -31,7 +31,7 @@ import io.reactivex.Single;
 public class WardrobeRepository extends AbstractRepository<Wardrobe> {
 
     @Inject
-    public WardrobeRepository(StorIOSQLite storIOSQLite) {
+    WardrobeRepository(StorIOSQLite storIOSQLite) {
         super(storIOSQLite);
     }
 
@@ -81,7 +81,7 @@ public class WardrobeRepository extends AbstractRepository<Wardrobe> {
         return resultSingle.map(result -> new RepoResult(result.wasInserted() ? result.insertedId() : wardrobe.getId(), result.wasInserted()));
     }
 
-    //Get wardrobe and fill it with isd of things and looks
+    //Get wardrobe and fill it with ids of things and looks
     @Override
     public Single<Wardrobe> getItem(long id) {
         return super.getItem(id).map(wardrobe -> {

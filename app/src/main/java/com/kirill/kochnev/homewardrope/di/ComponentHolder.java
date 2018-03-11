@@ -3,13 +3,13 @@ package com.kirill.kochnev.homewardrope.di;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.kirill.kochnev.homewardrope.di.components.AddUpdateThingComponent;
-import com.kirill.kochnev.homewardrope.di.components.AddUpdateWardropeComponent;
 import com.kirill.kochnev.homewardrope.di.components.AppComponent;
 import com.kirill.kochnev.homewardrope.di.components.CollageComponent;
 import com.kirill.kochnev.homewardrope.di.components.CreateLookComponent;
 import com.kirill.kochnev.homewardrope.di.components.DaggerAppComponent;
 import com.kirill.kochnev.homewardrope.di.components.LookComponent;
+import com.kirill.kochnev.homewardrope.di.components.PutThingComponent;
+import com.kirill.kochnev.homewardrope.di.components.PutWardrobeComponent;
 import com.kirill.kochnev.homewardrope.di.components.ThingListComponent;
 import com.kirill.kochnev.homewardrope.di.components.UpdateLookComponent;
 import com.kirill.kochnev.homewardrope.di.components.WardrobeListComponent;
@@ -35,8 +35,8 @@ public class ComponentHolder {
     private CollageComponent collageComponent;
     private WardrobeListComponent wardrobeListComponent;
     private ThingListComponent thingListComponent;
-    private AddUpdateThingComponent addUpdateThingComponent;
-    private AddUpdateWardropeComponent addUpdateWardropeComponent;
+    private PutThingComponent putThingComponent;
+    private PutWardrobeComponent putWardrobeComponent;
 
     public ComponentHolder(Context context) {
         mainComponent = DaggerAppComponent.builder().dbModule(new DbModule(context)).build();
@@ -81,20 +81,20 @@ public class ComponentHolder {
     }
 
     @NonNull
-    public AddUpdateWardropeComponent getAddUpdateWardrobeComponent(final long wardrobeId) {
-        if (addUpdateWardropeComponent == null) {
-            addUpdateWardropeComponent = mainComponent.plusAddUpdateWardropeComponent(new AddUpdateWardrobeModule(wardrobeId));
+    public PutWardrobeComponent getAddUpdateWardrobeComponent(final long wardrobeId) {
+        if (putWardrobeComponent == null) {
+            putWardrobeComponent = mainComponent.plusAddUpdateWardropeComponent(new AddUpdateWardrobeModule(wardrobeId));
         }
-        return addUpdateWardropeComponent;
+        return putWardrobeComponent;
     }
 
 
     @NonNull
-    public AddUpdateThingComponent getAddUpdateThingComponent(final long thingId) {
-        if (addUpdateThingComponent == null) {
-            addUpdateThingComponent = mainComponent.plusAddUpdateThingComponent(new AddUpdateThingModule(thingId));
+    public PutThingComponent getAddUpdateThingComponent(final long thingId) {
+        if (putThingComponent == null) {
+            putThingComponent = mainComponent.plusAddUpdateThingComponent(new AddUpdateThingModule(thingId));
         }
-        return addUpdateThingComponent;
+        return putThingComponent;
     }
 
     @NonNull
@@ -126,11 +126,11 @@ public class ComponentHolder {
     }
 
     public void clearAddUpdateThingComponent() {
-        addUpdateThingComponent = null;
+        putThingComponent = null;
     }
 
     public void clearAddUpdateWardrobeComponent() {
-        addUpdateWardropeComponent = null;
+        putWardrobeComponent = null;
     }
 
     public void clearThingListComponent() {

@@ -15,9 +15,9 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
-import com.kirill.kochnev.homewardrope.di.components.AddUpdateWardropeComponent;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.AddUpdateWardrobePresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardrobeView;
+import com.kirill.kochnev.homewardrope.di.components.PutWardrobeComponent;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.PutWardrobePresenter;
+import com.kirill.kochnev.homewardrope.mvp.views.IPutWardrobeView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardrobePagerAdapter;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by kirill on 30.03.17.
  */
 
-public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements IAddUpdateWardrobeView {
+public class PutWardrobeActivity extends MvpAppCompatActivity implements IPutWardrobeView {
 
     public static final String WARDROPE_ID = "wardrope_id";
 
@@ -52,14 +52,14 @@ public class AddUpdateWardrobeActivity extends MvpAppCompatActivity implements I
     TextView looksCount;
 
     @InjectPresenter
-    AddUpdateWardrobePresenter presenter;
+    PutWardrobePresenter presenter;
 
     private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @ProvidePresenter
-    AddUpdateWardrobePresenter providePresenter() {
+    PutWardrobePresenter providePresenter() {
         final long wardropeId = getIntent().getLongExtra(WARDROPE_ID, AppConstants.DEFAULT_ID);
-        final AddUpdateWardropeComponent component = WardrobeApplication.getComponentHolder().getAddUpdateWardrobeComponent(wardropeId);
+        final PutWardrobeComponent component = WardrobeApplication.getComponentHolder().getAddUpdateWardrobeComponent(wardropeId);
         return component.providePresenter();
     }
 

@@ -17,9 +17,9 @@ import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.R;
 import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
-import com.kirill.kochnev.homewardrope.di.components.AddUpdateThingComponent;
-import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
-import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.di.components.PutThingComponent;
+import com.kirill.kochnev.homewardrope.mvp.presenters.thing.PutThingPresenter;
+import com.kirill.kochnev.homewardrope.mvp.views.IPutThingView;
 import com.kirill.kochnev.homewardrope.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 
 import static com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter.THINGS_ID;
 
-public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAddUpdateThingView {
+public class PutThingActivity extends MvpAppCompatActivity implements IPutThingView {
 
     private static final int REQUEST_TAKE_PHOTO = 2;
     public static final String IS_EDIT = "is_edit";
@@ -52,11 +52,11 @@ public class AddUpdateThingActivity extends MvpAppCompatActivity implements IAdd
     FloatingActionButton edit;
 
     @InjectPresenter
-    AddUpdateThingPresenter presenter;
+    PutThingPresenter presenter;
 
     @ProvidePresenter
-    AddUpdateThingPresenter providePresenter() {
-        final AddUpdateThingComponent component = WardrobeApplication.getComponentHolder()
+    PutThingPresenter providePresenter() {
+        final PutThingComponent component = WardrobeApplication.getComponentHolder()
                 .getAddUpdateThingComponent(getIntent().getLongExtra(THINGS_ID, AppConstants.DEFAULT_ID));
         return component.providePresenter();
     }

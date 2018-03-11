@@ -10,9 +10,9 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
 import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
-import com.kirill.kochnev.homewardrope.interactors.AddUpdateWardrobeInteractor;
+import com.kirill.kochnev.homewardrope.interactors.PutWardrobeInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
-import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateWardrobeView;
+import com.kirill.kochnev.homewardrope.mvp.views.IPutWardrobeView;
 
 import java.util.HashSet;
 
@@ -27,11 +27,11 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class AddUpdateWardrobePresenter extends MvpPresenter<IAddUpdateWardrobeView> {
+public class PutWardrobePresenter extends MvpPresenter<IPutWardrobeView> {
 
     public static final String TAG = "AddUpdateWardrope";
 
-    private @NonNull final AddUpdateWardrobeInteractor interactor;
+    private @NonNull final PutWardrobeInteractor interactor;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
@@ -41,9 +41,9 @@ public class AddUpdateWardrobePresenter extends MvpPresenter<IAddUpdateWardrobeV
     private boolean isEditableMode = false;
 
     @Inject
-    public AddUpdateWardrobePresenter(
+    public PutWardrobePresenter(
             @Named("wardrobeId") long id,
-            @NonNull final AddUpdateWardrobeInteractor interactor
+            @NonNull final PutWardrobeInteractor interactor
     ) {
         this.interactor = interactor;
         initWardrope(id);

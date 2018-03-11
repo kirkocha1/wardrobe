@@ -3,6 +3,7 @@ package com.kirill.kochnev.homewardrope.mvp.presenters.base;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.mvp.views.base.IPaginationView;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class ListLoaderDelegate {
                 .subscribe(onSuccess, onError);
     }
 
-    public <T> Disposable getListDisposable(Single<List<T>> observable) {
+    public <T extends IDbModel> Disposable getListDisposable(Single<List<T>> observable) {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
