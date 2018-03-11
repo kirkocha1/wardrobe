@@ -37,18 +37,18 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
 
     private Context context;
 
-    private LinearLayoutManager layoutManager;
+    private @NonNull LinearLayoutManager layoutManager;
     private boolean isLoading = false;
     private boolean isAllLoaded = false;
-    private BaseDbAdapter<M, H> adapter;
-    private IPaginator paginator;
-    private ViewMode mode;
-    private ViewMode mainState;
+    private @NonNull BaseDbAdapter<M, H> adapter;
+    private @NonNull IPaginator<M> paginator;
+    private @NonNull ViewMode mode;
+    private @NonNull ViewMode mainState;
 
     public ListDelegate(
             @NonNull final View view,
             @NonNull final BaseDbAdapter<M, H> adapter,
-            @NonNull final IPaginator paginator,
+            @NonNull final IPaginator<M> paginator,
             @NonNull final ViewMode mode,
             @NonNull final ViewMode mainState,
             @NonNull final View.OnClickListener addButtonListener
@@ -59,7 +59,7 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
     public ListDelegate(
             @NonNull final View view,
             @NonNull final BaseDbAdapter<M, H> adapter,
-            @NonNull final IPaginator paginator,
+            @NonNull final IPaginator<M> paginator,
             @NonNull final ViewMode mode,
             @NonNull final ViewMode mainState,
             @NonNull final LinearLayoutManager layoutManager,
@@ -83,7 +83,7 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
     }
 
     private void adjustList() {
-        adapter.setClickListner(this);
+        adapter.setClickListener(this);
         list.setLayoutManager(layoutManager);
         list.setAdapter(adapter);
         list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -116,10 +116,6 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
             }
         });
 
-    }
-
-    public void setLayoutManager(LinearLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -158,12 +154,9 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
     }
 
     public void deleteListItem(M model) {
-        if (adapter != null) {
-            adapter.onRemoveItem(model);
-            if (adapter.getItemCount() == 0) {
-                blankImg.setVisibility(View.VISIBLE);
-            }
+        adapter.onRemoveItem(model);
+        if (adapter.getItemCount() == 0) {
+            blankImg.setVisibility(View.VISIBLE);
         }
     }
-
 }

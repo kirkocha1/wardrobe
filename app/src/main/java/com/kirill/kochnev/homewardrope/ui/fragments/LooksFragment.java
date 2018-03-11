@@ -34,7 +34,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
-import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity.WARDROPE_ID;
+import static com.kirill.kochnev.homewardrope.ui.activities.PutWardrobeActivity.WARDROPE_ID;
 
 /**
  * Created by kirill on 21.04.17.
@@ -115,7 +115,7 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
-            presenter.addOrUpdateListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
+            presenter.putListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
         }
     }
 

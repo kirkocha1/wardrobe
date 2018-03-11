@@ -18,7 +18,7 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
 
     private OnClick<M> clickListner;
 
-    public void setClickListner(OnClick<M> clickListner) {
+    public void setClickListener(OnClick<M> clickListner) {
         this.clickListner = clickListner;
     }
 

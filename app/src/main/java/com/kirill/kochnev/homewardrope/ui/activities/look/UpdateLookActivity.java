@@ -110,8 +110,8 @@ public class UpdateLookActivity extends MvpAppCompatActivity implements IUpdateL
     @Override
     public void goToUpdateLookScreen(Look look) {
         startActivityForResult(CreationLookActivity
-                        .createIntent(this, look.getId(), look.getWardropeId() == null ?
-                                AppConstants.DEFAULT_ID : look.getWardropeId()),
+                        .createIntent(this, look.getId(), look.getWardrobeId() == null ?
+                                AppConstants.DEFAULT_ID : look.getWardrobeId()),
                 UPDATE_LOOK_CODE
         );
     }

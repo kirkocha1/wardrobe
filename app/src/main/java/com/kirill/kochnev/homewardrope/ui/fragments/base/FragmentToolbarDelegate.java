@@ -24,7 +24,12 @@ public class FragmentToolbarDelegate {
     @BindView(R.id.menu_btn)
     protected ImageView menuBtn;
 
-    public void init(@NonNull View view, @NonNull ViewMode mode, @NonNull ViewMode mainMode, @StringRes int titleRes) {
+    public void init(
+            @NonNull View view,
+            @NonNull ViewMode mode,
+            @NonNull ViewMode mainMode,
+            @StringRes int titleRes
+    ) {
         ButterKnife.bind(this, view);
         if (mode == mainMode) {
             title.setText(titleRes);

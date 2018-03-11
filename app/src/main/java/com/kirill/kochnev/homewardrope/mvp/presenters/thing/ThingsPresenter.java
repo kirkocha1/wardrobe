@@ -6,7 +6,6 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
@@ -26,7 +25,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPaginator {
+public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPaginator<Thing> {
 
     public static final String TAG = "ThingsPresenter";
     public static final String THINGS_ID = "things_id";
@@ -80,12 +79,12 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
             if (isEdit) {
                 disposableDelegate.addToCompositeDisposable(
                         interactor
-                                .getWardropeThingIds(filterId)
+                                .getWardrobeThingIds(filterId)
                                 .subscribe(set -> getViewState().addThingIdsToAdapter(set))
                 );
                 disposableDelegate.addToCompositeDisposable(
                         listDelegate.getListDisposable(
-                                interactor.getThingsByWardrope(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
+                                interactor.getThingsByWardrobe(AppConstants.DEFAULT_ID, AppConstants.DEFAULT_ID))
                 );
             } else {
                 loadMoreData(AppConstants.DEFAULT_ID);
@@ -99,7 +98,7 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
                         interactor
-                                .getThingsByWardrope(
+                                .getThingsByWardrobe(
                                         lastId, viewMode == ViewMode.WARDROBE_MODE && isEdit ?
                                                 AppConstants.DEFAULT_ID : filterId
                                 ),
@@ -110,23 +109,22 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     }
 
     @Override
-    public void onLongItemClick(final IDbModel model) {
+    public void onLongItemClick(Thing model) {
         if (viewMode == ViewMode.THING_MODE) {
             disposableDelegate.addToCompositeDisposable(
                     interactor
-                            .deleteThings((Thing) model)
+                            .deleteThings(model)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(result -> getViewState().deleteListItem((Thing) model))
+                            .subscribe(result -> getViewState().deleteListItem(model))
             );
         }
     }
 
     @Override
-    public void onItemClick(final IDbModel model) {
-        resolveClick((Thing) model);
+    public void onItemClick(Thing model) {
+        resolveClick(model);
     }
-
 
     private void resolveClick(final Thing thing) {
         if (viewMode != ViewMode.THING_MODE && isEdit) {
@@ -145,7 +143,7 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     }
 
     @Override
-    public void addOrUpdateListItem(final long id) {
+    public void putListItem(final long id) {
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
                         interactor.getThing(id),

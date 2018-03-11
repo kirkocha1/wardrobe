@@ -55,7 +55,6 @@ public class CollageFragment extends MvpAppCompatFragment implements ICollageVie
         return fragment;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

@@ -42,7 +42,7 @@ public class Look extends BitmapModel implements IDbModel {
     String iconImagePath;
 
     @StorIOSQLiteColumn(name = LOOK_WARDROBE_ID)
-    Long wardropeId;
+    Long wardrobeId;
 
 
     private HashSet<Long> thingIds;
@@ -120,12 +120,12 @@ public class Look extends BitmapModel implements IDbModel {
         ((LookHolder) holder).item.setImage(iconImagePath);
     }
 
-    public Long getWardropeId() {
-        return wardropeId;
+    public Long getWardrobeId() {
+        return wardrobeId;
     }
 
-    public void setWardropeId(Long wardropeId) {
-        this.wardropeId = wardropeId;
+    public void setWardrobeId(Long wardrobeId) {
+        this.wardrobeId = wardrobeId;
     }
 
 }

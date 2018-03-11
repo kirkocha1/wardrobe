@@ -9,7 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 
-public interface IAddUpdateThingView extends MvpView {
+public interface IPutThingView extends MvpView {
 
     void setImage(Bitmap bitmap);
 

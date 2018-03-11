@@ -23,7 +23,7 @@ import javax.inject.Named;
  * Created by kirill on 30.03.17.
  */
 @InjectViewState
-public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements IPaginator {
+public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements IPaginator<Wardrobe> {
     private static final String TAG = "WardrobesPresenter";
 
     @NonNull
@@ -39,7 +39,7 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     @Inject
-    public WardrobesPresenter(
+    WardrobesPresenter(
             @Named("mode") @NonNull final ViewMode mode,
             @NonNull final WardrobesInteractor interactor
     ) {
@@ -67,7 +67,7 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
     }
 
     @Override
-    public void onLongItemClick(IDbModel model) {
+    public void onLongItemClick(Wardrobe model) {
         if (mode == ViewMode.WARDROBE_MODE) {
             disposableDelegate.addToCompositeDisposable(
                     listDelegate.getDisposable(
@@ -77,6 +77,11 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
                     )
             );
         }
+    }
+
+    @Override
+    public void onItemClick(Wardrobe model) {
+        resolveClick(model);
     }
 
     private void resolveClick(IDbModel model) {
@@ -97,7 +102,7 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
     }
 
     @Override
-    public void addOrUpdateListItem(final long id) {
+    public void putListItem(final long id) {
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(
                         interactor.getWardrobe(id),
@@ -105,11 +110,6 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
                         e -> Log.e(TAG, e.getMessage())
                 )
         );
-    }
-
-    @Override
-    public void onItemClick(IDbModel model) {
-        resolveClick(model);
     }
 
     @Override

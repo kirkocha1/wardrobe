@@ -8,7 +8,7 @@ import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByWardrobeSpecification;
-import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.kirill.kochnev.homewardrope.utils.ImageProcessor;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.kirill.kochnev.homewardrope.utils.bus.StateBus;
 import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
@@ -29,14 +29,14 @@ import io.reactivex.Single;
 public class ThingsInteractor {
 
     private @NonNull final ThingRepository things;
-    private @NonNull final ImageHelper helper;
+    private @NonNull final ImageProcessor helper;
     private @NonNull IdBus idBus;
     private @NonNull StateBus stateBus;
 
     @Inject
     ThingsInteractor(
             @NonNull ThingRepository things,
-            @NonNull ImageHelper helper,
+            @NonNull ImageProcessor helper,
             @NonNull IdBus idBus,
             @NonNull StateBus stateBus
     ) {
@@ -46,16 +46,16 @@ public class ThingsInteractor {
         this.stateBus = stateBus;
     }
 
-    public Single<HashSet<Long>> getWardropeThingIds(long filterId) {
+    public Single<HashSet<Long>> getWardrobeThingIds(long filterId) {
         return things
                 .getWardropeThingIds(filterId);
     }
 
-    public Single<List<Thing>> getThingsByWardrope(long lastId, long wardropeId) {
+    public Single<List<Thing>> getThingsByWardrobe(long lastId, long wardrobeId) {
         Single<List<Thing>> single;
         single = things.query(lastId);
-        if (wardropeId != AppConstants.DEFAULT_ID) {
-            single = things.query(new ThingsByWardrobeSpecification(lastId, wardropeId));
+        if (wardrobeId != AppConstants.DEFAULT_ID) {
+            single = things.query(new ThingsByWardrobeSpecification(lastId, wardrobeId));
         }
         return single;
     }

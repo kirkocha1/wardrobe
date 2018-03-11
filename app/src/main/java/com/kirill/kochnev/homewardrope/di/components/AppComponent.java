@@ -8,13 +8,13 @@ import com.kirill.kochnev.homewardrope.di.modules.ThingsModule;
 import com.kirill.kochnev.homewardrope.di.modules.UtilsModule;
 import com.kirill.kochnev.homewardrope.di.modules.WardropeModule;
 import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
-import com.kirill.kochnev.homewardrope.mvp.presenters.thing.AddUpdateThingPresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.thing.PutThingPresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.AddUpdateWardrobePresenter;
+import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.PutWardrobePresenter;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.WardrobesPresenter;
 import com.kirill.kochnev.homewardrope.ui.views.ListItemView;
 import com.kirill.kochnev.homewardrope.ui.views.WardrobeItemView;
-import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.kirill.kochnev.homewardrope.utils.ImageProcessor;
 import com.kirill.kochnev.homewardrope.utils.bus.IdBus;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
@@ -36,25 +36,25 @@ public interface AppComponent {
 
     LookComponent plusComponent(LooksModule module);
 
-    ImageHelper provideImageHelper();
+    ImageProcessor provideImageHelper();
 
     WardrobeListComponent plusWardropeComponent(WardropeModule module);
 
     ThingListComponent plusThingListComponent(ThingsModule module);
 
-    AddUpdateWardropeComponent plusAddUpdateWardropeComponent(AddUpdateWardrobeModule module);
+    PutWardrobeComponent plusAddUpdateWardropeComponent(AddUpdateWardrobeModule module);
 
-    AddUpdateThingComponent plusAddUpdateThingComponent(AddUpdateThingModule module);
+    PutThingComponent plusAddUpdateThingComponent(AddUpdateThingModule module);
 
     CollageComponent plusCollageComponent(CollageModule module);
 
-    void inject(AddUpdateWardrobePresenter presenter);
+    void inject(PutWardrobePresenter presenter);
 
     void inject(WardrobesPresenter presenter);
 
     void inject(ThingsPresenter presenter);
 
-    void inject(AddUpdateThingPresenter presenter);
+    void inject(PutThingPresenter presenter);
 
     void inject(WardrobeItemView view);
 

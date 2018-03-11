@@ -1,6 +1,7 @@
 package com.kirill.kochnev.homewardrope.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,15 +18,19 @@ import com.kirill.kochnev.homewardrope.ui.fragments.ThingsFragment;
 
 public class WardrobePagerAdapter extends FragmentPagerAdapter {
 
-    public static final int LOOKS_FRAGMENT_ID = 1;
-    public static final int THINGS_FRAGMENT_ID = 0;
-    public static final int FRAGMENTS_COUNT = 2;
+    private static final int LOOKS_FRAGMENT_ID = 1;
+    private static final int THINGS_FRAGMENT_ID = 0;
+    private static final int FRAGMENTS_COUNT = 2;
 
     private long wardrobeId;
     private Context context;
 
 
-    public WardrobePagerAdapter(Context context, FragmentManager fm, long wardrobeId) {
+    public WardrobePagerAdapter(
+            @NonNull final Context context,
+            @NonNull final FragmentManager fm,
+            final long wardrobeId
+    ) {
         super(fm);
         this.context = context;
         this.wardrobeId = wardrobeId;

@@ -11,7 +11,7 @@ import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
  * Created by kirill on 30.03.17.
  */
 @StateStrategyType(SkipStrategy.class)
-public interface IAddUpdateWardrobeView extends MvpView {
+public interface IPutWardrobeView extends MvpView {
 
     void setCount(int thingsCount, int looksCount);
 

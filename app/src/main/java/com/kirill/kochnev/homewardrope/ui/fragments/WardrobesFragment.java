@@ -22,7 +22,7 @@ import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.WardrobesPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IWardrobeView;
-import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.PutWardrobeActivity;
 import com.kirill.kochnev.homewardrope.ui.activities.IDrawerController;
 import com.kirill.kochnev.homewardrope.ui.adapters.WardrobesAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardrobeHolder;
@@ -34,7 +34,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
-import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity.WARDROPE_ID;
+import static com.kirill.kochnev.homewardrope.ui.activities.PutWardrobeActivity.WARDROPE_ID;
 
 /**
  * Created by kirill on 30.03.17.
@@ -79,7 +79,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrobe
         adapter = new WardrobesAdapter();
         fragmentToolbarDelegate.init(view, mode, ViewMode.WARDROBE_MODE, R.string.wardropes_title);
         delegate = new ListDelegate<>(view, adapter, presenter, mode, ViewMode.WARDROBE_MODE,
-                v -> startActivityForResult(new Intent(getContext(), AddUpdateWardrobeActivity.class), REQUEST_CODE));
+                v -> startActivityForResult(new Intent(getContext(), PutWardrobeActivity.class), REQUEST_CODE));
 
         fragmentToolbarDelegate.setMenuListener(v -> {
             if (getActivity() instanceof IDrawerController) {
@@ -99,7 +99,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrobe
 
     @Override
     public void navigateToAddUpdateWardropeView(Long id) {
-        Intent intent = new Intent(getContext(), AddUpdateWardrobeActivity.class);
+        Intent intent = new Intent(getContext(), PutWardrobeActivity.class);
         intent.putExtra(WARDROPE_ID, id);
         startActivityForResult(intent, REQUEST_CODE);
     }
@@ -113,7 +113,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrobe
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
-            presenter.addOrUpdateListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
+            presenter.putListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
         }
     }
 

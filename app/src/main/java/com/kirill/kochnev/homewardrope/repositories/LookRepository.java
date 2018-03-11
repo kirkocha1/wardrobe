@@ -74,8 +74,8 @@ public class LookRepository extends AbstractRepository<Look> {
                             .executeAsBlocking();
                 }
                 result = storIOSQLite.put().object(model).prepare().executeAsBlocking();
-                if (model.getWardropeId() != null) {
-                    increaseWardropeLookCount(model.getWardropeId());
+                if (model.getWardrobeId() != null) {
+                    increaseWardropeLookCount(model.getWardrobeId());
                 }
                 if (model.getThingIds().size() != 0) {
                     List<LooksThings> looksThings = new ArrayList<>();
@@ -105,8 +105,8 @@ public class LookRepository extends AbstractRepository<Look> {
                 .table(LooksTable.LOOKS_TABLE)
                 .where(LooksTable._ID + "=?")
                 .whereArgs(lookId).build()).prepare().executeAsBlocking();
-        if (oldLook != null && oldLook.getWardropeId() != null) {
-            Wardrobe wardrobe = getLookWardrope(oldLook.getWardropeId());
+        if (oldLook != null && oldLook.getWardrobeId() != null) {
+            Wardrobe wardrobe = getLookWardrope(oldLook.getWardrobeId());
             if (wardrobe != null) {
                 wardrobe.setLooksCount(wardrobe.getLooksCount() - 1);
                 storIOSQLite.put().object(wardrobe).prepare().executeAsBlocking();
@@ -143,7 +143,7 @@ public class LookRepository extends AbstractRepository<Look> {
                                 .prepare().executeAsBlocking();
                     }
                 }
-                Wardrobe wardrobe = getLookWardrope(model.getWardropeId());
+                Wardrobe wardrobe = getLookWardrope(model.getWardrobeId());
                 if (wardrobe != null) {
                     wardrobe.setLooksCount(wardrobe.getLooksCount() - 1);
                     storIOSQLite.put().object(wardrobe).prepare().executeAsBlocking();

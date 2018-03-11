@@ -7,9 +7,9 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.interactors.AddUpdateThingsInteractor;
+import com.kirill.kochnev.homewardrope.interactors.PutThingsInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.base.CompositeDisposableDelegate;
-import com.kirill.kochnev.homewardrope.mvp.views.IAddUpdateThingView;
+import com.kirill.kochnev.homewardrope.mvp.views.IPutThingView;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,20 +18,20 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 @InjectViewState
-public class AddUpdateThingPresenter extends MvpPresenter<IAddUpdateThingView> {
+public class PutThingPresenter extends MvpPresenter<IPutThingView> {
 
-    public static final String TAG = "AddUpdateThingPresenter";
+    public static final String TAG = "PutThingPresenter";
 
-    private @NonNull final AddUpdateThingsInteractor interactor;
+    private @NonNull final PutThingsInteractor interactor;
     private long thingId;
 
     @NonNull
     private final CompositeDisposableDelegate disposableDelegate = new CompositeDisposableDelegate();
 
     @Inject
-    AddUpdateThingPresenter(
+    PutThingPresenter(
             @Named("thingId") long id,
-            @NonNull final AddUpdateThingsInteractor interactor
+            @NonNull final PutThingsInteractor interactor
     ) {
         this.interactor = interactor;
         thingId = id;

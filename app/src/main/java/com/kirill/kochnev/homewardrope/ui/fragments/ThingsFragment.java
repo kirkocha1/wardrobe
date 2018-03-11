@@ -20,7 +20,7 @@ import com.kirill.kochnev.homewardrope.di.components.ThingListComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter;
 import com.kirill.kochnev.homewardrope.mvp.views.IThingsView;
-import com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity;
+import com.kirill.kochnev.homewardrope.ui.activities.PutThingActivity;
 import com.kirill.kochnev.homewardrope.ui.activities.IDrawerController;
 import com.kirill.kochnev.homewardrope.ui.adapters.ThingsAdapter;
 import com.kirill.kochnev.homewardrope.ui.adapters.holders.ThingHolder;
@@ -34,8 +34,8 @@ import static android.app.Activity.RESULT_OK;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_IS_EDIT;
 import static com.kirill.kochnev.homewardrope.AppConstants.FRAGMENT_MODE;
 import static com.kirill.kochnev.homewardrope.mvp.presenters.thing.ThingsPresenter.THINGS_ID;
-import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateThingActivity.IS_EDIT;
-import static com.kirill.kochnev.homewardrope.ui.activities.AddUpdateWardrobeActivity.WARDROPE_ID;
+import static com.kirill.kochnev.homewardrope.ui.activities.PutThingActivity.IS_EDIT;
+import static com.kirill.kochnev.homewardrope.ui.activities.PutWardrobeActivity.WARDROPE_ID;
 
 /**
  * Created by Kirill Kochnev on 24.02.17.
@@ -67,7 +67,6 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     private ViewMode mode;
     private long wardrobeId;
     private boolean isEdit;
-
 
     @InjectPresenter
     ThingsPresenter presenter;
@@ -106,7 +105,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
                 mode,
                 ViewMode.THING_MODE,
                 new GridLayoutManager(getContext(), 2),
-                v -> startActivityForResult(new Intent(getContext(), AddUpdateThingActivity.class), REQUEST_CODE)
+                v -> startActivityForResult(new Intent(getContext(), PutThingActivity.class), REQUEST_CODE)
         );
         fragmentToolbarDelegate.setMenuListener(v -> {
             if (getActivity() instanceof IDrawerController) {
@@ -135,7 +134,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
 
     @Override
     public void navigateToAddUpdateThingView(boolean isEdit, Long id) {
-        Intent intent = new Intent(getContext(), AddUpdateThingActivity.class);
+        Intent intent = new Intent(getContext(), PutThingActivity.class);
         intent.putExtra(THINGS_ID, id);
         intent.putExtra(IS_EDIT, isEdit);
         startActivityForResult(intent, REQUEST_CODE);
@@ -156,10 +155,9 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
         delegate.deleteListItem(model);
     }
 
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
-            presenter.addOrUpdateListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
+            presenter.putListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));
         }
     }
 

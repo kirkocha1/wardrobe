@@ -2,13 +2,13 @@ package com.kirill.kochnev.homewardrope.mvp.presenters.base;
 
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 
-public interface IPaginator {
+public interface IPaginator<M extends IDbModel> {
 
     void loadMoreData(final long lastId);
 
-    void onLongItemClick(final IDbModel model);
+    void onLongItemClick(final M model);
 
-    void onItemClick(final IDbModel model);
+    void onItemClick(final M model);
 
-    void addOrUpdateListItem(final long id);
+    void putListItem(final long id);
 }

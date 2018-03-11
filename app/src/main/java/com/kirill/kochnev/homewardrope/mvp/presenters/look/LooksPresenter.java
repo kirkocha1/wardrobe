@@ -6,7 +6,6 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
@@ -31,7 +30,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @InjectViewState
-public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginator {
+public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginator<Look> {
 
     public static final String TAG = "LooksPresenter";
     private ViewMode viewMode;
@@ -102,7 +101,7 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     private void setIds(List<Look> list) {
         HashSet<Long> ids = new HashSet<>();
         for (Look look : list) {
-            if (look.getWardropeId() != null && look.getWardropeId() == filterId) {
+            if (look.getWardrobeId() != null && look.getWardrobeId() == filterId) {
                 ids.add(look.getId());
             }
         }
@@ -124,7 +123,7 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     }
 
     @Override
-    public void onLongItemClick(IDbModel model) {
+    public void onLongItemClick(Look model) {
         if (viewMode == ViewMode.LOOK_MODE) {
             disposableDelegate.addToCompositeDisposable(
                     interactor.deleteLook((Look) model)
@@ -138,7 +137,7 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     }
 
     @Override
-    public void onItemClick(IDbModel model) {
+    public void onItemClick(Look model) {
         if (viewMode != ViewMode.LOOK_MODE && isEdit) {
             disposableDelegate.addToCompositeDisposable(
                     interactor
@@ -153,11 +152,10 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
         } else {
             getViewState().navigateToUpdateLookView(model.getId());
         }
-
     }
 
     @Override
-    public void addOrUpdateListItem(long id) {
+    public void putListItem(long id) {
         disposableDelegate.addToCompositeDisposable(
                 listDelegate.getDisposable(interactor.getLook(id),
                         item -> getViewState().invalidateListItem(item),

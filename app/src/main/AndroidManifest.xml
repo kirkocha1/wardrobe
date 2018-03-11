@@ -22,11 +22,11 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.AddUpdateThingActivity"
+            android:name=".ui.activities.PutThingActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activities.AddUpdateWardrobeActivity"
+            android:name=".ui.activities.PutWardrobeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 

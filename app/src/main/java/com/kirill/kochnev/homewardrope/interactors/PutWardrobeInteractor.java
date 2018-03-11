@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by kirill on 11.05.17.
  */
 
-public class AddUpdateWardrobeInteractor {
+public class PutWardrobeInteractor {
 
     private long id = AppConstants.DEFAULT_ID;
     private @NonNull final WardrobeRepository wardrobes;
@@ -33,7 +33,7 @@ public class AddUpdateWardrobeInteractor {
     private Single<Wardrobe> getWardrobeSingle;
 
     @Inject
-    AddUpdateWardrobeInteractor(
+    PutWardrobeInteractor(
             @NonNull WardrobeRepository wardrobes,
             @NonNull IdBus idBus,
             @NonNull StateBus stateBus

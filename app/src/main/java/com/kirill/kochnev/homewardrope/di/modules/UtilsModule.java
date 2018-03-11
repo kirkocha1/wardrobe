@@ -3,7 +3,7 @@ package com.kirill.kochnev.homewardrope.di.modules;
 import android.content.Context;
 
 import com.kirill.kochnev.homewardrope.AppConstants;
-import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.kirill.kochnev.homewardrope.utils.ImageProcessor;
 import com.kirill.kochnev.homewardrope.utils.ImageLoader;
 import com.kirill.kochnev.homewardrope.utils.bus.EditStateBus;
 import com.kirill.kochnev.homewardrope.utils.bus.EntityIdBus;
@@ -47,8 +47,8 @@ public class UtilsModule {
 
     @Singleton
     @Provides
-    public ImageHelper provideImageHelper(Context context) {
-        return new ImageHelper(context);
+    public ImageProcessor provideImageHelper(Context context) {
+        return new ImageProcessor(context);
     }
 
     @Singleton

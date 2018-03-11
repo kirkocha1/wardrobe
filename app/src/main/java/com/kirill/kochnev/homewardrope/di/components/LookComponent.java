@@ -4,7 +4,6 @@ import com.kirill.kochnev.homewardrope.di.modules.look.CreateLookModule;
 import com.kirill.kochnev.homewardrope.di.modules.look.LooksModule;
 import com.kirill.kochnev.homewardrope.di.modules.look.UpdateLookModule;
 import com.kirill.kochnev.homewardrope.di.scopes.LookScope;
-import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
 import com.kirill.kochnev.homewardrope.mvp.presenters.look.LooksPresenter;
 
 import dagger.Subcomponent;
@@ -18,8 +17,6 @@ import dagger.Subcomponent;
 public interface LookComponent {
 
     LooksPresenter provideLooksPresenter();
-
-    LooksInteractor provideLooksInteractor();
 
     UpdateLookComponent plusUpdateLookComponent(UpdateLookModule module);
 

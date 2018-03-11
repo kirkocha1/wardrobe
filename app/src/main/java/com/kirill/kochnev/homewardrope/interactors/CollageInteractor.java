@@ -7,7 +7,7 @@ import android.util.SparseArray;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrope.repositories.utils.ThingsByIdsSpecofication;
-import com.kirill.kochnev.homewardrope.utils.ImageHelper;
+import com.kirill.kochnev.homewardrope.utils.ImageProcessor;
 
 import java.util.HashSet;
 
@@ -22,10 +22,10 @@ import io.reactivex.Single;
 public class CollageInteractor {
 
     private @NonNull final ThingRepository things;
-    private @NonNull final ImageHelper helper;
+    private @NonNull final ImageProcessor helper;
 
     @Inject
-    public CollageInteractor(@NonNull final ThingRepository things, @NonNull final ImageHelper helper) {
+    public CollageInteractor(@NonNull final ThingRepository things, @NonNull final ImageProcessor helper) {
         this.things = things;
         this.helper = helper;
     }

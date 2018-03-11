@@ -2,6 +2,7 @@ package com.kirill.kochnev.homewardrope;
 
 import android.app.Application;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 
 import com.kirill.kochnev.homewardrope.di.ComponentHolder;
 
@@ -23,6 +24,7 @@ public class WardrobeApplication extends Application {
         componentHolder = new ComponentHolder(this);
     }
 
+    @NonNull
     public static ComponentHolder getComponentHolder() {
         return componentHolder;
     }
