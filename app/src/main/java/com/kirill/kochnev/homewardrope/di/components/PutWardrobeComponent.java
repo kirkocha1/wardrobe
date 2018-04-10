@@ -2,7 +2,7 @@ package com.kirill.kochnev.homewardrope.di.components;
 
 import com.kirill.kochnev.homewardrope.di.modules.AddUpdateWardrobeModule;
 import com.kirill.kochnev.homewardrope.di.scopes.WardropeScope;
-import com.kirill.kochnev.homewardrope.mvp.presenters.wardrobe.PutWardrobePresenter;
+import com.kirill.kochnev.homewardrope.presentation.presenters.wardrobe.PutWardrobePresenter;
 
 import dagger.Subcomponent;
 

@@ -2,7 +2,7 @@ package com.kirill.kochnev.homewardrope.di.components;
 
 
 import com.kirill.kochnev.homewardrope.di.modules.look.CreateLookModule;
-import com.kirill.kochnev.homewardrope.mvp.presenters.look.CreationLookPresenter;
+import com.kirill.kochnev.homewardrope.presentation.presenters.look.CreationLookPresenter;
 
 import dagger.Subcomponent;
 

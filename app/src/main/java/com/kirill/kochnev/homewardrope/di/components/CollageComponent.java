@@ -2,7 +2,7 @@ package com.kirill.kochnev.homewardrope.di.components;
 
 import com.kirill.kochnev.homewardrope.di.modules.CollageModule;
 import com.kirill.kochnev.homewardrope.di.scopes.CollageScope;
-import com.kirill.kochnev.homewardrope.mvp.presenters.look.CollagePresenter;
+import com.kirill.kochnev.homewardrope.presentation.presenters.look.CollagePresenter;
 
 import dagger.Subcomponent;
 

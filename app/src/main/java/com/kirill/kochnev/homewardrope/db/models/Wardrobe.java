@@ -2,9 +2,9 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
 
-import com.kirill.kochnev.homewardrope.ui.adapters.base.BaseHolder;
-import com.kirill.kochnev.homewardrope.ui.adapters.holders.WardrobeHolder;
-import com.kirill.kochnev.homewardrope.ui.views.WardrobeItemView;
+import com.kirill.kochnev.homewardrope.presentation.ui.adapters.base.BaseHolder;
+import com.kirill.kochnev.homewardrope.presentation.ui.adapters.holders.WardrobeHolder;
+import com.kirill.kochnev.homewardrope.presentation.ui.views.WardrobeItemView;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 

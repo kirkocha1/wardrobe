@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
 
-    <com.kirill.kochnev.homewardrope.ui.views.CollageView
+    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageView
         android:id="@+id/collage_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
