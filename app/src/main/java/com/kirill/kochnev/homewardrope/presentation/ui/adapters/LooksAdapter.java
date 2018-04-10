@@ -32,6 +32,9 @@ public class LooksAdapter extends BaseDbAdapter<Look, LookHolder> {
     @Override
     public void onBindViewHolder(LookHolder holder, int position) {
         holder.setEdit(isEdit);
+        if (ids == null) {
+            ids = new HashSet<>();
+        }
         holder.setUsedIds(ids);
         super.onBindViewHolder(holder, position);
     }

@@ -54,7 +54,6 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
         return fragment;
     }
 
-
     @NonNull
     private ThingsAdapter adapter;
 

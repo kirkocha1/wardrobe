@@ -42,10 +42,11 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     private final ListLoaderDelegate listDelegate = new ListLoaderDelegate(getViewState());
 
     @Inject
-    public ThingsPresenter(@Named("filterId") long filterId,
-                           @Named("isEdit") boolean isEdit,
-                           @Named("mode") ViewMode mode,
-                           @NonNull ThingsInteractor interactor
+    ThingsPresenter(
+            @Named("filterId") long filterId,
+            @Named("isEdit") boolean isEdit,
+            @Named("mode") ViewMode mode,
+            @NonNull ThingsInteractor interactor
     ) {
         this.interactor = interactor;
         this.isEdit = isEdit;
@@ -80,7 +81,10 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
                 disposableDelegate.addToCompositeDisposable(
                         interactor
                                 .getWardrobeThingIds(filterId)
-                                .subscribe(set -> getViewState().addThingIdsToAdapter(set))
+                                .subscribe(
+                                        set -> getViewState().addThingIdsToAdapter(set),
+                                        e -> Log.e(TAG, e.getMessage())
+                                )
                 );
                 disposableDelegate.addToCompositeDisposable(
                         listDelegate.getListDisposable(
@@ -132,8 +136,7 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
                     interactor
                             .sendThingIdWithMode(ViewMode.THING_MODE, thing.getId())
                             .subscribe(
-                                    () -> {
-                                    },
+                                    () -> {},
                                     e -> Log.e(TAG, e.getMessage())
                             )
             );

@@ -12,7 +12,6 @@ import java.util.HashSet;
 
 public class ThingHolder extends EditItemHolder<Thing> {
 
-
     public ThingHolder(View itemView, HashSet<Long> usedIds) {
         super(itemView, usedIds);
     }

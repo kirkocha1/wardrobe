@@ -32,6 +32,9 @@ public class ThingsAdapter extends BaseDbAdapter<Thing, ThingHolder> {
     @Override
     public void onBindViewHolder(ThingHolder holder, int position) {
         holder.setEdit(isEdit);
+        if (ids == null) {
+            ids = new HashSet<>();
+        }
         holder.setUsedIds(ids);
         super.onBindViewHolder(holder, position);
     }
