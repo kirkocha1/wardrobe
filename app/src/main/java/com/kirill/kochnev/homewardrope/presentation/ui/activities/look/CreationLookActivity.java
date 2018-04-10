@@ -23,7 +23,7 @@ import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.presentation.presenters.look.CreationLookPresenter;
 import com.kirill.kochnev.homewardrope.presentation.ui.activities.base.ActivityToolbarDelegate;
-import com.kirill.kochnev.homewardrope.presentation.ui.fragments.CollageFragment;
+import com.kirill.kochnev.homewardrope.presentation.ui.fragments.GLCollageFragment;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.ThingsFragment;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.WardrobesFragment;
 import com.kirill.kochnev.homewardrope.presentation.views.IFirstStepCreationLookView;
@@ -144,7 +144,8 @@ public class CreationLookActivity extends MvpAppCompatActivity implements IFirst
 
     @Override
     public void openCollageFragment(HashSet<Long> thingIds) {
-        initFragment(CollageFragment.createInstance(thingIds), CreationLookState.COLLAGE);
+//        initFragment(CollageFragment.createInstance(thingIds), CreationLookState.COLLAGE);
+        initFragment(new GLCollageFragment(), CreationLookState.COLLAGE);
     }
 
     @Override
