@@ -11,10 +11,10 @@ Description:
   also you can make looks with you clothers and attach to wardrobes.
 
 Aproaches:
-  - I tried to make architecture of application close to "Clean architecture" and use Reactive style in some places.
-  - For DI I choose Dagger2
-  - For MVP structure I decided to take MOXY (https://github.com/Arello-Mobile/Moxy)
-  - For database access I decide to use StorIO (https://github.com/pushtorefresh/storio)
+  - application close to "Clean architecture" and use Reactive style in some places.
+  - for DI I choose Dagger2
+  - for MVP structure I decided to take MOXY (https://github.com/Arello-Mobile/Moxy)
+  - for database access I decided to use StorIO (https://github.com/pushtorefresh/storio)
 
 Application allows you:
  - make a pictures

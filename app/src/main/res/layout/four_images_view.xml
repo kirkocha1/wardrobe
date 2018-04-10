@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.kirill.kochnev.homewardrope.ui.views.CollageItemView
+    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageItemView
         android:id="@+id/four_image_first"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,7 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
 
-    <com.kirill.kochnev.homewardrope.ui.views.CollageItemView
+    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageItemView
         android:id="@+id/four_image_second"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +27,7 @@
         android:layout_height="0dp"
         android:layout_centerInParent="true" />
 
-    <com.kirill.kochnev.homewardrope.ui.views.CollageItemView
+    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageItemView
         android:id="@+id/four_image_third"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +37,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/center" />
 
-    <com.kirill.kochnev.homewardrope.ui.views.CollageItemView
+    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageItemView
         android:id="@+id/four_image_fours"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

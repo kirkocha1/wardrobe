@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.kirill.kochnev.homewardrope.ui.views.CollageView
+    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageView
         android:id="@+id/col"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
