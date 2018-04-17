@@ -1,6 +1,6 @@
 package com.kirill.kochnev.homewardrope.presentation.ui.adapters.base;
 
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
 
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.presentation.ui.adapters.OnClick;
@@ -8,29 +8,16 @@ import com.kirill.kochnev.homewardrope.presentation.ui.adapters.OnClick;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kirill on 05.04.17.
- */
+public class CommonAdapterDelegate<M extends IDbModel> implements IListAdapterDelegate<M> {
 
-public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>> extends RecyclerView.Adapter<H> {
+    private @Nullable List<M> models;
 
-    private List<M> models;
-
-    private OnClick<M> clickListner;
-
-    public void setClickListener(OnClick<M> clickListner) {
-        this.clickListner = clickListner;
+    public void addData(List<M> model) {
+        getModels().addAll(model);
     }
 
-    public void addData(List<M> models) {
-        if (this.models == null) {
-            this.models = new ArrayList<>();
-        }
-        this.models.addAll(models);
-        notifyDataSetChanged();
-    }
-
-    public void addData(M model) {
+    @Override
+    public int addData(M model) {
         int position = 0;
         if (this.models == null) {
             this.models = new ArrayList<>();
@@ -38,7 +25,7 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
         } else {
             position = insertItem(model);
         }
-        notifyItemChanged(position);
+        return position;
     }
 
     private int insertItem(M item) {
@@ -60,20 +47,11 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
         return position;
     }
 
-    @Override
-    public void onBindViewHolder(H holder, int position) {
-        holder.setModel(getItem(position));
-        holder.setOnItemClick(clickListner);
-    }
-
-    public void onRemoveItem(M model) {
-        int position = models.indexOf(model);
-        models.remove(model);
-        notifyItemRemoved(position);
-    }
-
-    public void clear() {
-        models = null;
+    private List<M> getModels() {
+        if (models == null) {
+            models = new ArrayList<>();
+        }
+        return models;
     }
 
     @Override
@@ -81,12 +59,30 @@ public abstract class BaseDbAdapter<M extends IDbModel, H extends BaseHolder<M>>
         return models == null ? 0 : models.size();
     }
 
+    @Override
     public M getItem(int position) {
         return models.get(position);
     }
 
-
+    @Override
     public long getLastId() {
         return getItem(getItemCount() - 1).getId();
+    }
+
+    @Override
+    public int onRemoveItem(M model) {
+        int position = models.indexOf(model);
+        models.remove(model);
+        return position;
+    }
+
+    @Override
+    public void clear() {
+        models = null;
+    }
+
+    @Override
+    public void setClickListener(OnClick<M> clickListner) {
+
     }
 }

@@ -3,8 +3,6 @@ package com.kirill.kochnev.homewardrope.db.models;
 import android.provider.BaseColumns;
 
 import com.kirill.kochnev.homewardrope.db.WardrobeSqlHelper;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.base.BaseHolder;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.holders.ThingHolder;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -58,13 +56,6 @@ public class Thing extends BitmapModel implements IDbModel {
 
     public void setId(Long _id) {
         this._id = _id;
-    }
-
-
-    @Override
-    public void inflateHolder(BaseHolder holder) {
-        ((ThingHolder) holder).item.setName(name);
-        ((ThingHolder) holder).item.setImage(iconImagePath);
     }
 
     public String getName() {

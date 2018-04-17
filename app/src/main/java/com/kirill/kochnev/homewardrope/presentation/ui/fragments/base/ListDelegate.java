@@ -13,8 +13,7 @@ import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.presentation.presenters.base.IPaginator;
 import com.kirill.kochnev.homewardrope.presentation.ui.adapters.OnClick;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.base.BaseDbAdapter;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.base.BaseHolder;
+import com.kirill.kochnev.homewardrope.presentation.ui.adapters.base.IListAdapterDelegate;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import java.util.List;
@@ -24,7 +23,7 @@ import butterknife.ButterKnife;
 
 import static com.kirill.kochnev.homewardrope.AppConstants.LIMIT;
 
-public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implements OnClick<M> {
+public class ListDelegate<M extends IDbModel> implements OnClick<M> {
 
     @BindView(R.id.list_items)
     RecyclerView list;
@@ -40,14 +39,14 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
     private @NonNull LinearLayoutManager layoutManager;
     private boolean isLoading = false;
     private boolean isAllLoaded = false;
-    private @NonNull BaseDbAdapter<M, H> adapter;
+    private @NonNull IListAdapterDelegate<M> adapter;
     private @NonNull IPaginator<M> paginator;
     private @NonNull ViewMode mode;
     private @NonNull ViewMode mainState;
 
     public ListDelegate(
             @NonNull final View view,
-            @NonNull final BaseDbAdapter<M, H> adapter,
+            @NonNull final IListAdapterDelegate<M> adapter,
             @NonNull final IPaginator<M> paginator,
             @NonNull final ViewMode mode,
             @NonNull final ViewMode mainState,
@@ -58,7 +57,7 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
 
     public ListDelegate(
             @NonNull final View view,
-            @NonNull final BaseDbAdapter<M, H> adapter,
+            @NonNull final IListAdapterDelegate<M> adapter,
             @NonNull final IPaginator<M> paginator,
             @NonNull final ViewMode mode,
             @NonNull final ViewMode mainState,
@@ -85,7 +84,7 @@ public class ListDelegate<M extends IDbModel, H extends BaseHolder<M>> implement
     private void adjustList() {
         adapter.setClickListener(this);
         list.setLayoutManager(layoutManager);
-        list.setAdapter(adapter);
+        list.setAdapter((RecyclerView.Adapter) adapter);
         list.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override

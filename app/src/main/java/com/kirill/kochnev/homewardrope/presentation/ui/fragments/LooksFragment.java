@@ -19,14 +19,13 @@ import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.di.components.LookComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.presentation.presenters.look.LooksPresenter;
-import com.kirill.kochnev.homewardrope.presentation.views.ILooksView;
 import com.kirill.kochnev.homewardrope.presentation.ui.activities.IDrawerController;
 import com.kirill.kochnev.homewardrope.presentation.ui.activities.look.CreationLookActivity;
 import com.kirill.kochnev.homewardrope.presentation.ui.activities.look.UpdateLookActivity;
 import com.kirill.kochnev.homewardrope.presentation.ui.adapters.LooksAdapter;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.holders.LookHolder;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.base.FragmentToolbarDelegate;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.base.ListDelegate;
+import com.kirill.kochnev.homewardrope.presentation.views.ILooksView;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +57,7 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
     private LooksAdapter adapter;
 
     @NonNull
-    private ListDelegate<Look, LookHolder> delegate;
+    private ListDelegate<Look> delegate;
 
     @NonNull
     private FragmentToolbarDelegate fragmentToolbarDelegate = new FragmentToolbarDelegate();
