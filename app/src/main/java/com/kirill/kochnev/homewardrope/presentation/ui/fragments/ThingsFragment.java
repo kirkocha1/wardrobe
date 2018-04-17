@@ -19,13 +19,12 @@ import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.di.components.ThingListComponent;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.presentation.presenters.thing.ThingsPresenter;
-import com.kirill.kochnev.homewardrope.presentation.views.IThingsView;
-import com.kirill.kochnev.homewardrope.presentation.ui.activities.PutThingActivity;
 import com.kirill.kochnev.homewardrope.presentation.ui.activities.IDrawerController;
+import com.kirill.kochnev.homewardrope.presentation.ui.activities.PutThingActivity;
 import com.kirill.kochnev.homewardrope.presentation.ui.adapters.ThingsAdapter;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.holders.ThingHolder;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.base.FragmentToolbarDelegate;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.base.ListDelegate;
+import com.kirill.kochnev.homewardrope.presentation.views.IThingsView;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +57,7 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     private ThingsAdapter adapter;
 
     @NonNull
-    private ListDelegate<Thing, ThingHolder> delegate;
+    private ListDelegate<Thing> delegate;
 
     @NonNull
     private FragmentToolbarDelegate fragmentToolbarDelegate = new FragmentToolbarDelegate();

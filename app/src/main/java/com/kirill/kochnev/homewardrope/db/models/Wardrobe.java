@@ -2,9 +2,6 @@ package com.kirill.kochnev.homewardrope.db.models;
 
 import android.provider.BaseColumns;
 
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.base.BaseHolder;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.holders.WardrobeHolder;
-import com.kirill.kochnev.homewardrope.presentation.ui.views.WardrobeItemView;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -54,14 +51,14 @@ public class Wardrobe implements IDbModel {
         thingsCount = thingIds.size();
         looksCount = lookIds.size();
     }
-
-    @Override
-    public void inflateHolder(BaseHolder holder) {
-        WardrobeItemView item = ((WardrobeHolder) holder).item;
-        item.setName(name);
-        item.setLooksCount(looksCount);
-        item.setThingsCount(thingsCount);
-    }
+//
+//    @Override
+//    public void inflateHolder(BaseHolder holder) {
+//        WardrobeItemView item = ((WardrobeHolder) holder).item;
+//        item.setName(name);
+//        item.setLooksCount(looksCount);
+//        item.setThingsCount(thingsCount);
+//    }
 
     public String getName() {
         return this.name;

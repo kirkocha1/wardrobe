@@ -21,13 +21,12 @@ import com.kirill.kochnev.homewardrope.di.components.WardrobeListComponent;
 import com.kirill.kochnev.homewardrope.enums.CreationLookState;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.presentation.presenters.wardrobe.WardrobesPresenter;
-import com.kirill.kochnev.homewardrope.presentation.views.IWardrobeView;
-import com.kirill.kochnev.homewardrope.presentation.ui.activities.PutWardrobeActivity;
 import com.kirill.kochnev.homewardrope.presentation.ui.activities.IDrawerController;
+import com.kirill.kochnev.homewardrope.presentation.ui.activities.PutWardrobeActivity;
 import com.kirill.kochnev.homewardrope.presentation.ui.adapters.WardrobesAdapter;
-import com.kirill.kochnev.homewardrope.presentation.ui.adapters.holders.WardrobeHolder;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.base.FragmentToolbarDelegate;
 import com.kirill.kochnev.homewardrope.presentation.ui.fragments.base.ListDelegate;
+import com.kirill.kochnev.homewardrope.presentation.views.IWardrobeView;
 import com.kirill.kochnev.homewardrope.utils.AnimationHelper;
 
 import java.util.List;
@@ -52,7 +51,7 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrobe
     }
 
     @Nullable
-    private ListDelegate<Wardrobe, WardrobeHolder> delegate;
+    private ListDelegate<Wardrobe> delegate;
 
     @NonNull
     private FragmentToolbarDelegate fragmentToolbarDelegate = new FragmentToolbarDelegate();
