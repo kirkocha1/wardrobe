@@ -28,13 +28,13 @@ public class LooksTable implements BaseColumns {
             "FOREIGN KEY (" + LOOK_WARDROBE_ID + ") REFERENCES " + WardrobeTable.WARDROBE_TABLE + "(" + WardrobeTable._ID + ")" +
             ")";
 
-    public static final String updateWardropeId(String range, Long wardropeId) {
+    public static String updateWardrobeId(String range, Long wardropeId) {
         return "UPDATE " + LooksTable.LOOKS_TABLE +
                 " SET " + LooksTable.LOOK_WARDROBE_ID + " = " + wardropeId +
                 " WHERE " + LooksTable._ID + " IN (" + range + ")";
     }
 
-    public static final String dropWardropeId(Long wardropeId) {
+    public static String dropWardrobeId(Long wardropeId) {
         return "UPDATE " + LooksTable.LOOKS_TABLE +
                 " SET " + LooksTable.LOOK_WARDROBE_ID + " = " + null +
                 " WHERE " + LooksTable.LOOK_WARDROBE_ID + " = " + wardropeId;

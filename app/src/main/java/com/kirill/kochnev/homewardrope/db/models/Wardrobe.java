@@ -51,14 +51,6 @@ public class Wardrobe implements IDbModel {
         thingsCount = thingIds.size();
         looksCount = lookIds.size();
     }
-//
-//    @Override
-//    public void inflateHolder(BaseHolder holder) {
-//        WardrobeItemView item = ((WardrobeHolder) holder).item;
-//        item.setName(name);
-//        item.setLooksCount(looksCount);
-//        item.setThingsCount(thingsCount);
-//    }
 
     public String getName() {
         return this.name;

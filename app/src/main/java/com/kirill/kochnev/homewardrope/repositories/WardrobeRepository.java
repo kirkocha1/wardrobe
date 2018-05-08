@@ -50,7 +50,7 @@ public class WardrobeRepository extends AbstractRepository<Wardrobe> {
                             .executeAsBlocking();
 
                     storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
-                            .query(LooksTable.dropWardropeId(wardrobe.getId()))
+                            .query(LooksTable.dropWardrobeId(wardrobe.getId()))
                             .build());
                 }
 
@@ -60,7 +60,7 @@ public class WardrobeRepository extends AbstractRepository<Wardrobe> {
                     sub.onError(new Exception("wardropeId is null"));
                 } else {
                     storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
-                            .query(LooksTable.updateWardropeId(wardrobe.getLookIdsString(), wardropeId))
+                            .query(LooksTable.updateWardrobeId(wardrobe.getLookIdsString(), wardropeId))
                             .build());
 
                     List<ThingsWardrobes> thingsWardropes = new ArrayList<>();
@@ -124,7 +124,7 @@ public class WardrobeRepository extends AbstractRepository<Wardrobe> {
                         .whereArgs(model.getId()).build()).prepare().executeAsBlocking();
 
                 storIOSQLite.lowLevel().executeSQL(RawQuery.builder()
-                        .query(LooksTable.dropWardropeId(model.getId()))
+                        .query(LooksTable.dropWardrobeId(model.getId()))
                         .build());
 
                 DeleteResult result = storIOSQLite.delete().object(model).prepare().executeAsBlocking();
