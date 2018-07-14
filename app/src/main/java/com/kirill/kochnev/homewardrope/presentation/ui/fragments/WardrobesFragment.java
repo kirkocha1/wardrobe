@@ -91,12 +91,6 @@ public class WardrobesFragment extends MvpAppCompatFragment implements IWardrobe
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        WardrobeApplication.getComponentHolder().clearWardrobeComponent();
-    }
-
-    @Override
     public void navigateToAddUpdateWardropeView(Long id) {
         Intent intent = new Intent(getContext(), PutWardrobeActivity.class);
         intent.putExtra(WARDROPE_ID, id);

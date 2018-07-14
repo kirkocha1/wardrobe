@@ -106,12 +106,6 @@ public class LooksFragment extends MvpAppCompatFragment implements ILooksView {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        WardrobeApplication.getComponentHolder().clearLookComponent();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
             presenter.putListItem(data.getLongExtra(AppConstants.ADD_UPDATED_ID, -1));

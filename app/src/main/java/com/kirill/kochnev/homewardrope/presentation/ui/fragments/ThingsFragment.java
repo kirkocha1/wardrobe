@@ -114,12 +114,6 @@ public class ThingsFragment extends MvpAppCompatFragment implements IThingsView 
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        WardrobeApplication.getComponentHolder().clearThingListComponent();
-    }
-
-    @Override
     public void setEditMode(boolean isEditMode) {
         adapter.clear();
         adapter.setEdit(isEditMode);

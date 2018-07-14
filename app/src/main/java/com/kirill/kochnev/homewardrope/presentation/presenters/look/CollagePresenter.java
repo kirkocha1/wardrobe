@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.enums.CollageMode;
 import com.kirill.kochnev.homewardrope.interactors.CollageInteractor;
 import com.kirill.kochnev.homewardrope.presentation.presenters.base.CompositeDisposableDelegate;
@@ -51,5 +52,6 @@ public class CollagePresenter extends MvpPresenter<ICollageView> {
     public void onDestroy() {
         super.onDestroy();
         disposableDelegate.unsubscribe();
+        WardrobeApplication.getComponentHolder().clearCollageComponent();
     }
 }

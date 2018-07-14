@@ -6,6 +6,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Thing;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.ThingsInteractor;
@@ -160,5 +161,6 @@ public class ThingsPresenter extends MvpPresenter<IThingsView> implements IPagin
     public void onDestroy() {
         super.onDestroy();
         disposableDelegate.unsubscribe();
+        WardrobeApplication.getComponentHolder().clearThingListComponent();
     }
 }

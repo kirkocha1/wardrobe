@@ -6,6 +6,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.Look;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
 import com.kirill.kochnev.homewardrope.interactors.LooksInteractor;
@@ -168,5 +169,6 @@ public class LooksPresenter extends MvpPresenter<ILooksView> implements IPaginat
     public void onDestroy() {
         super.onDestroy();
         disposableDelegate.unsubscribe();
+        WardrobeApplication.getComponentHolder().clearLookComponent();
     }
 }

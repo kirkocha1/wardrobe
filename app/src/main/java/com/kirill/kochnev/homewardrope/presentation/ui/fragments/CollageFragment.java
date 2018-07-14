@@ -67,10 +67,4 @@ public class CollageFragment extends MvpAppCompatFragment implements ICollageVie
     public void constructView(@NonNull final SparseArray<Bitmap> cache, @NonNull final CollageMode mode) {
         container.inflateItems(mode, cache);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        WardrobeApplication.getComponentHolder().clearCollageComponent();
-    }
 }

@@ -7,6 +7,7 @@ import android.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.kirill.kochnev.homewardrope.AppConstants;
+import com.kirill.kochnev.homewardrope.WardrobeApplication;
 import com.kirill.kochnev.homewardrope.db.models.IDbModel;
 import com.kirill.kochnev.homewardrope.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrope.enums.ViewMode;
@@ -116,5 +117,6 @@ public class WardrobesPresenter extends MvpPresenter<IWardrobeView> implements I
     public void onDestroy() {
         super.onDestroy();
         disposableDelegate.unsubscribe();
+        WardrobeApplication.getComponentHolder().clearWardrobeComponent();
     }
 }
