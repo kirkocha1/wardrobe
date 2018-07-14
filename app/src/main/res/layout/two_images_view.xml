@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageItemView
+    <com.kirill.kochnev.homewardrobe.presentation.ui.views.CollageItemView
         android:id="@+id/two_image_first"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.kirill.kochnev.homewardrope.presentation.ui.views.CollageItemView
+    <com.kirill.kochnev.homewardrobe.presentation.ui.views.CollageItemView
         android:id="@+id/two_image_second"
         android:layout_width="match_parent"
         android:layout_height="0dp"

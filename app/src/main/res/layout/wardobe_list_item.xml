@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.kirill.kochnev.homewardrope.presentation.ui.views.WardrobeItemView
+<com.kirill.kochnev.homewardrobe.presentation.ui.views.WardrobeItemView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/wardrope_list_item"
     android:layout_width="match_parent"

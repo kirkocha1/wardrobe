@@ -1,31 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        app_sign {
-            keyAlias 'WardrobeKey'
-            keyPassword 'Mechanic$1'
-            storeFile file('/home/kirill/store/apps_key_store.jks')
-            storePassword 'Mechanic$1'
-        }
-    }
+
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
         minSdkVersion 23
-        applicationId "com.kirill.kochnev.homewardrope"
+        applicationId "com.kirill.kochnev.homewardrobe"
         targetSdkVersion 25
         versionCode 2
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.app_sign
-        }
-    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
