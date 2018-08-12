@@ -8,7 +8,7 @@ android {
         minSdkVersion 23
         applicationId "com.kirill.kochnev.homewardrobe"
         targetSdkVersion 27
-        versionCode 2
+        versionCode 3
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
