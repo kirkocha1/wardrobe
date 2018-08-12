@@ -12,6 +12,7 @@
 /daemon
 /wrapper
 /native
+/app/release
 /app/app-release.apk
 *.java.orig
 .externalNativeBuild
