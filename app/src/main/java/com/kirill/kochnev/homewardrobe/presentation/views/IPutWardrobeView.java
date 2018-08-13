@@ -21,4 +21,6 @@ public interface IPutWardrobeView extends MvpView {
 
     void changeBtnsMode(boolean mode);
 
+    void askPermission();
+
 }

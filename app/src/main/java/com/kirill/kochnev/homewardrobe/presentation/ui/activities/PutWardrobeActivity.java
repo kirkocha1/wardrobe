@@ -1,7 +1,9 @@
 package com.kirill.kochnev.homewardrobe.presentation.ui.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.kirill.kochnev.homewardrobe.WardrobeApplication;
 import com.kirill.kochnev.homewardrobe.db.models.Wardrobe;
 import com.kirill.kochnev.homewardrobe.di.components.PutWardrobeComponent;
 import com.kirill.kochnev.homewardrobe.presentation.presenters.wardrobe.PutWardrobePresenter;
+import com.kirill.kochnev.homewardrobe.presentation.ui.activities.base.PermissonDelegate;
 import com.kirill.kochnev.homewardrobe.presentation.views.IPutWardrobeView;
 import com.kirill.kochnev.homewardrobe.presentation.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrobe.presentation.ui.adapters.WardrobePagerAdapter;
@@ -54,7 +57,10 @@ public class PutWardrobeActivity extends MvpAppCompatActivity implements IPutWar
     @InjectPresenter
     PutWardrobePresenter presenter;
 
-    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
+    @NonNull
+    private final ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
+    @NonNull
+    private final PermissonDelegate permissonDelegate = new PermissonDelegate(this);
 
     @ProvidePresenter
     PutWardrobePresenter providePresenter() {
@@ -85,13 +91,29 @@ public class PutWardrobeActivity extends MvpAppCompatActivity implements IPutWar
         WardrobeApplication.getComponentHolder().clearAddUpdateWardrobeComponent();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissonDelegate.onRequestPermissionsResult(
+                requestCode,
+                permissions,
+                grantResults,
+                permission -> presenter.initWardrope(),
+                permission -> finish()
+        );
+    }
+
+    @Override
+    public void askPermission() {
+        permissonDelegate.askPermisson(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
     private void initBtns(long wardropeId) {
         select.setOnClickListener(v -> presenter.toggleMode());
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
         save.setOnClickListener(v -> presenter.save(name.getText().toString()));
         select.setVisibility(wardropeId == AppConstants.DEFAULT_ID ? View.GONE : View.VISIBLE);
         save.setVisibility(wardropeId == AppConstants.DEFAULT_ID ? View.VISIBLE : View.GONE);
-        name.setEnabled(wardropeId == AppConstants.DEFAULT_ID);
+        name.setEnabled(wardropeI   d == AppConstants.DEFAULT_ID);
     }
 
     @Override

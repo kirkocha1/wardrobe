@@ -64,9 +64,8 @@ public class PutThingActivity extends MvpAppCompatActivity implements IPutThingV
         return component.providePresenter();
     }
 
-    @NonNull
-    private final PermissonDelegate permissonDelegate = new PermissonDelegate(this);
-    private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
+    @NonNull private final PermissonDelegate permissonDelegate = new PermissonDelegate(this);
+    @NonNull private final ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +96,8 @@ public class PutThingActivity extends MvpAppCompatActivity implements IPutThingV
                 requestCode,
                 permissions,
                 grantResults,
-                () -> {
-                    switch (permissions[0]) {
+                permisson -> {
+                    switch (permisson) {
                         case Manifest.permission.CAMERA:
                             presenter.createUri();
                             break;
@@ -107,7 +106,7 @@ public class PutThingActivity extends MvpAppCompatActivity implements IPutThingV
                             break;
                     }
                 },
-                () -> {
+                permission -> {
                 }
         );
     }

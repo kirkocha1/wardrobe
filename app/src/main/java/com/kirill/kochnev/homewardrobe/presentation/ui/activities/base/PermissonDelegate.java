@@ -16,8 +16,13 @@ public final class PermissonDelegate {
     private final int PERMISSION_REQUEST_CODE = 1;
     private final String LOG_TAG = PermissonDelegate.class.getSimpleName();
 
+    public interface PermissionHandler {
+        void handlePermission(String permission);
+    }
+
     private final @NonNull
     Activity activity;
+
 
     public PermissonDelegate(@NonNull final Activity activity) {
         this.activity = activity;
@@ -31,21 +36,25 @@ public final class PermissonDelegate {
             final int requestCode,
             @NonNull final String[] permissions,
             @NonNull final int[] grantResults,
-            @NonNull final Action onPermissonGranted,
-            @NonNull final Action onPermissonRejected
+            @NonNull final PermissionHandler onPermissonGranted,
+            @NonNull final PermissionHandler onPermissonRejected
     ) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if ((grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                try {
-                    onPermissonGranted.run();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, e.getLocalizedMessage());
-                }
-            } else {
-                try {
-                    onPermissonRejected.run();
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, e.getLocalizedMessage());
+            if ((grantResults.length != 0)) {
+                for (int i = 0; i < grantResults.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        try {
+                            onPermissonGranted.handlePermission(permissions[i]);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, e.getLocalizedMessage());
+                        }
+                    } else {
+                        try {
+                            onPermissonRejected.handlePermission(permissions[i]);
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, e.getLocalizedMessage());
+                        }
+                    }
                 }
             }
         }
