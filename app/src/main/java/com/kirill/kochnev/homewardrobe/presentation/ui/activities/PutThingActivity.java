@@ -1,10 +1,12 @@
 package com.kirill.kochnev.homewardrobe.presentation.ui.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import com.kirill.kochnev.homewardrobe.WardrobeApplication;
 import com.kirill.kochnev.homewardrobe.db.models.Thing;
 import com.kirill.kochnev.homewardrobe.di.components.PutThingComponent;
 import com.kirill.kochnev.homewardrobe.presentation.presenters.thing.PutThingPresenter;
+import com.kirill.kochnev.homewardrobe.presentation.ui.activities.base.PermissonDelegate;
 import com.kirill.kochnev.homewardrobe.presentation.views.IPutThingView;
 import com.kirill.kochnev.homewardrobe.presentation.ui.activities.base.ActivityToolbarDelegate;
 import com.kirill.kochnev.homewardrobe.utils.AnimationHelper;
@@ -61,6 +64,8 @@ public class PutThingActivity extends MvpAppCompatActivity implements IPutThingV
         return component.providePresenter();
     }
 
+    @NonNull
+    private final PermissonDelegate permissonDelegate = new PermissonDelegate(this);
     private ActivityToolbarDelegate activityToolbarDelegate = new ActivityToolbarDelegate();
 
     @Override
@@ -86,6 +91,27 @@ public class PutThingActivity extends MvpAppCompatActivity implements IPutThingV
         WardrobeApplication.getComponentHolder().clearAddUpdateThingComponent();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissonDelegate.onRequestPermissionsResult(
+                requestCode,
+                permissions,
+                grantResults,
+                () -> {
+                    switch (permissions[0]) {
+                        case Manifest.permission.CAMERA:
+                            presenter.createUri();
+                            break;
+                        case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                            presenter.saveThing(name.getText().toString(), tag.getText().toString());
+                            break;
+                    }
+                },
+                () -> {
+                }
+        );
+    }
+
     private void initBtns(final boolean isNew, final boolean isEditMode) {
         edit.setVisibility(isNew ? View.GONE : View.VISIBLE);
         if (isEditMode) {
@@ -94,8 +120,8 @@ public class PutThingActivity extends MvpAppCompatActivity implements IPutThingV
         edit.setOnClickListener(v -> {
             changeMode(true);
         });
-        captureBtn.setOnClickListener(v -> presenter.createUri());
-        save.setOnClickListener(v -> presenter.saveThing(name.getText().toString(), tag.getText().toString()));
+        captureBtn.setOnClickListener(v -> permissonDelegate.askPermisson(Manifest.permission.CAMERA));
+        save.setOnClickListener(v -> permissonDelegate.askPermisson(Manifest.permission.WRITE_EXTERNAL_STORAGE));
     }
 
     private void changeMode(boolean isAnimate) {
