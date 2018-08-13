@@ -39,6 +39,7 @@ public class PutWardrobePresenter extends MvpPresenter<IPutWardrobeView> {
     private HashSet<Long> thingsSet = new HashSet<>();
     private HashSet<Long> looksSet = new HashSet<>();
     private boolean isEditableMode = false;
+    private long wardropeId = AppConstants.DEFAULT_ID;
 
     @Inject
     public PutWardrobePresenter(
@@ -46,14 +47,19 @@ public class PutWardrobePresenter extends MvpPresenter<IPutWardrobeView> {
             @NonNull final PutWardrobeInteractor interactor
     ) {
         this.interactor = interactor;
-        initWardrope(id);
+        this.wardropeId = id;
     }
 
-    private void initWardrope(long id) {
+    @Override
+    protected void onFirstViewAttach() {
+        getViewState().askPermission();
+    }
+
+    public void initWardrope() {
         registerForThingIds();
         disposableDelegate.addToCompositeDisposable(
                 interactor
-                        .getWardrobe(id)
+                        .getWardrobe(wardropeId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
