@@ -156,6 +156,7 @@ public class PutThingActivity extends MvpAppCompatActivity implements IPutThingV
     public void sendMakePhotoIntent(Uri uri) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 

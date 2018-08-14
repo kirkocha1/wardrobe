@@ -8,7 +8,7 @@ import com.kirill.kochnev.homewardrobe.db.RepoResult;
 import com.kirill.kochnev.homewardrobe.db.models.Thing;
 import com.kirill.kochnev.homewardrobe.repositories.ThingRepository;
 import com.kirill.kochnev.homewardrobe.utils.ImageProcessor;
-
+import com.kirill.kochnev.homewardrobe.utils.FilePathBuilder;
 import java.io.File;
 
 import javax.inject.Inject;
@@ -26,11 +26,17 @@ public class PutThingsInteractor {
 
     private @NonNull final ThingRepository things;
     private @NonNull final ImageProcessor helper;
+    private @NonNull final FilePathBuilder filePathBuilder;
 
     @Inject
-    PutThingsInteractor(@NonNull final ImageProcessor helper, @NonNull final ThingRepository things) {
+    PutThingsInteractor(
+            @NonNull final ImageProcessor helper,
+            @NonNull final ThingRepository things,
+            @NonNull final FilePathBuilder filePathBuilder
+    ) {
         this.things = things;
         this.helper = helper;
+        this.filePathBuilder = filePathBuilder;
     }
 
     public Single<Thing> getThing(long id) {
@@ -56,7 +62,7 @@ public class PutThingsInteractor {
                     File photoFile = helper.createImageFile("thing");
                     thing.setFullImagePath(photoFile.getAbsolutePath());
                     thing.setIconImagePath(helper.createIconImageFile("thing").getAbsolutePath());
-                    return Uri.fromFile(photoFile);
+                    return filePathBuilder.buildFilePath(photoFile);
                 });
     }
 
